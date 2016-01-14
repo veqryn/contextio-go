@@ -22,7 +22,7 @@ type GetDiscoveryResponse struct {
 		OAuth  bool `json:"oauth:omitempty"`
 
 		Port int `json:"port:omitempty"`
-	}
+	} `json:"imap:omitempty"`
 }
 
 // GetDiscovery ...

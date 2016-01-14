@@ -14,8 +14,6 @@ type CioParams struct {
 	Delimiter            string `json:"delimiter:omitempty"`
 	Email                string `json:"email,omitempty"`
 	FilterNotifURL       string `json:"failure_notif_url,omitempty"`
-	IncludeHeaders       string `json:"include_headers:omitempty"`
-	MigrateAccountID     string `json:"migrate_account_id,omitempty"`
 	FirstName            string `json:"first_name,omitempty"`
 	FilterTo             string `json:"filter_to:omitempty"`
 	FilterFrom           string `json:"filter_from:omitempty"`
@@ -27,6 +25,8 @@ type CioParams struct {
 	FilterFolderAdded    string `json:"filter_folder_added:omitempty"`
 	FilterToDomain       string `json:"filter_to_domain:omitempty"`
 	FilterFromDomain     string `json:"filter_from_domain:omitempty"`
+	MigrateAccountID     string `json:"migrate_account_id,omitempty"`
+	NewFolderID          string `json:"new_folder_id,omitempty"`
 	LastName             string `json:"last_name,omitempty"`
 	Password             string `json:"password,omitempty"`
 	ProviderRefreshToken string `json:"provider_refresh_token,omitempty"`
@@ -44,6 +44,7 @@ type CioParams struct {
 	Active            bool `json:"active:omitempty"`
 	ForceStatusCheck  bool `json:"force_status_check:omitempty"`
 	IncludeBody       bool `json:"include_body:omitempty"`
+	IncludeHeaders    bool `json:"include_headers:omitempty"`
 	IncludeFlags      bool `json:"include_flags:omitempty"`
 	IncludeNamesOnly  bool `json:"include_names_only:omitempty"`
 	Raw               bool `json:"raw:omitempty"`
@@ -76,8 +77,47 @@ func (cioParams CioParams) FormValues() url.Values {
 	if cioParams.Email != "" {
 		values.Set("email", cioParams.Email)
 	}
+	if cioParams.FilterNotifURL != "" {
+		values.Set("failure_notif_url", cioParams.FilterNotifURL)
+	}
 	if cioParams.FirstName != "" {
 		values.Set("first_name", cioParams.FirstName)
+	}
+	if cioParams.FilterTo != "" {
+		values.Set("filter_to", cioParams.FirstName)
+	}
+	if cioParams.FilterFrom != "" {
+		values.Set("filter_from", cioParams.FirstName)
+	}
+	if cioParams.FilterCC != "" {
+		values.Set("filter_cc", cioParams.FirstName)
+	}
+	if cioParams.FilterSubject != "" {
+		values.Set("filter_subject", cioParams.FirstName)
+	}
+	if cioParams.FilterThread != "" {
+		values.Set("filter_thread", cioParams.FirstName)
+	}
+	if cioParams.FilterNewImportant != "" {
+		values.Set("filter_new_important", cioParams.FirstName)
+	}
+	if cioParams.FilterFileName != "" {
+		values.Set("filter_file_name", cioParams.FirstName)
+	}
+	if cioParams.FilterFolderAdded != "" {
+		values.Set("filter_folder_added", cioParams.FirstName)
+	}
+	if cioParams.FilterToDomain != "" {
+		values.Set("filter_to_domain", cioParams.FirstName)
+	}
+	if cioParams.FilterFromDomain != "" {
+		values.Set("filter_from_domain", cioParams.FirstName)
+	}
+	if cioParams.MigrateAccountID != "" {
+		values.Set("migrate_account_id", cioParams.FirstName)
+	}
+	if cioParams.NewFolderID != "" {
+		values.Set("new_folder_id", cioParams.FirstName)
 	}
 	if cioParams.LastName != "" {
 		values.Set("last_name", cioParams.LastName)
@@ -97,9 +137,6 @@ func (cioParams CioParams) FormValues() url.Values {
 	if cioParams.ProviderConsumerKey != "" {
 		values.Set("provider_consumer_key", cioParams.ProviderConsumerKey)
 	}
-	if cioParams.IncludeHeaders != "" {
-		values.Set("include_headers", cioParams.IncludeHeaders)
-	}
 	if cioParams.Server != "" {
 		values.Set("server", cioParams.Server)
 	}
@@ -109,6 +146,9 @@ func (cioParams CioParams) FormValues() url.Values {
 	if cioParams.StatusOK != "" {
 		values.Set("status_ok", cioParams.StatusOK)
 	}
+	if cioParams.StatusCallbackURL != "" {
+		values.Set("status_callback_url", cioParams.StatusOK)
+	}
 	if cioParams.Type != "" {
 		values.Set("type", cioParams.Type)
 	}
@@ -117,11 +157,17 @@ func (cioParams CioParams) FormValues() url.Values {
 	}
 
 	// Booleans
+	if cioParams.Active {
+		values.Set("active", "1")
+	}
 	if cioParams.ForceStatusCheck {
 		values.Set("force_status_check", "1")
 	}
 	if cioParams.IncludeBody {
 		values.Set("include_body", "1")
+	}
+	if cioParams.IncludeHeaders {
+		values.Set("include_headers", "1")
 	}
 	if cioParams.IncludeFlags {
 		values.Set("include_flags", "1")

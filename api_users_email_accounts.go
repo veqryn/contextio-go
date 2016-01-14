@@ -52,7 +52,7 @@ func (cioLite *CioLite) GetUserEmailAccounts(userID string) ([]GetUsersEmailAcco
 	// Make request
 	request := clientRequest{
 		method: "GET",
-		path:   fmt.Sprintf("users/%s/email_accounts", userID),
+		path:   fmt.Sprintf("/users/%s/email_accounts", userID),
 	}
 
 	// Make response
@@ -65,14 +65,14 @@ func (cioLite *CioLite) GetUserEmailAccounts(userID string) ([]GetUsersEmailAcco
 }
 
 // GetUserEmailAccount ...
-// Parameters and status for an email account.
+// Parameters and status for an email account
 // https://context.io/docs/lite/users/email_accounts#id-get
 func (cioLite *CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
 	request := clientRequest{
 		method: "GET",
-		path:   fmt.Sprintf("users/%s/email_accounts/%s", userID, label),
+		path:   fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 	}
 
 	// Make response

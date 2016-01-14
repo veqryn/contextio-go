@@ -15,7 +15,7 @@ type GetUsersWebHooksResponse struct {
 	WebhookID          string `json:"webhook_id:omitempty"`
 	FilterTo           string `json:"filter_to:omitempty"`
 	FilterFrom         string `json:"filter_from:omitempty"`
-	FilterCC           string `json:"filter_cc:omitempty"`
+	FilterCc           string `json:"filter_cc:omitempty"`
 	FilterSubject      string `json:"filter_subject:omitempty"`
 	FilterThread       string `json:"filter_thread:omitempty"`
 	FilterNewImportant string `json:"filter_new_important:omitempty"`
@@ -58,7 +58,7 @@ func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksRespon
 	// Make request
 	request := clientRequest{
 		method: "GET",
-		path:   fmt.Sprintf("users/%s/webhooks", userID),
+		path:   fmt.Sprintf("/users/%s/webhooks", userID),
 	}
 
 	// Make response
@@ -78,7 +78,7 @@ func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUser
 	// Make request
 	request := clientRequest{
 		method: "GET",
-		path:   fmt.Sprintf("users/%s/webhooks/%s", userID, webhookID),
+		path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 	}
 
 	// Make response
