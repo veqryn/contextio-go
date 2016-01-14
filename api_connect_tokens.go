@@ -4,7 +4,9 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/connect_tokens
 
 // Imports
-import ()
+import (
+	"fmt"
+)
 
 // GetConnectTokensResponse ...
 type GetConnectTokensResponse struct {
@@ -71,13 +73,12 @@ func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokensResponse, error) {
 // GetConnectToken ...
 // Information about a given connect token
 // https://context.io/docs/lite/connect_tokens#id-get
-func (cioLite *CioLite) GetConnectToken(queryValues CioParams) (GetConnectTokensResponse, error) {
+func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokensResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "GET",
-		path:        "/connect_tokens",
-		queryValues: queryValues,
+		method: "GET",
+		path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}
 
 	// Make response
@@ -113,13 +114,12 @@ func (cioLite *CioLite) CreateConnectToken(formValues CioParams) (CreateConnectT
 // DeleteConnectToken ...
 // Remove a given connect token
 // https://context.io/docs/lite/connect_tokens#id-delete
-func (cioLite *CioLite) DeleteConnectToken(queryValues CioParams) (DeleteConnectTokenResponse, error) {
+func (cioLite *CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "DELETE",
-		path:        "/connect_tokens",
-		queryValues: queryValues,
+		method: "DELETE",
+		path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}
 
 	// Make response

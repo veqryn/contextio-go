@@ -4,7 +4,9 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/connect_tokens
 
 // Imports
-import ()
+import (
+	"fmt"
+)
 
 // GetOAuthProvidersResponse ...
 type GetOAuthProvidersResponse struct {
@@ -49,13 +51,12 @@ func (cioLite *CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error)
 // GetOAuthProvider ...
 // Information about a given OAuth provider
 // https://context.io/docs/lite/oauth_providers#id-get
-func (cioLite *CioLite) GetOAuthProvider(queryValues CioParams) (GetOAuthProvidersResponse, error) {
+func (cioLite *CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "GET",
-		path:        "/oauth_providers",
-		queryValues: queryValues,
+		method: "GET",
+		path:   fmt.Sprintf("/oauth_providers/%s", key),
 	}
 
 	// Make response
@@ -91,13 +92,12 @@ func (cioLite *CioLite) CreateOAuthProvider(formValues CioParams) (CreateOAuthPr
 // DeleteOAuthProvider ...
 // Remove a given OAuth provider
 // https://context.io/docs/lite/oauth_providers#id-delete
-func (cioLite *CioLite) DeleteOAuthProvider(queryValues CioParams) (DeleteOAuthProviderResponse, error) {
+func (cioLite *CioLite) DeleteOAuthProvider(key string) (DeleteOAuthProviderResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "DELETE",
-		path:        "/oauth_providers",
-		queryValues: queryValues,
+		method: "DELETE",
+		path:   fmt.Sprintf("/oauth_providers/%s", key),
 	}
 
 	// Make response

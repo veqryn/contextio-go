@@ -74,13 +74,12 @@ func (cioLite *CioLite) GetUsers() ([]GetUsersResponse, error) {
 // GetUser ...
 // Details about a given user
 // https://context.io/docs/lite/users#id-get
-func (cioLite *CioLite) GetUser(queryValues CioParams) (GetUsersResponse, error) {
+func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "GET",
-		path:        "/users",
-		queryValues: queryValues,
+		method: "GET",
+		path:   fmt.Sprintf("/users/%s", userID),
 	}
 
 	// Make response
@@ -137,13 +136,12 @@ func (cioLite *CioLite) ModifyUser(userID string, formValues CioParams) (ModifyU
 // DeleteUser ...
 // Remove a given user
 // https://context.io/docs/lite/users#id-delete
-func (cioLite *CioLite) DeleteUser(queryValues CioParams) (DeleteUserResponse, error) {
+func (cioLite *CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method:      "DELETE",
-		path:        "/users",
-		queryValues: queryValues,
+		method: "DELETE",
+		path:   fmt.Sprintf("/users/%s", userID),
 	}
 
 	// Make response

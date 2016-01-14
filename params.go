@@ -13,9 +13,20 @@ type CioParams struct {
 	CallbackURL          string `json:"callback_url:omitempty"`
 	Delimiter            string `json:"delimiter:omitempty"`
 	Email                string `json:"email,omitempty"`
+	FilterNotifURL       string `json:"failure_notif_url,omitempty"`
 	IncludeHeaders       string `json:"include_headers:omitempty"`
 	MigrateAccountID     string `json:"migrate_account_id,omitempty"`
 	FirstName            string `json:"first_name,omitempty"`
+	FilterTo             string `json:"filter_to:omitempty"`
+	FilterFrom           string `json:"filter_from:omitempty"`
+	FilterCC             string `json:"filter_cc:omitempty"`
+	FilterSubject        string `json:"filter_subject:omitempty"`
+	FilterThread         string `json:"filter_thread:omitempty"`
+	FilterNewImportant   string `json:"filter_new_important:omitempty"`
+	FilterFileName       string `json:"filter_file_name:omitempty"`
+	FilterFolderAdded    string `json:"filter_folder_added:omitempty"`
+	FilterToDomain       string `json:"filter_to_domain:omitempty"`
+	FilterFromDomain     string `json:"filter_from_domain:omitempty"`
 	LastName             string `json:"last_name,omitempty"`
 	Password             string `json:"password,omitempty"`
 	ProviderRefreshToken string `json:"provider_refresh_token,omitempty"`
@@ -23,12 +34,14 @@ type CioParams struct {
 	ProviderTokenSecret  string `json:"provider_token_secret,omitempty"`
 	ProviderConsumerKey  string `json:"provider_consumer_key,omitempty"`
 	Server               string `json:"server,omitempty"`
+	SourceType           string `json:"source_type,omitempty"`
 	Status               string `json:"status:omitempty"`
 	StatusCallbackURL    string `json:"status_callback_url:omitempty"`
 	StatusOK             string `json:"status_ok:omitempty"`
 	Type                 string `json:"type,omitempty"`
 	Username             string `json:"username,omitempty"`
 
+	Active            bool `json:"active:omitempty"`
 	ForceStatusCheck  bool `json:"force_status_check:omitempty"`
 	IncludeBody       bool `json:"include_body:omitempty"`
 	IncludeFlags      bool `json:"include_flags:omitempty"`
