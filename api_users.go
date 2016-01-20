@@ -27,7 +27,10 @@ type GetUsersResponse struct {
 // CreateUserResponse ...
 type CreateUserResponse struct {
 	Success           string `json:"success:omitempty"`
-	Token             string `json:"token:omitempty"`
+	Id                string `json:"id:omitempty"`
+	
+	EmailAccount CreateEmailAccountResponse `json:"email_account,omitempty"`
+	
 	ResourceURL       string `json:"resource_url:omitempty"`
 	AccessToken       string `json:"access_token:omitempty"`
 	AccessTokenSecret string `json:"access_token_secret:omitempty"`
