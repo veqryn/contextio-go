@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/garyburd/go-oauth/oauth"
+	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -84,7 +85,7 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 	if err != nil {
 		return fmt.Errorf("Could not read response: %s", err)
 	}
-	
+
 	// Unmarshal result
 	return json.Unmarshal(resBody, &result)
 }
