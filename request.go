@@ -80,5 +80,11 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 
 	// Parse the response
 	defer res.Body.Close()
-	return json.NewDecoder(res.Body).Decode(&result)
+	resBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return fmt.Errorf("Could not read response: %s", err)
+	}
+	
+	// Unmarshal result
+	return json.Unmarshal(resBody, &result)
 }
