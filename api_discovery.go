@@ -12,17 +12,17 @@ type GetDiscoveryResponse struct {
 	Type          string   `json:"type,omitempty"`
 	Documentation []string `json:"documentation,omitempty"`
 
-	Found bool `json:"found:omitempty"`
+	Found bool `json:"found,omitempty"`
 
 	IMAP struct {
 		Server   string `json:"server,omitempty"`
 		Username string `json:"username,omitempty"`
 
-		UseSSL bool `json:"use_ssl:omitempty"`
-		OAuth  bool `json:"oauth:omitempty"`
+		UseSSL bool `json:"use_ssl,omitempty"`
+		OAuth  bool `json:"oauth,omitempty"`
 
-		Port int `json:"port:omitempty"`
-	} `json:"imap:omitempty"`
+		Port int `json:"port,omitempty"`
+	} `json:"imap,omitempty"`
 }
 
 // GetDiscovery ...
@@ -41,7 +41,7 @@ func (cioLite *CioLite) GetDiscovery(queryValues CioParams) (GetDiscoveryRespons
 	var response GetDiscoveryResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

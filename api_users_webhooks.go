@@ -10,44 +10,44 @@ import (
 
 // GetUsersWebHooksResponse ...
 type GetUsersWebHooksResponse struct {
-	CallbackURL        string `json:"callback_url:omitempty"`
-	FailureNotifURL    string `json:"failure_notif_url:omitempty"`
-	WebhookID          string `json:"webhook_id:omitempty"`
-	FilterTo           string `json:"filter_to:omitempty"`
-	FilterFrom         string `json:"filter_from:omitempty"`
-	FilterCc           string `json:"filter_cc:omitempty"`
-	FilterSubject      string `json:"filter_subject:omitempty"`
-	FilterThread       string `json:"filter_thread:omitempty"`
-	FilterNewImportant string `json:"filter_new_important:omitempty"`
-	FilterFileName     string `json:"filter_file_name:omitempty"`
-	FilterFolderAdded  string `json:"filter_folder_added:omitempty"`
-	FilterToDomain     string `json:"filter_to_domain:omitempty"`
-	FilterFromDomain   string `json:"filter_from_domain:omitempty"`
-	BodyType           string `json:"body_type:omitempty"`
+	CallbackURL        string `json:"callback_url,omitempty"`
+	FailureNotifURL    string `json:"failure_notif_url,omitempty"`
+	WebhookID          string `json:"webhook_id,omitempty"`
+	FilterTo           string `json:"filter_to,omitempty"`
+	FilterFrom         string `json:"filter_from,omitempty"`
+	FilterCc           string `json:"filter_cc,omitempty"`
+	FilterSubject      string `json:"filter_subject,omitempty"`
+	FilterThread       string `json:"filter_thread,omitempty"`
+	FilterNewImportant string `json:"filter_new_important,omitempty"`
+	FilterFileName     string `json:"filter_file_name,omitempty"`
+	FilterFolderAdded  string `json:"filter_folder_added,omitempty"`
+	FilterToDomain     string `json:"filter_to_domain,omitempty"`
+	FilterFromDomain   string `json:"filter_from_domain,omitempty"`
+	BodyType           string `json:"body_type,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
 
-	Active      bool `json:"active:omitempty"`
-	Failure     bool `json:"failure:omitempty"`
-	IncludeBody bool `json:"include_body:omitempty"`
+	Active      bool `json:"active,omitempty"`
+	Failure     bool `json:"failure,omitempty"`
+	IncludeBody bool `json:"include_body,omitempty"`
 }
 
 // CreateUserWebHookResponse ...
 type CreateUserWebHookResponse struct {
-	Status      string `json:"stats:omitempty"`
-	WebhookID   string `json:"webhook_id:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Status      string `json:"stats,omitempty"`
+	WebhookID   string `json:"webhook_id,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // ModifyWebHookResponse ...
 type ModifyWebHookResponse struct {
-	Success     string `json:"success:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Success     string `json:"success,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // DeleteWebHookResponse ...
 type DeleteWebHookResponse struct {
-	Success     string `json:"success:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Success     string `json:"success,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // GetUserWebHooks ...

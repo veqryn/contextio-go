@@ -15,43 +15,43 @@ type GetUsersResponse struct {
 	EmailAddresses []string `json:"email_addresses,omitempty"`
 	FirstName      string   `json:"first_name,omitempty"`
 	LastName       string   `json:"last_name,omitempty"`
-	ResourceURL    string   `json:"resource_url:omitempty"`
+	ResourceURL    string   `json:"resource_url,omitempty"`
 
 	EmailAccounts []GetUsersEmailAccountsResponse `json:"email_accounts,omitempty"`
 
-	Created         int `json:"created:omitempty"`
-	Suspended       int `json:"suspended:omitempty"`
-	PasswordExpired int `json:"password_expired:omitempty"`
+	Created         int `json:"created,omitempty"`
+	Suspended       int `json:"suspended,omitempty"`
+	PasswordExpired int `json:"password_expired,omitempty"`
 }
 
 // CreateUserResponse ...
 type CreateUserResponse struct {
-	Success           string `json:"success:omitempty"`
-	Id                string `json:"id:omitempty"`
-	
+	Success string `json:"success,omitempty"`
+	Id      string `json:"id,omitempty"`
+
 	EmailAccount CreateEmailAccountResponse `json:"email_account,omitempty"`
-	
-	ResourceURL       string `json:"resource_url:omitempty"`
-	AccessToken       string `json:"access_token:omitempty"`
-	AccessTokenSecret string `json:"access_token_secret:omitempty"`
+
+	ResourceURL       string `json:"resource_url,omitempty"`
+	AccessToken       string `json:"access_token,omitempty"`
+	AccessTokenSecret string `json:"access_token_secret,omitempty"`
 }
 
 // ModifyUsersResponse ...
 type ModifyUsersResponse struct {
-	Success     string `json:"success:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Success     string `json:"success,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // ModifyUserResponse ...
 type ModifyUserResponse struct {
-	Success     string `json:"success:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Success     string `json:"success,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // DeleteUserResponse ...
 type DeleteUserResponse struct {
-	Success     string `json:"success:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Success     string `json:"success,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // GetUsers ...

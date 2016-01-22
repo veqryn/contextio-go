@@ -10,9 +10,9 @@ import (
 
 // GetUserEmailAccountsFolderMessageHeadersResponse ...
 type GetUserEmailAccountsFolderMessageHeadersResponse struct {
-	ResourceURL int `json:"resource_url:omitempty"`
+	ResourceURL int `json:"resource_url,omitempty"`
 
-	Headers map[string]interface{} `json:"headers:omitempty"`
+	Headers map[string]interface{} `json:"headers,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageHeaders ...

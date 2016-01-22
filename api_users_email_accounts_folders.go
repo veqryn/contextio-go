@@ -10,19 +10,19 @@ import (
 
 // GetUsersEmailAccountFoldersResponse ...
 type GetUsersEmailAccountFoldersResponse struct {
-	Name             string `json:"name:omitempty"`
-	SymbolicName     string `json:"symbolic_name:omitempty"`
-	NbMessages       string `json:"nb_messages:omitempty"`
-	NbUnseenMessages string `json:"nb_unseen_messages:omitempty"`
-	Delimiter        string `json:"delimiter:omitempty"`
+	Name             string `json:"name,omitempty"`
+	SymbolicName     string `json:"symbolic_name,omitempty"`
+	NbMessages       string `json:"nb_messages,omitempty"`
+	NbUnseenMessages string `json:"nb_unseen_messages,omitempty"`
+	Delimiter        string `json:"delimiter,omitempty"`
 	ResourceURL      string `json:"resource_url,omitempty"`
 }
 
 // CreateEmailAccountFolderResponse ...
 type CreateEmailAccountFolderResponse struct {
-	Status      string `json:"stats:omitempty"`
-	Delimeter   string `json:"delimeter:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Status      string `json:"stats,omitempty"`
+	Delimeter   string `json:"delimeter,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // GetUserEmailAccountsFolders ...

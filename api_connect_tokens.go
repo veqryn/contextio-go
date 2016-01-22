@@ -10,7 +10,7 @@ import (
 
 // GetConnectTokensResponse ...
 type GetConnectTokensResponse struct {
-	Token              string `json:"token:omitempty"`
+	Token              string `json:"token,omitempty"`
 	Email              string `json:"email,omitempty"`
 	CallbackURL        string `json:"callback_url,omitempty"`
 	FirstName          string `json:"first_name,omitempty"`
@@ -19,11 +19,11 @@ type GetConnectTokensResponse struct {
 	BrowserRedirectURL string `json:"browser_redirect_url,omitempty"`
 	ServerLabel        string `json:"server_label,omitempty"`
 
-	AccountLite bool `json:"account_lite:omitempty"`
+	AccountLite bool `json:"account_lite,omitempty"`
 
-	Created int `json:"created:omitempty"`
-	Used    int `json:"used:omitempty"`
-	Expires int `json:"expires:omitempty"`
+	Created int `json:"created,omitempty"`
+	Used    int `json:"used,omitempty"`
+	Expires int `json:"expires,omitempty"`
 
 	User struct {
 		ID             string   `json:"id,omitempty"`
@@ -37,17 +37,17 @@ type GetConnectTokensResponse struct {
 
 // CreateConnectTokenResponse ...
 type CreateConnectTokenResponse struct {
-	Success            string `json:"success:omitempty"`
-	Token              string `json:"token:omitempty"`
-	ResourceURL        string `json:"resource_url:omitempty"`
-	BrowserRedirectURL string `json:"browser_redirect_url:omitempty"`
-	AccessToken        string `json:"access_token:omitempty"`
-	AccessTokenSecret  string `json:"access_token_secret:omitempty"`
+	Success            string `json:"success,omitempty"`
+	Token              string `json:"token,omitempty"`
+	ResourceURL        string `json:"resource_url,omitempty"`
+	BrowserRedirectURL string `json:"browser_redirect_url,omitempty"`
+	AccessToken        string `json:"access_token,omitempty"`
+	AccessTokenSecret  string `json:"access_token_secret,omitempty"`
 }
 
 // DeleteConnectTokenResponse ...
 type DeleteConnectTokenResponse struct {
-	Success string `json:"success:omitempty"`
+	Success string `json:"success,omitempty"`
 }
 
 // GetConnectTokens ...

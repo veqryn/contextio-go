@@ -10,7 +10,7 @@ import (
 
 // GetUsersEmailAccountsResponse ...
 type GetUsersEmailAccountsResponse struct {
-	Status             string `json:"status:omitempty"`
+	Status             string `json:"status,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
 	Type               string `json:"type,omitempty"`
 	AuthenticationType string `json:"authentication_type,omitempty"`
@@ -18,30 +18,30 @@ type GetUsersEmailAccountsResponse struct {
 	Label              string `json:"label,omitempty"`
 	Username           string `json:"username,omitempty"`
 
-	UseSSL bool `json:"use_ssl:omitempty"`
+	UseSSL bool `json:"use_ssl,omitempty"`
 
-	Port int `json:"port:omitempty"`
+	Port int `json:"port,omitempty"`
 }
 
 // CreateEmailAccountResponse ...
 type CreateEmailAccountResponse struct {
-	Status      string `json:"stats:omitempty"`
-	Label       string `json:"label:omitempty"`
-	ResourceURL string `json:"resource_url:omitempty"`
+	Status      string `json:"stats,omitempty"`
+	Label       string `json:"label,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // ModifyEmailAccountResponse ...
 type ModifyEmailAccountResponse struct {
-	Success      string `json:"success:omitempty"`
-	ResourceURL  string `json:"resource_url:omitempty"`
-	FeedbackCode string `json:"feedback_code:omitempty"`
+	Success      string `json:"success,omitempty"`
+	ResourceURL  string `json:"resource_url,omitempty"`
+	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
 // DeleteEmailAccountResponse ...
 type DeleteEmailAccountResponse struct {
-	Success      string `json:"success:omitempty"`
-	ResourceURL  string `json:"resource_url:omitempty"`
-	FeedbackCode string `json:"feedback_code:omitempty"`
+	Success      string `json:"success,omitempty"`
+	ResourceURL  string `json:"resource_url,omitempty"`
+	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
 // GetUserEmailAccounts ...

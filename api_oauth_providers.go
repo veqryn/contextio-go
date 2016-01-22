@@ -10,22 +10,22 @@ import (
 
 // GetOAuthProvidersResponse ...
 type GetOAuthProvidersResponse struct {
-	Type                   string `json:"type:omitempty"`
+	Type                   string `json:"type,omitempty"`
 	ProviderConsumerKey    string `json:"provider_consumer_key,omitempty"`
 	ProviderConsumerSecret string `json:"provider_consumer_secret,omitempty"`
-	ResourceURL            string `json:"resource_url:omitempty"`
+	ResourceURL            string `json:"resource_url,omitempty"`
 }
 
 // CreateOAuthProviderResponse ...
 type CreateOAuthProviderResponse struct {
-	Success             string `json:"success:omitempty"`
-	ProviderConsumerKey string `json:"provider_consumer_key:omitempty"`
-	ResourceURL         string `json:"resource_url:omitempty"`
+	Success             string `json:"success,omitempty"`
+	ProviderConsumerKey string `json:"provider_consumer_key,omitempty"`
+	ResourceURL         string `json:"resource_url,omitempty"`
 }
 
 // DeleteOAuthProviderResponse ...
 type DeleteOAuthProviderResponse struct {
-	Success string `json:"success:omitempty"`
+	Success string `json:"success,omitempty"`
 }
 
 // GetOAuthProviders ...

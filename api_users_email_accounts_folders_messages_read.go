@@ -10,7 +10,7 @@ import (
 
 // GetUserEmailAccountsFolderMessageHeadersResponse ...
 type UserEmailAccountsFolderMessageReadResponse struct {
-	Success int `json:"success:omitempty"`
+	Success int `json:"success,omitempty"`
 }
 
 // MarkUserEmailAccountsFolderMessageRead ...

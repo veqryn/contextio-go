@@ -9,22 +9,22 @@ import (
 
 // CioParams ...
 type CioParams struct {
-	BodyType             string `json:"body_type:omitempty"`
-	CallbackURL          string `json:"callback_url:omitempty"`
-	Delimiter            string `json:"delimiter:omitempty"`
+	BodyType             string `json:"body_type,omitempty"`
+	CallbackURL          string `json:"callback_url,omitempty"`
+	Delimiter            string `json:"delimiter,omitempty"`
 	Email                string `json:"email,omitempty"`
 	FilterNotifURL       string `json:"failure_notif_url,omitempty"`
 	FirstName            string `json:"first_name,omitempty"`
-	FilterTo             string `json:"filter_to:omitempty"`
-	FilterFrom           string `json:"filter_from:omitempty"`
-	FilterCC             string `json:"filter_cc:omitempty"`
-	FilterSubject        string `json:"filter_subject:omitempty"`
-	FilterThread         string `json:"filter_thread:omitempty"`
-	FilterNewImportant   string `json:"filter_new_important:omitempty"`
-	FilterFileName       string `json:"filter_file_name:omitempty"`
-	FilterFolderAdded    string `json:"filter_folder_added:omitempty"`
-	FilterToDomain       string `json:"filter_to_domain:omitempty"`
-	FilterFromDomain     string `json:"filter_from_domain:omitempty"`
+	FilterTo             string `json:"filter_to,omitempty"`
+	FilterFrom           string `json:"filter_from,omitempty"`
+	FilterCC             string `json:"filter_cc,omitempty"`
+	FilterSubject        string `json:"filter_subject,omitempty"`
+	FilterThread         string `json:"filter_thread,omitempty"`
+	FilterNewImportant   string `json:"filter_new_important,omitempty"`
+	FilterFileName       string `json:"filter_file_name,omitempty"`
+	FilterFolderAdded    string `json:"filter_folder_added,omitempty"`
+	FilterToDomain       string `json:"filter_to_domain,omitempty"`
+	FilterFromDomain     string `json:"filter_from_domain,omitempty"`
 	MigrateAccountID     string `json:"migrate_account_id,omitempty"`
 	NewFolderID          string `json:"new_folder_id,omitempty"`
 	LastName             string `json:"last_name,omitempty"`
@@ -35,25 +35,25 @@ type CioParams struct {
 	ProviderConsumerKey  string `json:"provider_consumer_key,omitempty"`
 	Server               string `json:"server,omitempty"`
 	SourceType           string `json:"source_type,omitempty"`
-	Status               string `json:"status:omitempty"`
-	StatusCallbackURL    string `json:"status_callback_url:omitempty"`
-	StatusOK             string `json:"status_ok:omitempty"`
+	Status               string `json:"status,omitempty"`
+	StatusCallbackURL    string `json:"status_callback_url,omitempty"`
+	StatusOK             string `json:"status_ok,omitempty"`
 	Type                 string `json:"type,omitempty"`
 	Username             string `json:"username,omitempty"`
 
-	Active            bool `json:"active:omitempty"`
-	ForceStatusCheck  bool `json:"force_status_check:omitempty"`
-	IncludeBody       bool `json:"include_body:omitempty"`
-	IncludeHeaders    bool `json:"include_headers:omitempty"`
-	IncludeFlags      bool `json:"include_flags:omitempty"`
-	IncludeNamesOnly  bool `json:"include_names_only:omitempty"`
-	Raw               bool `json:"raw:omitempty"`
+	Active            bool `json:"active,omitempty"`
+	ForceStatusCheck  bool `json:"force_status_check,omitempty"`
+	IncludeBody       bool `json:"include_body,omitempty"`
+	IncludeHeaders    bool `json:"include_headers,omitempty"`
+	IncludeFlags      bool `json:"include_flags,omitempty"`
+	IncludeNamesOnly  bool `json:"include_names_only,omitempty"`
+	Raw               bool `json:"raw,omitempty"`
 	RawFileList       bool `json:"raw_file_list,omitempty"`
 	SourceRawFileList bool `json:"source_raw_file_list"`
 	UseSSL            bool `json:"use_ssl,omitempty"`
 
-	Limit  int `json:"limit:omitempty"`
-	Offset int `json:"offset:omitempty"`
+	Limit  int `json:"limit,omitempty"`
+	Offset int `json:"offset,omitempty"`
 	Port   int `json:"port,omitempty"`
 }
 
@@ -154,6 +154,9 @@ func (cioParams CioParams) FormValues() url.Values {
 	}
 	if cioParams.Username != "" {
 		values.Set("username", cioParams.Username)
+	}
+	if cioParams.SourceType != "" {
+		values.Set("source_type", cioParams.SourceType)
 	}
 
 	// Booleans

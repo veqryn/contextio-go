@@ -10,14 +10,14 @@ import (
 
 // GetUserEmailAccountsFolderMessageFlagsResponse ...
 type GetUserEmailAccountsFolderMessageFlagsResponse struct {
-	ResourceURL int `json:"resource_url:omitempty"`
+	ResourceURL int `json:"resource_url,omitempty"`
 
 	Flags struct {
-		Read     bool `json:"read:omitempty"`
-		Answered bool `json:"answered:omitempty"`
-		Flagged  bool `json:"flagged:omitempty"`
-		Draft    bool `json:"draft:omitempty"`
-	} `json:"flags:omitempty"`
+		Read     bool `json:"read,omitempty"`
+		Answered bool `json:"answered,omitempty"`
+		Flagged  bool `json:"flagged,omitempty"`
+		Draft    bool `json:"draft,omitempty"`
+	} `json:"flags,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageFlags ...

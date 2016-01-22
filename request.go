@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/garyburd/go-oauth/oauth"
-	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -23,7 +22,6 @@ type clientRequest struct {
 }
 
 const (
-
 	// The default host of Medium's API
 	host = "https://api.context.io/lite"
 
@@ -82,11 +80,5 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 
 	// Parse the response
 	defer res.Body.Close()
-	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("Could not read response: %s", err)
-	}
-
-	// Unmarshal result
-	return json.Unmarshal(resBody, &result)
+	return json.NewDecoder(res.Body).Decode(&result)
 }

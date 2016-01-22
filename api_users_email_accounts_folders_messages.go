@@ -10,44 +10,44 @@ import (
 
 // GetUsersEmailAccountFoldersResponse ...
 type GetUsersEmailAccountFolderMessagesResponse struct {
-	EmailMessageID int `json:"email_message_id:omitempty"`
-	Subject        int `json:"subject:omitempty"`
-	MessageID      int `json:"message_id:omitempty"`
-	InReplyTo      int `json:"in_reply_to:omitempty"`
-	ResourceURL    int `json:"resource_url:omitempty"`
+	EmailMessageID int `json:"email_message_id,omitempty"`
+	Subject        int `json:"subject,omitempty"`
+	MessageID      int `json:"message_id,omitempty"`
+	InReplyTo      int `json:"in_reply_to,omitempty"`
+	ResourceURL    int `json:"resource_url,omitempty"`
 
-	Folders         []string `json:"folders:omitempty"`
-	ListHeaders     []string `json:"list_headers:omitempty"`
-	References      []string `json:"references:omitempty"`
-	ReceivedHeaders []string `json:"received_headers:omitempty"`
+	Folders         []string `json:"folders,omitempty"`
+	ListHeaders     []string `json:"list_headers,omitempty"`
+	References      []string `json:"references,omitempty"`
+	ReceivedHeaders []string `json:"received_headers,omitempty"`
 
 	Addresses struct {
 		From []struct {
-			Email string `json:"email:omitempty"`
-			Name  string `json:"name:omitempty"`
-		} `json:"from:omitempty"`
+			Email string `json:"email,omitempty"`
+			Name  string `json:"name,omitempty"`
+		} `json:"from,omitempty"`
 
 		To []struct {
-			Email string `json:"email:omitempty"`
-			Name  string `json:"name:omitempty"`
-		} `json:"to:omitempty"`
+			Email string `json:"email,omitempty"`
+			Name  string `json:"name,omitempty"`
+		} `json:"to,omitempty"`
 
 		Cc []struct {
-			Email string `json:"email:omitempty"`
-			Name  string `json:"cc:omitempty"`
-		} `json:"to:omitempty"`
-	} `json:"addresses:omitempty"`
+			Email string `json:"email,omitempty"`
+			Name  string `json:"cc,omitempty"`
+		} `json:"to,omitempty"`
+	} `json:"addresses,omitempty"`
 
 	PersonInfo map[string]interface {
-	} `json:"person_info:omitempty"`
+	} `json:"person_info,omitempty"`
 
-	SentAt     int `json:"sent_at:omitempty"`
-	ReceivedAt int `json:"received_at:omitempty"`
+	SentAt     int `json:"sent_at,omitempty"`
+	ReceivedAt int `json:"received_at,omitempty"`
 }
 
 // MoveUserEmailAccountFolderMessageResponse ...
 type MoveUserEmailAccountFolderMessageResponse struct {
-	Success string `json:"success:omitempty"`
+	Success string `json:"success,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessages ...

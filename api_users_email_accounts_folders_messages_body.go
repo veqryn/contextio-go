@@ -10,10 +10,10 @@ import (
 
 // GetUserEmailAccountsFolderMessageBodyResponse ...
 type GetUserEmailAccountsFolderMessageBodyResponse struct {
-	Type        int `json:"type:omitempty"`
-	Charset     int `json:"charset:omitempty"`
-	Content     int `json:"content:omitempty"`
-	BodySection int `json:"body_section:omitempty"`
+	Type        int `json:"type,omitempty"`
+	Charset     int `json:"charset,omitempty"`
+	Content     int `json:"content,omitempty"`
+	BodySection int `json:"body_section,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageBody ...

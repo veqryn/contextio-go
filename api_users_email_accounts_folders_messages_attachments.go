@@ -10,15 +10,15 @@ import (
 
 // GetUserEmailAccountsFolderMessageAttachmentsResponse ...
 type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
-	Type               int `json:"type:omitempty"`
-	FileName           int `json:"file_name:omitempty"`
-	BodySection        int `json:"body_section:omitempty"`
-	ContentDisposition int `json:"content_disposition:omitempty"`
-	EmailMessageID     int `json:"email_message_id:omitempty"`
-	XAttachmentID      int `json:"x_attachment_id:omitempty"`
+	Type               int `json:"type,omitempty"`
+	FileName           int `json:"file_name,omitempty"`
+	BodySection        int `json:"body_section,omitempty"`
+	ContentDisposition int `json:"content_disposition,omitempty"`
+	EmailMessageID     int `json:"email_message_id,omitempty"`
+	XAttachmentID      int `json:"x_attachment_id,omitempty"`
 
-	Size         int `json:"size:omitempty"`
-	AttachmentID int `json:"attachment_id:omitempty"`
+	Size         int `json:"size,omitempty"`
+	AttachmentID int `json:"attachment_id,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageAttachments ...
