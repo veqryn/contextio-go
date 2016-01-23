@@ -2,15 +2,25 @@
 package ciolite
 
 // Imports
-import ()
+import (
+	"github.com/Sirupsen/logrus"
+)
 
 // CioLite ...
 type CioLite struct {
 	apiKey    string
 	apiSecret string
+
+	log *logrus.Logger
 }
 
-// NewContextIOLite ...
-func NewCioLite(key string, secret string) *CioLite {
-	return &CioLite{apiKey: key, apiSecret: secret}
+// NewCioLite ...
+func NewCioLite(key string, secret string, logger *logrus.Logger) *CioLite {
+
+	if logger == nil {
+		logger = logrus.New()
+		logger.Level = logrus.ErrorLevel
+	}
+
+	return &CioLite{apiKey: key, apiSecret: secret, log: logger}
 }
