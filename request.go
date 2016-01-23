@@ -1,4 +1,3 @@
-// Package ciolite ...
 package ciolite
 
 // Imports
@@ -14,8 +13,7 @@ import (
 	"time"
 )
 
-// clientRequest ...
-// Defines information that can be used to make a request to Medium.
+// clientRequest defines information that can be used to make a request
 type clientRequest struct {
 	method      string
 	path        string
@@ -31,8 +29,7 @@ const (
 	defaultTimeout = 10 * time.Second
 )
 
-// doFormRequest ...
-// Makes the actual request
+// doFormRequest makes the actual request
 func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url

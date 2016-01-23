@@ -1,19 +1,20 @@
-// Package ciolite ...
 package ciolite
 
 // Imports
 import (
 	"fmt"
 	"net/url"
+	"reflect"
+	"strings"
 )
 
-// CioParams ...
+// CioParams struct with all possible query and post form values
 type CioParams struct {
 	BodyType             string `json:"body_type,omitempty"`
 	CallbackURL          string `json:"callback_url,omitempty"`
 	Delimiter            string `json:"delimiter,omitempty"`
 	Email                string `json:"email,omitempty"`
-	FilterNotifURL       string `json:"failure_notif_url,omitempty"`
+	FailureNotifUrl      string `json:"failure_notif_url,omitempty"`
 	FirstName            string `json:"first_name,omitempty"`
 	FilterTo             string `json:"filter_to,omitempty"`
 	FilterFrom           string `json:"filter_from,omitempty"`
@@ -49,7 +50,7 @@ type CioParams struct {
 	IncludeNamesOnly  bool `json:"include_names_only,omitempty"`
 	Raw               bool `json:"raw,omitempty"`
 	RawFileList       bool `json:"raw_file_list,omitempty"`
-	SourceRawFileList bool `json:"source_raw_file_list"`
+	SourceRawFileList bool `json:"source_raw_file_list,omitempty"`
 	UseSSL            bool `json:"use_ssl,omitempty"`
 
 	Limit  int `json:"limit,omitempty"`
@@ -57,156 +58,50 @@ type CioParams struct {
 	Port   int `json:"port,omitempty"`
 }
 
-// FormValues ...
-// Make form values
+// FormValues returns valid FormValues for CIO Lite
 func (cioParams CioParams) FormValues() url.Values {
 
 	// Values
 	values := url.Values{}
 
-	// Strings
-	if cioParams.BodyType != "" {
-		values.Set("body_type", cioParams.BodyType)
-	}
-	if cioParams.CallbackURL != "" {
-		values.Set("callback_url", cioParams.CallbackURL)
-	}
-	if cioParams.Delimiter != "" {
-		values.Set("delimiter", cioParams.Delimiter)
-	}
-	if cioParams.Email != "" {
-		values.Set("email", cioParams.Email)
-	}
-	if cioParams.FilterNotifURL != "" {
-		values.Set("failure_notif_url", cioParams.FilterNotifURL)
-	}
-	if cioParams.FirstName != "" {
-		values.Set("first_name", cioParams.FirstName)
-	}
-	if cioParams.FilterTo != "" {
-		values.Set("filter_to", cioParams.FirstName)
-	}
-	if cioParams.FilterFrom != "" {
-		values.Set("filter_from", cioParams.FirstName)
-	}
-	if cioParams.FilterCC != "" {
-		values.Set("filter_cc", cioParams.FirstName)
-	}
-	if cioParams.FilterSubject != "" {
-		values.Set("filter_subject", cioParams.FirstName)
-	}
-	if cioParams.FilterThread != "" {
-		values.Set("filter_thread", cioParams.FirstName)
-	}
-	if cioParams.FilterNewImportant != "" {
-		values.Set("filter_new_important", cioParams.FirstName)
-	}
-	if cioParams.FilterFileName != "" {
-		values.Set("filter_file_name", cioParams.FirstName)
-	}
-	if cioParams.FilterFolderAdded != "" {
-		values.Set("filter_folder_added", cioParams.FirstName)
-	}
-	if cioParams.FilterToDomain != "" {
-		values.Set("filter_to_domain", cioParams.FirstName)
-	}
-	if cioParams.FilterFromDomain != "" {
-		values.Set("filter_from_domain", cioParams.FirstName)
-	}
-	if cioParams.MigrateAccountID != "" {
-		values.Set("migrate_account_id", cioParams.FirstName)
-	}
-	if cioParams.NewFolderID != "" {
-		values.Set("new_folder_id", cioParams.FirstName)
-	}
-	if cioParams.LastName != "" {
-		values.Set("last_name", cioParams.LastName)
-	}
-	if cioParams.Password != "" {
-		values.Set("password", cioParams.Password)
-	}
-	if cioParams.ProviderRefreshToken != "" {
-		values.Set("provider_refresh_token", cioParams.ProviderRefreshToken)
-	}
-	if cioParams.ProviderToken != "" {
-		values.Set("provider_token", cioParams.ProviderToken)
-	}
-	if cioParams.ProviderTokenSecret != "" {
-		values.Set("provider_token_secret", cioParams.ProviderTokenSecret)
-	}
-	if cioParams.ProviderConsumerKey != "" {
-		values.Set("provider_consumer_key", cioParams.ProviderConsumerKey)
-	}
-	if cioParams.Server != "" {
-		values.Set("server", cioParams.Server)
-	}
-	if cioParams.Status != "" {
-		values.Set("status", cioParams.Status)
-	}
-	if cioParams.StatusOK != "" {
-		values.Set("status_ok", cioParams.StatusOK)
-	}
-	if cioParams.StatusCallbackURL != "" {
-		values.Set("status_callback_url", cioParams.StatusOK)
-	}
-	if cioParams.Type != "" {
-		values.Set("type", cioParams.Type)
-	}
-	if cioParams.Username != "" {
-		values.Set("username", cioParams.Username)
-	}
-	if cioParams.SourceType != "" {
-		values.Set("source_type", cioParams.SourceType)
-	}
+	// dynamically iterate through struct fields
+	refVal := reflect.ValueOf(cioParams)
+	refType := reflect.TypeOf(cioParams)
+	for i, numFields := 0, refVal.NumField(); i < numFields; i++ {
+		fieldValue := refVal.Field(i)
+		fieldType := refType.Field(i)
 
-	// Booleans
-	if cioParams.Active {
-		values.Set("active", "1")
-	}
-	if cioParams.ForceStatusCheck {
-		values.Set("force_status_check", "1")
-	}
-	if cioParams.IncludeBody {
-		values.Set("include_body", "1")
-	}
-	if cioParams.IncludeHeaders {
-		values.Set("include_headers", "1")
-	}
-	if cioParams.IncludeFlags {
-		values.Set("include_flags", "1")
-	}
-	if cioParams.IncludeNamesOnly {
-		values.Set("include_names_only", "1")
-	}
-	if cioParams.Raw {
-		values.Set("raw", "1")
-	}
-	if cioParams.RawFileList {
-		values.Set("raw_file_list", "1")
-	}
-	if cioParams.SourceRawFileList {
-		values.Set("source_raw_file_list", "1")
-	}
-	if cioParams.UseSSL {
-		values.Set("use_ssl", "1")
-	}
+		// dynamically choose how to fill the values based on field type
+		// and set the key to the json tag name
+		switch fieldValue.Kind() {
 
-	// Integers
-	if cioParams.Limit != 0 {
-		values.Set("limit", fmt.Sprintf("%d", cioParams.Limit))
-	}
-	if cioParams.Offset != 0 {
-		values.Set("offset", fmt.Sprintf("%d", cioParams.Offset))
-	}
-	if cioParams.Port != 0 {
-		values.Set("port", fmt.Sprintf("%d", cioParams.Port))
+		case reflect.String:
+			v := fieldValue.String()
+			if len(v) > 0 {
+				values.Set(jsonName(fieldType), v)
+			}
+
+		case reflect.Bool:
+			v := fieldValue.Bool()
+			if v {
+				values.Set(jsonName(fieldType), "1")
+			}
+
+		case reflect.Int:
+			v := fieldValue.Int()
+			if v != 0 {
+				values.Set(jsonName(fieldType), fmt.Sprintf("%d", v))
+			}
+
+		default:
+			panic("Unexpected CioParams type: " + fieldValue.Kind().String())
+		}
 	}
 
 	return values
 }
 
-// QueryString ...
-// Make a query string
+// QueryString returns a query string
 func (cioParams CioParams) QueryString() string {
 
 	// Encode parameters
@@ -216,5 +111,11 @@ func (cioParams CioParams) QueryString() string {
 	}
 
 	// Format
-	return fmt.Sprintf("?%v", encoded)
+	return fmt.Sprintf("?%s", encoded)
+}
+
+// jsonName returns the json name based on the json tag of the struct field
+func jsonName(sf reflect.StructField) string {
+	jsonTag := sf.Tag.Get("json")
+	return jsonTag[:strings.Index(jsonTag, ",")]
 }
