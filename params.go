@@ -117,5 +117,12 @@ func (cioParams CioParams) QueryString() string {
 // jsonName returns the json name based on the json tag of the struct field
 func jsonName(sf reflect.StructField) string {
 	jsonTag := sf.Tag.Get("json")
-	return jsonTag[:strings.Index(jsonTag, ",")]
+	indexComma := strings.Index(jsonTag, ",")
+	if len(jsonTag) == 0 || indexComma == 0 {
+		panic(fmt.Sprintf("CioParam %s missing json name tag", sf.Name))
+	}
+	if indexComma >= 0 {
+		return jsonTag[:indexComma]
+	}
+	return jsonTag
 }
