@@ -1,10 +1,6 @@
-// Package ciolite ...
 package ciolite
 
 // Api functions that support: https://context.io/docs/lite/discovery
-
-// Imports
-import ()
 
 // GetDiscoveryResponse ...
 type GetDiscoveryResponse struct {

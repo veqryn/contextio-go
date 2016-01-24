@@ -1,4 +1,3 @@
-// Package ciolite ...
 package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders
