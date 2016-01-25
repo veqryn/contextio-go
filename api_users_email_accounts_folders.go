@@ -24,55 +24,60 @@ type CreateEmailAccountFolderResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
-// GetUserEmailAccountsFolders ...
-// List folders in an email account
-// https://context.io/docs/lite/users/email_accounts/folders#get
-func (cioLite *CioLite) GetUserEmailAccountsFolders(userID string, label string) ([]GetUsersEmailAccountFoldersResponse, error) {
+// GetUserEmailAccountsFolders gets a list of folders in an email account.
+// queryValues may optionally contain CioParams.IncludeNamesOnly
+// 	https://context.io/docs/lite/users/email_accounts/folders#get
+func (cioLite *CioLite) GetUserEmailAccountsFolders(userID string, label string,
+	queryValues CioParams) ([]GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUsersEmailAccountFoldersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUserEmailAccountFolder ...
-// Returns information about a given folder
-// https://context.io/docs/lite/users/email_accounts/folders#id-get
-func (cioLite *CioLite) GetUserEmailAccountFolder(userID string, label string, folder string) (GetUsersEmailAccountFoldersResponse, error) {
+// GetUserEmailAccountFolder gets information about a given folder.
+// queryValues may optionally contain CioParams.Delimiter
+// 	https://context.io/docs/lite/users/email_accounts/folders#id-get
+func (cioLite *CioLite) GetUserEmailAccountFolder(userID string, label string, folder string,
+	queryValues CioParams) (GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response GetUsersEmailAccountFoldersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// CreateUserEmailAccountFolder ...
-// Create a folder on an email account
-// https://context.io/docs/lite/users/email_accounts/folders#id-post
-func (cioLite *CioLite) CreateUserEmailAccountFolder(userID string, label string, formValues CioParams) (CreateEmailAccountFolderResponse, error) {
+// CreateUserEmailAccountFolder create a folder on an email account.
+// queryValues may optionally contain CioParams.Delimiter
+// 	https://context.io/docs/lite/users/email_accounts/folders#id-post
+func (cioLite *CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string,
+	formValues CioParams) (CreateEmailAccountFolderResponse, error) {
 
 	// Make request
 	request := clientRequest{
 		method:     "POST",
-		path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/folder", userID, label),
+		path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
 		formValues: formValues,
 	}
 
@@ -80,7 +85,7 @@ func (cioLite *CioLite) CreateUserEmailAccountFolder(userID string, label string
 	var response CreateEmailAccountFolderResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

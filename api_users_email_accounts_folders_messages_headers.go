@@ -14,22 +14,24 @@ type GetUserEmailAccountsFolderMessageHeadersResponse struct {
 	Headers map[string]interface{} `json:"headers,omitempty"`
 }
 
-// GetUserEmailAccountsFolderMessageHeaders ...
-// Complete headers of a given email message
-// https://context.io/docs/lite/users/email_accounts/folders/messages/headers#get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessageHeaders(userID string, label string, folder string, messageID string) (GetUserEmailAccountsFolderMessageHeadersResponse, error) {
+// GetUserEmailAccountsFolderMessageHeaders gets the complete headers of a given email message.
+// queryValues may optionally contain CioParams.Delimiter, CioParams.Raw
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/headers#get
+func (cioLite *CioLite) GetUserEmailAccountsFolderMessageHeaders(userID string, label string, folder string,
+	messageID string, queryValues CioParams) (GetUserEmailAccountsFolderMessageHeadersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/headers", userID, label, folder, messageID),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/headers", userID, label, folder, messageID),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response GetUserEmailAccountsFolderMessageHeadersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

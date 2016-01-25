@@ -7,9 +7,8 @@ import (
 	"fmt"
 )
 
-// GetUserConnectTokens ...
-// List of connect tokens created for a user
-// https://context.io/docs/lite/users/connect_tokens#get
+// GetUserConnectTokens gets a list of connect tokens created for a user.
+// 	https://context.io/docs/lite/users/connect_tokens#get
 func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokensResponse, error) {
 
 	// Make request
@@ -22,14 +21,13 @@ func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokensR
 	var response []GetConnectTokensResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUserConnectToken ...
-// Information about a given connect token for a specific user
-// https://context.io/docs/lite/users/connect_tokens#id-get
+// GetUserConnectToken gets information about a given connect token for a specific user.
+// 	https://context.io/docs/lite/users/connect_tokens#id-get
 func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokensResponse, error) {
 
 	// Make request
@@ -42,14 +40,15 @@ func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetCon
 	var response GetConnectTokensResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// CreateUserConnectToken ...
-// Obtain a new connect_token for a specific user
-// https://context.io/docs/lite/users/connect_tokens#post
+// CreateUserConnectToken creates and obtains a new connect_token for a specific user.
+// formValues requires CioParams.CallbackURL, and may optionally have CioParams.Email,
+// CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
+// 	https://context.io/docs/lite/users/connect_tokens#post
 func (cioLite *CioLite) CreateUserConnectToken(userID string, formValues CioParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
@@ -63,14 +62,13 @@ func (cioLite *CioLite) CreateUserConnectToken(userID string, formValues CioPara
 	var response CreateConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// DeleteUserConnectToken ...
-// Remove a given connect token for a specific user
-// https://context.io/docs/lite/users/connect_tokens#id-delete
+// DeleteUserConnectToken removes a given connect token for a specific user.
+// 	https://context.io/docs/lite/users/connect_tokens#id-delete
 func (cioLite *CioLite) DeleteUserConnectToken(userID string, token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
@@ -83,7 +81,7 @@ func (cioLite *CioLite) DeleteUserConnectToken(userID string, token string) (Del
 	var response DeleteConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

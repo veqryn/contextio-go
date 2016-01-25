@@ -26,19 +26,13 @@ type GetUsersResponse struct {
 // CreateUserResponse ...
 type CreateUserResponse struct {
 	Success string `json:"success,omitempty"`
-	Id      string `json:"id,omitempty"`
+	ID      string `json:"id,omitempty"`
 
 	EmailAccount CreateEmailAccountResponse `json:"email_account,omitempty"`
 
 	ResourceURL       string `json:"resource_url,omitempty"`
 	AccessToken       string `json:"access_token,omitempty"`
 	AccessTokenSecret string `json:"access_token_secret,omitempty"`
-}
-
-// ModifyUsersResponse ...
-type ModifyUsersResponse struct {
-	Success     string `json:"success,omitempty"`
-	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // ModifyUserResponse ...
@@ -53,29 +47,30 @@ type DeleteUserResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
-// GetUsers ...
-// List of users
-// https://context.io/docs/lite/users#get
-func (cioLite *CioLite) GetUsers() ([]GetUsersResponse, error) {
+// GetUsers gets a list of users.
+// queryValues may optionally contain CioParams.Email, CioParams.Status,
+// CioParams.StatusOK, CioParams.Limit, CioParams.Offset
+// 	https://context.io/docs/lite/users#get
+func (cioLite *CioLite) GetUsers(queryValues CioParams) ([]GetUsersResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   "/users",
+		method:      "GET",
+		path:        "/users",
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUsersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUser ...
-// Details about a given user
-// https://context.io/docs/lite/users#id-get
+// GetUser get details about a given user.
+// 	https://context.io/docs/lite/users#id-get
 func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
 
 	// Make request
@@ -88,14 +83,17 @@ func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
 	var response GetUsersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// CreateUser ...
-// Add a new user
-// https://context.io/docs/lite/users#post
+// CreateUser create a new user.
+// formValues may optionally contain CioParams.MigrateAccountID, CioParams.Email,
+// CioParams.FirstName, CioParams.LastName, CioParams.Server, CioParams.Username,
+// CioParams.UseSSL, CioParams.Port, CioParams.Type, CioParams.Password,
+// CioParams.ProviderRefreshToken, CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// 	https://context.io/docs/lite/users#post
 func (cioLite *CioLite) CreateUser(formValues CioParams) (CreateUserResponse, error) {
 
 	// Make request
@@ -109,14 +107,14 @@ func (cioLite *CioLite) CreateUser(formValues CioParams) (CreateUserResponse, er
 	var response CreateUserResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// ModifyUser ...
-// Modify a given user
-// https://context.io/docs/lite/users#id-post
+// ModifyUser modifies a given user.
+// formValues requires CioParams.FirstName, CioParams.LastName
+// 	https://context.io/docs/lite/users#id-post
 func (cioLite *CioLite) ModifyUser(userID string, formValues CioParams) (ModifyUserResponse, error) {
 
 	// Make request
@@ -130,14 +128,13 @@ func (cioLite *CioLite) ModifyUser(userID string, formValues CioParams) (ModifyU
 	var response ModifyUserResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// DeleteUser ...
-// Remove a given user
-// https://context.io/docs/lite/users#id-delete
+// DeleteUser removes a given user.
+// 	https://context.io/docs/lite/users#id-delete
 func (cioLite *CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	// Make request
@@ -150,7 +147,7 @@ func (cioLite *CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 	var response DeleteUserResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

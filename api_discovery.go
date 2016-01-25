@@ -21,9 +21,9 @@ type GetDiscoveryResponse struct {
 	} `json:"imap,omitempty"`
 }
 
-// GetDiscovery ...
-// Attempts to discover connection settings for a given email address
-// https://context.io/docs/lite/discovery#get
+// GetDiscovery attempts to discover connection settings for a given email address.
+// queryValues requires CioParams.Email and CioParams.SourceType to be set.
+// 	https://context.io/docs/lite/discovery#get
 func (cioLite *CioLite) GetDiscovery(queryValues CioParams) (GetDiscoveryResponse, error) {
 
 	// Make request

@@ -43,29 +43,29 @@ type DeleteEmailAccountResponse struct {
 	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
-// GetUserEmailAccounts ...
-// List of email accounts assigned to a user
-// https://context.io/docs/lite/users/email_accounts#get
-func (cioLite *CioLite) GetUserEmailAccounts(userID string) ([]GetUsersEmailAccountsResponse, error) {
+// GetUserEmailAccounts gets a list of email accounts assigned to a user.
+// queryValues may optionally contain CioParams.Status, CioParams.StatusOK
+// 	https://context.io/docs/lite/users/email_accounts#get
+func (cioLite *CioLite) GetUserEmailAccounts(userID string, queryValues CioParams) ([]GetUsersEmailAccountsResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts", userID),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts", userID),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUserEmailAccount ...
-// Parameters and status for an email account
-// https://context.io/docs/lite/users/email_accounts#id-get
+// GetUserEmailAccount gets the parameters and status for an email account.
+// 	https://context.io/docs/lite/users/email_accounts#id-get
 func (cioLite *CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
@@ -78,14 +78,17 @@ func (cioLite *CioLite) GetUserEmailAccount(userID string, label string) (GetUse
 	var response GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// CreateUserEmailAccount ...
-// Add a mailbox to a given user
-// https://context.io/docs/lite/users/email_accounts#post
+// CreateUserEmailAccount adds a mailbox to a given user.
+// formValues requires CioParams.Email, CioParams.Server, CioParams.Username,
+// CioParams.UseSSL, CioParams.Port, CioParams.Type,
+// and may optionally contain CioParams.Password, CioParams.ProviderRefreshToken,
+// CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// 	https://context.io/docs/lite/users/email_accounts#post
 func (cioLite *CioLite) CreateUserEmailAccount(userID string, formValues CioParams) (CreateEmailAccountResponse, error) {
 
 	// Make request
@@ -99,14 +102,15 @@ func (cioLite *CioLite) CreateUserEmailAccount(userID string, formValues CioPara
 	var response CreateEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// ModifyUserEmailAccount ...
-// Modify an email account on a given user
-// https://context.io/docs/lite/users/email_accounts#id-post
+// ModifyUserEmailAccount modifies an email account on a given user.
+// formValues optionally may contain CioParams.Status, CioParams.ForceStatusCheck, CioParams.Password,
+// CioParams.ProviderRefreshToken, CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// 	https://context.io/docs/lite/users/email_accounts#id-post
 func (cioLite *CioLite) ModifyUserEmailAccount(userID string, label string, formValues CioParams) (ModifyEmailAccountResponse, error) {
 
 	// Make request
@@ -120,14 +124,13 @@ func (cioLite *CioLite) ModifyUserEmailAccount(userID string, label string, form
 	var response ModifyEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// DeleteUserEmailAccount ...
-// Delete an email account of a user
-// https://context.io/docs/lite/users/email_accounts#id-delete
+// DeleteUserEmailAccount deletes an email account of a user.
+// 	https://context.io/docs/lite/users/email_accounts#id-delete
 func (cioLite *CioLite) DeleteUserEmailAccount(userID string, label string) (DeleteEmailAccountResponse, error) {
 
 	// Make request
@@ -140,7 +143,7 @@ func (cioLite *CioLite) DeleteUserEmailAccount(userID string, label string) (Del
 	var response DeleteEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

@@ -1,6 +1,4 @@
-/*
-	Package ciolite is the Golang client library for the Lite Context.IO API
-*/
+// Package ciolite is the Golang client library for the Lite Context.IO API
 package ciolite
 
 // Imports

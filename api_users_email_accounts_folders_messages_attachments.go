@@ -20,42 +20,46 @@ type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
 	AttachmentID int `json:"attachment_id,omitempty"`
 }
 
-// GetUserEmailAccountsFolderMessageAttachments ...
-// Listing of email attachments
-// https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string, messageID string) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
+// GetUserEmailAccountsFolderMessageAttachments gets listings of email attachments.
+// queryValues may optionally contain CioParams.Delimiter
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#get
+func (cioLite *CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string,
+	messageID string, queryValues CioParams) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, folder, messageID),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, folder, messageID),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUserEmailAccountsFolderMessageAttachment ...
-// Retrieve an email attachment
-// https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#id-get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string, messageID string, attachmentID string) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
+// GetUserEmailAccountsFolderMessageAttachment retrieves an email attachment.
+// queryValues may optionally contain CioParams.Delimiter
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#id-get
+func (cioLite *CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string,
+	messageID string, attachmentID string, queryValues CioParams) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
 	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, folder, messageID, attachmentID),
+		method:      "GET",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, folder, messageID, attachmentID),
+		queryValues: queryValues,
 	}
 
 	// Make response
 	var response GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

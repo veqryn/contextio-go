@@ -45,13 +45,11 @@ type ModifyWebHookResponse struct {
 
 // DeleteWebHookResponse ...
 type DeleteWebHookResponse struct {
-	Success     string `json:"success,omitempty"`
-	ResourceURL string `json:"resource_url,omitempty"`
+	Success string `json:"success,omitempty"`
 }
 
-// GetUserWebHooks ...
-// Listing of WebHook configured for a user
-// https://context.io/docs/lite/users/webhooks#get
+// GetUserWebHooks gets listings of WebHooks configured for a user.
+// 	https://context.io/docs/lite/users/webhooks#get
 func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksResponse, error) {
 
 	// Make request
@@ -64,14 +62,13 @@ func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksRespon
 	var response []GetUsersWebHooksResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// GetUserWebHook ...
-// Properties of a given WebHook
-// https://context.io/docs/lite/users/webhooks#id-get
+// GetUserWebHook gets the properties of a given WebHook.
+// 	https://context.io/docs/lite/users/webhooks#id-get
 func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUsersWebHooksResponse, error) {
 
 	// Make request
@@ -84,14 +81,17 @@ func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUser
 	var response GetUsersWebHooksResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// CreateUserWebHook ...
-// Create a new WebHook on a user
-// https://context.io/docs/lite/users/webhooks#post
+// CreateUserWebHook creates a new WebHook on a user.
+// formValues requires CioParams.CallbackURL, CioParams.FailureNotifUrl, and may optionally contain
+// CioParams.FilterTo, CioParams.FilterFrom, CioParams.FilterCC, CioParams.FilterSubject,
+// CioParams.FilterThread, CioParams.FilterNewImportant, CioParams.FilterFileName, CioParams.FilterFolderAdded,
+// CioParams.FilterToDomain, CioParams.FilterFromDomain, CioParams.IncludeBody, CioParams.BodyType
+// 	https://context.io/docs/lite/users/webhooks#post
 func (cioLite *CioLite) CreateUserWebHook(userID string, formValues CioParams) (CreateUserWebHookResponse, error) {
 
 	// Make request
@@ -105,14 +105,14 @@ func (cioLite *CioLite) CreateUserWebHook(userID string, formValues CioParams) (
 	var response CreateUserWebHookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// ModifyUserWebHook ...
-// Change properties of a given WebHook
-// https://context.io/docs/lite/users/webhooks#id-post
+// ModifyUserWebHook changes the properties of a given WebHook.
+// formValues requires CioParams.Active
+// 	https://context.io/docs/lite/users/webhooks#id-post
 func (cioLite *CioLite) ModifyUserWebHook(userID string, webhookID string, formValues CioParams) (ModifyWebHookResponse, error) {
 
 	// Make request
@@ -126,14 +126,13 @@ func (cioLite *CioLite) ModifyUserWebHook(userID string, webhookID string, formV
 	var response ModifyWebHookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
 
-// DeleteUserWebHookAccount ...
-// Cancel a WebHook
-// https://context.io/docs/lite/users/webhooks#id-delete
+// DeleteUserWebHookAccount cancels a WebHook.
+// 	https://context.io/docs/lite/users/webhooks#id-delete
 func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string) (DeleteWebHookResponse, error) {
 
 	// Make request
@@ -146,7 +145,7 @@ func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string
 	var response DeleteWebHookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
