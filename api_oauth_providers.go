@@ -17,14 +17,14 @@ type GetOAuthProvidersResponse struct {
 
 // CreateOAuthProviderResponse ...
 type CreateOAuthProviderResponse struct {
-	Success             string `json:"success,omitempty"`
+	Success             bool   `json:"success,omitempty"`
 	ProviderConsumerKey string `json:"provider_consumer_key,omitempty"`
 	ResourceURL         string `json:"resource_url,omitempty"`
 }
 
 // DeleteOAuthProviderResponse ...
 type DeleteOAuthProviderResponse struct {
-	Success string `json:"success,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // GetOAuthProviders get the list of OAuth providers configured.

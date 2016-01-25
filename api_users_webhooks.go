@@ -39,13 +39,13 @@ type CreateUserWebHookResponse struct {
 
 // ModifyWebHookResponse ...
 type ModifyWebHookResponse struct {
-	Success     string `json:"success,omitempty"`
+	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // DeleteWebHookResponse ...
 type DeleteWebHookResponse struct {
-	Success string `json:"success,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // GetUserWebHooks gets listings of WebHooks configured for a user.

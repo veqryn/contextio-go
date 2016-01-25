@@ -25,7 +25,7 @@ type GetUsersResponse struct {
 
 // CreateUserResponse ...
 type CreateUserResponse struct {
-	Success string `json:"success,omitempty"`
+	Success bool   `json:"success,omitempty"`
 	ID      string `json:"id,omitempty"`
 
 	EmailAccount CreateEmailAccountResponse `json:"email_account,omitempty"`
@@ -37,13 +37,13 @@ type CreateUserResponse struct {
 
 // ModifyUserResponse ...
 type ModifyUserResponse struct {
-	Success     string `json:"success,omitempty"`
+	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // DeleteUserResponse ...
 type DeleteUserResponse struct {
-	Success     string `json:"success,omitempty"`
+	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 

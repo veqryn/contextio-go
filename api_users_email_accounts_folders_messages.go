@@ -73,7 +73,7 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 
 // MoveUserEmailAccountFolderMessageResponse ...
 type MoveUserEmailAccountFolderMessageResponse struct {
-	Success string `json:"success,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessages gets listings of email messages for a user.

@@ -37,7 +37,7 @@ type GetConnectTokensResponse struct {
 
 // CreateConnectTokenResponse ...
 type CreateConnectTokenResponse struct {
-	Success            string `json:"success,omitempty"`
+	Success            bool   `json:"success,omitempty"`
 	Token              string `json:"token,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
 	BrowserRedirectURL string `json:"browser_redirect_url,omitempty"`
@@ -47,7 +47,7 @@ type CreateConnectTokenResponse struct {
 
 // DeleteConnectTokenResponse ...
 type DeleteConnectTokenResponse struct {
-	Success string `json:"success,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // GetConnectTokens get a list of connect tokens created with your API key.

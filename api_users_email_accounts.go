@@ -31,14 +31,14 @@ type CreateEmailAccountResponse struct {
 
 // ModifyEmailAccountResponse ...
 type ModifyEmailAccountResponse struct {
-	Success      string `json:"success,omitempty"`
+	Success      bool   `json:"success,omitempty"`
 	ResourceURL  string `json:"resource_url,omitempty"`
 	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
 // DeleteEmailAccountResponse ...
 type DeleteEmailAccountResponse struct {
-	Success      string `json:"success,omitempty"`
+	Success      bool   `json:"success,omitempty"`
 	ResourceURL  string `json:"resource_url,omitempty"`
 	FeedbackCode string `json:"feedback_code,omitempty"`
 }
