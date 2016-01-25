@@ -80,8 +80,7 @@ type MoveUserEmailAccountFolderMessageResponse struct {
 // queryValues may optionally contain CioParams.Delimiter, CioParams.IncludeBody, CioParams.BodyType,
 // CioParams.IncludeHeaders, CioParams.IncludeFlags, CioParams.Limit, CioParams.Offset
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessages(userID string, label string, folder string,
-	queryValues CioParams) ([]GetUsersEmailAccountFolderMessagesResponse, error) {
+func (cioLite *CioLite) GetUserEmailAccountsFolderMessages(userID string, label string, folder string, queryValues CioParams) ([]GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -103,8 +102,7 @@ func (cioLite *CioLite) GetUserEmailAccountsFolderMessages(userID string, label 
 // queryValues may optionally contain CioParams.Delimiter, CioParams.IncludeBody,
 // CioParams.BodyType, CioParams.IncludeHeaders, CioParams.IncludeFlags
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
-func (cioLite *CioLite) GetUserEmailAccountFolderMessage(userID string, label string, folder string,
-	messageID string, queryValues CioParams) (GetUsersEmailAccountFolderMessagesResponse, error) {
+func (cioLite *CioLite) GetUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues CioParams) (GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -125,8 +123,7 @@ func (cioLite *CioLite) GetUserEmailAccountFolderMessage(userID string, label st
 // MoveUserEmailAccountFolderMessage moves a message.
 // formValues requires CioParams.NewFolderID, and may optionally contain CioParams.Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
-func (cioLite *CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string,
-	messageID string, formValues CioParams) (MoveUserEmailAccountFolderMessageResponse, error) {
+func (cioLite *CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, formValues CioParams) (MoveUserEmailAccountFolderMessageResponse, error) {
 
 	// Make request
 	request := clientRequest{

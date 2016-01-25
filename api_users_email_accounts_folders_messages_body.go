@@ -18,8 +18,7 @@ type GetUserEmailAccountsFolderMessageBodyResponse struct {
 // GetUserEmailAccountsFolderMessageBody fetches the message body of a given email.
 // queryValues may optionally contain CioParams.Delimiter, CioParams.Type
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessageBody(userID string, label string, folder string,
-	messageID string, queryValues CioParams) ([]GetUserEmailAccountsFolderMessageBodyResponse, error) {
+func (cioLite *CioLite) GetUserEmailAccountsFolderMessageBody(userID string, label string, folder string, messageID string, queryValues CioParams) ([]GetUserEmailAccountsFolderMessageBodyResponse, error) {
 
 	// Make request
 	request := clientRequest{

@@ -27,8 +27,7 @@ type CreateEmailAccountFolderResponse struct {
 // GetUserEmailAccountsFolders gets a list of folders in an email account.
 // queryValues may optionally contain CioParams.IncludeNamesOnly
 // 	https://context.io/docs/lite/users/email_accounts/folders#get
-func (cioLite *CioLite) GetUserEmailAccountsFolders(userID string, label string,
-	queryValues CioParams) ([]GetUsersEmailAccountFoldersResponse, error) {
+func (cioLite *CioLite) GetUserEmailAccountsFolders(userID string, label string, queryValues CioParams) ([]GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -49,8 +48,7 @@ func (cioLite *CioLite) GetUserEmailAccountsFolders(userID string, label string,
 // GetUserEmailAccountFolder gets information about a given folder.
 // queryValues may optionally contain CioParams.Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-get
-func (cioLite *CioLite) GetUserEmailAccountFolder(userID string, label string, folder string,
-	queryValues CioParams) (GetUsersEmailAccountFoldersResponse, error) {
+func (cioLite *CioLite) GetUserEmailAccountFolder(userID string, label string, folder string, queryValues CioParams) (GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -71,8 +69,7 @@ func (cioLite *CioLite) GetUserEmailAccountFolder(userID string, label string, f
 // CreateUserEmailAccountFolder create a folder on an email account.
 // queryValues may optionally contain CioParams.Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-post
-func (cioLite *CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string,
-	formValues CioParams) (CreateEmailAccountFolderResponse, error) {
+func (cioLite *CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string, formValues CioParams) (CreateEmailAccountFolderResponse, error) {
 
 	// Make request
 	request := clientRequest{
