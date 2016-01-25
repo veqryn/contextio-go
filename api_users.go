@@ -89,10 +89,12 @@ func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
 }
 
 // CreateUser create a new user.
-// formValues may optionally contain CioParams.MigrateAccountID, CioParams.Email,
-// CioParams.FirstName, CioParams.LastName, CioParams.Server, CioParams.Username,
-// CioParams.UseSSL, CioParams.Port, CioParams.Type, CioParams.Password,
-// CioParams.ProviderRefreshToken, CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// formValues can optionally be empty if just creating a user without any email accounts,
+// but if creating a user and an email account at the same time then it is required to have:
+// CioParams.Email, CioParams.Server, CioParams.Username, CioParams.UseSSL, CioParams.Port, CioParams.Type,
+// and (if OAUTH) CioParams.ProviderRefreshToken and CioParams.ProviderConsumerKey,
+// and (if not OAUTH) CioParams.Password, and may optionally contain CioParams.MigrateAccountID,
+// CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
 // 	https://context.io/docs/lite/users#post
 func (cioLite *CioLite) CreateUser(formValues CioParams) (CreateUserResponse, error) {
 

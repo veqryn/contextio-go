@@ -86,8 +86,8 @@ func (cioLite *CioLite) GetUserEmailAccount(userID string, label string) (GetUse
 // CreateUserEmailAccount adds a mailbox to a given user.
 // formValues requires CioParams.Email, CioParams.Server, CioParams.Username,
 // CioParams.UseSSL, CioParams.Port, CioParams.Type,
-// and may optionally contain CioParams.Password, CioParams.ProviderRefreshToken,
-// CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// and (if OAUTH) CioParams.ProviderRefreshToken and CioParams.ProviderConsumerKey,
+// and (if not OAUTH) CioParams.Password, and may optionally contain CioParams.StatusCallbackURL
 // 	https://context.io/docs/lite/users/email_accounts#post
 func (cioLite *CioLite) CreateUserEmailAccount(userID string, formValues CioParams) (CreateEmailAccountResponse, error) {
 
