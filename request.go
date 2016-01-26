@@ -5,12 +5,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Sirupsen/logrus"
-	"github.com/garyburd/go-oauth/oauth"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/garyburd/go-oauth/oauth"
 )
 
 // clientRequest defines information that can be used to make a request
