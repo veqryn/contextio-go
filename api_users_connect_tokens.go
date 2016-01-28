@@ -9,7 +9,7 @@ import (
 
 // GetUserConnectTokens gets a list of connect tokens created for a user.
 // 	https://context.io/docs/lite/users/connect_tokens#get
-func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokensResponse, error) {
+func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -18,7 +18,7 @@ func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokensR
 	}
 
 	// Make response
-	var response []GetConnectTokensResponse
+	var response []GetConnectTokenResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -28,7 +28,7 @@ func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokensR
 
 // GetUserConnectToken gets information about a given connect token for a specific user.
 // 	https://context.io/docs/lite/users/connect_tokens#id-get
-func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokensResponse, error) {
+func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -37,7 +37,7 @@ func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetCon
 	}
 
 	// Make response
-	var response GetConnectTokensResponse
+	var response GetConnectTokenResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)

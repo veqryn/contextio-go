@@ -5,10 +5,11 @@ package ciolite
 // Imports
 import (
 	"fmt"
+	"strings"
 )
 
-// GetConnectTokensResponse ...
-type GetConnectTokensResponse struct {
+// GetConnectTokenResponse ...
+type GetConnectTokenResponse struct {
 	Token              string `json:"token,omitempty"`
 	Email              string `json:"email,omitempty"`
 	CallbackURL        string `json:"callback_url,omitempty"`
@@ -19,20 +20,22 @@ type GetConnectTokensResponse struct {
 	ServerLabel        string `json:"server_label,omitempty"`
 
 	AccountLite bool `json:"account_lite,omitempty"`
+	Expires bool `json:"expires,omitempty"`
 
 	Created int `json:"created,omitempty"`
 	Used    int `json:"used,omitempty"`
-	Expires int `json:"expires,omitempty"`
 
-	User struct {
-		ID             string   `json:"id,omitempty"`
-		EmailAddresses []string `json:"email_addresses,omitempty"`
-		FirstName      string   `json:"first_name,omitempty"`
-		LastName       string   `json:"last_name,omitempty"`
-		Created        int      `json:"created,omitempty"`
+	User GetConnectTokenUserResponse `json:"user,omitempty"`
+}
 
-		EmailAccounts []GetUsersEmailAccountsResponse `json:"email_accounts,omitempty"`
-	}
+type GetConnectTokenUserResponse struct {
+	ID             string   `json:"id,omitempty"`
+	EmailAddresses []string `json:"email_addresses,omitempty"`
+	FirstName      string   `json:"first_name,omitempty"`
+	LastName       string   `json:"last_name,omitempty"`
+	Created        int      `json:"created,omitempty"`
+
+	EmailAccounts []GetUsersEmailAccountsResponse `json:"email_accounts,omitempty"`
 }
 
 // CreateConnectTokenResponse ...
@@ -52,7 +55,7 @@ type DeleteConnectTokenResponse struct {
 
 // GetConnectTokens get a list of connect tokens created with your API key.
 // 	https://context.io/docs/lite/connect_tokens#get
-func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokensResponse, error) {
+func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -61,7 +64,7 @@ func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokensResponse, error) {
 	}
 
 	// Make response
-	var response []GetConnectTokensResponse
+	var response []GetConnectTokenResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -71,7 +74,7 @@ func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokensResponse, error) {
 
 // GetConnectToken gets information about a given connect token.
 // https://context.io/docs/lite/connect_tokens#id-get
-func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokensResponse, error) {
+func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -80,7 +83,7 @@ func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokensResponse,
 	}
 
 	// Make response
-	var response GetConnectTokensResponse
+	var response GetConnectTokenResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -127,4 +130,32 @@ func (cioLite *CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResp
 	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
+}
+
+// EmailAccountMatching ...
+func (user *GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
+
+	if user.EmailAccounts != nil {
+
+		localPart := upToSeparator(email, "@")
+
+		for _, emailAccount := range user.EmailAccounts {
+
+			if email == emailAccount.Username ||
+				localPart == upToSeparator(emailAccount.Username, "@") ||
+				localPart == upToSeparator(emailAccount.Label, ":") {
+
+				return emailAccount, nil
+			}
+		}
+	}
+	return GetUsersEmailAccountsResponse{}, fmt.Errorf("No email accounts match %s in %v", email, *user)
+}
+
+func upToSeparator(s string, sep string) string {
+	idx := strings.Index(s, sep)
+	if idx >= 0 {
+		return s[:idx]
+	}
+	return s
 }
