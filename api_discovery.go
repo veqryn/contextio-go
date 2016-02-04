@@ -4,9 +4,9 @@ package ciolite
 
 // GetDiscoveryResponse ...
 type GetDiscoveryResponse struct {
-	Email         string   `json:"email,omitempty"`
-	Type          string   `json:"type,omitempty"`
-	Documentation []string `json:"documentation,omitempty"`
+	Email         string        `json:"email,omitempty"`
+	Type          string        `json:"type,omitempty"`
+	Documentation []interface{} `json:"documentation,omitempty"`
 
 	Found bool `json:"found,omitempty"`
 
