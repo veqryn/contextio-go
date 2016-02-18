@@ -9,7 +9,7 @@ import (
 
 // UserEmailAccountsFolderMessageReadResponse ...
 type UserEmailAccountsFolderMessageReadResponse struct {
-	Success int `json:"success,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // MarkUserEmailAccountsFolderMessageRead marks the message as read.

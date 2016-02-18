@@ -19,9 +19,7 @@ type GetUsersEmailAccountFoldersResponse struct {
 
 // CreateEmailAccountFolderResponse ...
 type CreateEmailAccountFolderResponse struct {
-	Status      string `json:"stats,omitempty"`
-	Delimeter   string `json:"delimeter,omitempty"`
-	ResourceURL string `json:"resource_url,omitempty"`
+	Success bool `json:"success,omitempty"`
 }
 
 // GetUserEmailAccountsFolders gets a list of folders in an email account.
