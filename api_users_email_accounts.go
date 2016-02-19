@@ -5,6 +5,7 @@ package ciolite
 // Imports
 import (
 	"fmt"
+	"strings"
 )
 
 // GetUsersEmailAccountsResponse ...
@@ -146,4 +147,32 @@ func (cioLite *CioLite) DeleteUserEmailAccount(userID string, label string) (Del
 	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
+}
+
+// FindEmailAccountMatching ...
+func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, email string) (GetUsersEmailAccountsResponse, error) {
+
+	if emailAccounts != nil {
+
+		localPart := upToSeparator(email, "@")
+
+		for _, emailAccount := range emailAccounts {
+
+			if email == emailAccount.Username ||
+				localPart == upToSeparator(emailAccount.Username, "@") ||
+				localPart == upToSeparator(emailAccount.Label, ":") {
+
+				return emailAccount, nil
+			}
+		}
+	}
+	return GetUsersEmailAccountsResponse{}, fmt.Errorf("No email accounts match %s in %v", email, emailAccounts)
+}
+
+func upToSeparator(s string, sep string) string {
+	idx := strings.Index(s, sep)
+	if idx >= 0 {
+		return s[:idx]
+	}
+	return s
 }

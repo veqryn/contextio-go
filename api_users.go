@@ -153,3 +153,8 @@ func (cioLite *CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	return response, err
 }
+
+// EmailAccountMatching ...
+func (user GetUsersResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
+	return FindEmailAccountMatching(user.EmailAccounts, email)
+}

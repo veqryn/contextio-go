@@ -3,7 +3,12 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/users/webhooks
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"hash"
+	"strconv"
 )
 
 // GetUsersWebHooksResponse ...
@@ -53,10 +58,13 @@ type DeleteWebHookResponse struct {
 type WebHookCallback struct {
 	AccountID string `json:"account_id,omitempty"`
 	WebhookID string `json:"webhook_id,omitempty"`
-	Token     string `json:"token,omitempty"`
-	Signature string `json:"signature,omitempty"`
+	Token     string `json:"token,omitempty" valid:"required"`
+	Signature string `json:"signature,omitempty" valid:"required"`
 
-	Timestamp int `json:"timestamp,omitempty"`
+	Timestamp int `json:"timestamp,omitempty" valid:"required"`
+
+	// Data is an error message that gives more information about the cause of failure
+	Data string `json:"data,omitempty"`
 
 	MessageData WebHookMessageData `json:"message_data,omitempty"`
 }
@@ -70,29 +78,46 @@ type WebHookMessageData struct {
 	References []string `json:"references,omitempty"`
 	Folders    []string `json:"folders,omitempty"`
 
-	Date int `json:"date,omitempty"`
+	Date         int `json:"date,omitempty"`
+	DateReceived int `json:"date_received,omitempty"`
 
-	Addresses  MessageAddresses `json:"addresses,omitempty"`
-	PersonInfo PersonInfo       `json:"person_info,omitempty"`
+	Addresses WebHookMessageDataAddresses `json:"addresses,omitempty"`
+
+	PersonInfo PersonInfo `json:"person_info,omitempty"`
+
+	Flags struct {
+		Flagged  bool `json:"flagged,omitempty"`
+		Answered bool `json:"answered,omitempty"`
+		Draft    bool `json:"draft,omitempty"`
+		Seen     bool `json:"seen,omitempty"`
+	} `json:"flags,omitempty"`
+
+	Sources []struct {
+		Label  string `json:"label,omitempty"`
+		Folder string `json:"folder,omitempty"`
+		UID    int    `json:"uid,omitempty"`
+	} `json:"sources,omitempty"`
+
+	EmailAccounts []struct {
+		Label  string `json:"label,omitempty"`
+		Folder string `json:"folder,omitempty"`
+		UID    int    `json:"uid,omitempty"`
+	} `json:"email_accounts,omitempty"`
+
+	Files []interface{} `json:"files,omitempty"`
 }
 
-// WebHookFailedCallback ...
-type WebHookFailedCallback struct {
-	AccountID string `json:"account_id,omitempty"`
-	WebhookID string `json:"webhook_id,omitempty"`
-	Data      string `json:"data,omitempty"`
-	Token     string `json:"token,omitempty"`
-	Signature string `json:"signature,omitempty"`
+// WebHookMessageDataAddresses ...
+type WebHookMessageDataAddresses struct {
+	From struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"from,omitempty"`
 
-	Timestamp int `json:"timestamp,omitempty"`
-}
-
-// WebHookCallbackAuthentication ...
-type WebHookCallbackAuthentication struct {
-	Token     string `json:"token,omitempty" valid:"required"`
-	Signature string `json:"signature,omitempty" valid:"required"`
-
-	Timestamp int `json:"timestamp,omitempty" valid:"required"`
+	To []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"to,omitempty"`
 }
 
 // GetUserWebHooks gets listings of WebHooks configured for a user.
@@ -195,4 +220,19 @@ func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string
 	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
+}
+
+// Valid returns true if this WebHookCallback authenticates
+func (whc WebHookCallback) Valid(cioLite *CioLite) bool {
+	// Hash timestamp and token with secret, compare to signature
+	message := strconv.Itoa(whc.Timestamp) + whc.Token
+	hash := hashHmac(sha256.New, message, cioLite.apiSecret)
+	return len(hash) > 0 && whc.Signature == hash
+}
+
+// hashHmac ...
+func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) string {
+	h := hmac.New(hashAlgorithm, []byte(secret))
+	h.Write([]byte(message))
+	return hex.EncodeToString(h.Sum(nil))
 }

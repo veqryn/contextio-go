@@ -19,7 +19,7 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 	References      []string `json:"references,omitempty"`
 	ReceivedHeaders []string `json:"received_headers,omitempty"`
 
-	Addresses MessageAddresses `json:"addresses,omitempty"`
+	Addresses GetUsersEmailAccountFolderMessageAddresses `json:"addresses,omitempty"`
 
 	PersonInfo PersonInfo `json:"person_info,omitempty"`
 
@@ -42,8 +42,8 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 // PersonInfo ...
 type PersonInfo map[string]interface{}
 
-// MessageAddresses ...
-type MessageAddresses struct {
+// GetUsersEmailAccountFolderMessageAddresses ...
+type GetUsersEmailAccountFolderMessageAddresses struct {
 	From []struct {
 		Email string `json:"email,omitempty"`
 		Name  string `json:"name,omitempty"`

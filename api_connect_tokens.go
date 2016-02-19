@@ -4,7 +4,6 @@ package ciolite
 
 import (
 	"fmt"
-	"strings"
 )
 
 // GetConnectTokenResponse ...
@@ -133,29 +132,6 @@ func (cioLite *CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResp
 }
 
 // EmailAccountMatching ...
-func (user *GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
-
-	if user.EmailAccounts != nil {
-
-		localPart := upToSeparator(email, "@")
-
-		for _, emailAccount := range user.EmailAccounts {
-
-			if email == emailAccount.Username ||
-				localPart == upToSeparator(emailAccount.Username, "@") ||
-				localPart == upToSeparator(emailAccount.Label, ":") {
-
-				return emailAccount, nil
-			}
-		}
-	}
-	return GetUsersEmailAccountsResponse{}, fmt.Errorf("No email accounts match %s in %v", email, *user)
-}
-
-func upToSeparator(s string, sep string) string {
-	idx := strings.Index(s, sep)
-	if idx >= 0 {
-		return s[:idx]
-	}
-	return s
+func (user GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
+	return FindEmailAccountMatching(user.EmailAccounts, email)
 }
