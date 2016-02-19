@@ -11,8 +11,8 @@ import (
 type GetUsersEmailAccountFoldersResponse struct {
 	Name             string `json:"name,omitempty"`
 	SymbolicName     string `json:"symbolic_name,omitempty"`
-	NbMessages       string `json:"nb_messages,omitempty"`
-	NbUnseenMessages string `json:"nb_unseen_messages,omitempty"`
+	NbMessages       int `json:"nb_messages,omitempty"`
+	NbUnseenMessages int `json:"nb_unseen_messages,omitempty"`
 	Delimiter        string `json:"delimiter,omitempty"`
 	ResourceURL      string `json:"resource_url,omitempty"`
 }
