@@ -35,12 +35,20 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 		AttachmentID int `json:"attachment_id,omitempty"`
 	} `json:"attachments,omitempty"`
 
+	Bodies []struct {
+		BodySection string `json:"body_section,omitempty"`
+		Type        string `json:"type,omitempty"`
+		Encoding    string `json:"encoding,omitempty"`
+
+		Size int `json:"size,omitempty"`
+	} `json:"bodies,omitempty"`
+
 	SentAt     int `json:"sent_at,omitempty"`
 	ReceivedAt int `json:"received_at,omitempty"`
 }
 
 // PersonInfo ...
-type PersonInfo map[string]interface{}
+type PersonInfo map[string]map[string]string
 
 // GetUsersEmailAccountFolderMessageAddresses ...
 type GetUsersEmailAccountFolderMessageAddresses struct {

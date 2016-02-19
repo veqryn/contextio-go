@@ -104,7 +104,22 @@ type WebHookMessageData struct {
 		UID    int    `json:"uid,omitempty"`
 	} `json:"email_accounts,omitempty"`
 
-	Files []interface{} `json:"files,omitempty"`
+	Files []struct {
+		ContentID          string `json:"content_id,omitempty"`
+		Type               string `json:"type,omitempty"`
+		XAttachmentID      string `json:"x_attachment_id,omitempty"`
+		FileName           string `json:"file_name,omitempty"`
+		BodySection        string `json:"body_section,omitempty"`
+		ContentDisposition string `json:"content_disposition,omitempty"`
+		MainFileName       string `json:"main_file_name,omitempty"`
+
+		FileNameStructure [][]string `json:"file_name_structure,omitempty"`
+
+		AttachmentID int `json:"attachment_id,omitempty"`
+		Size         int `json:"size,omitempty"`
+
+		IsEmbedded bool `json:"is_embedded,omitempty"`
+	} `json:"files,omitempty"`
 }
 
 // WebHookMessageDataAddresses ...
@@ -118,6 +133,26 @@ type WebHookMessageDataAddresses struct {
 		Email string `json:"email,omitempty"`
 		Name  string `json:"name,omitempty"`
 	} `json:"to,omitempty"`
+
+	Cc []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"cc,omitempty"`
+
+	Bcc []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"bcc,omitempty"`
+
+	Sender []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"sender,omitempty"`
+
+	ReplyTo []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"reply_to,omitempty"`
 }
 
 // GetUserWebHooks gets listings of WebHooks configured for a user.
