@@ -2,7 +2,6 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/webhooks
 
-// Imports
 import (
 	"fmt"
 )
@@ -32,20 +31,68 @@ type GetUsersWebHooksResponse struct {
 
 // CreateUserWebHookResponse ...
 type CreateUserWebHookResponse struct {
-	Status      string `json:"stats,omitempty"`
 	WebhookID   string `json:"webhook_id,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
+
+	Success bool `json:"success,omitempty"`
 }
 
 // ModifyWebHookResponse ...
 type ModifyWebHookResponse struct {
-	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
+
+	Success bool `json:"success,omitempty"`
 }
 
 // DeleteWebHookResponse ...
 type DeleteWebHookResponse struct {
 	Success bool `json:"success,omitempty"`
+}
+
+// WebHookCallback ...
+type WebHookCallback struct {
+	AccountID string `json:"account_id,omitempty"`
+	WebhookID string `json:"webhook_id,omitempty"`
+	Token     string `json:"token,omitempty"`
+	Signature string `json:"signature,omitempty"`
+
+	Timestamp int `json:"timestamp,omitempty"`
+
+	MessageData WebHookMessageData `json:"message_data,omitempty"`
+}
+
+// WebHookMessageData ...
+type WebHookMessageData struct {
+	MessageID      string `json:"message_id,omitempty"`
+	EmailMessageID string `json:"email_message_id,omitempty"`
+	Subject        string `json:"subject,omitempty"`
+
+	References []string `json:"references,omitempty"`
+	Folders    []string `json:"folders,omitempty"`
+
+	Date int `json:"date,omitempty"`
+
+	Addresses  MessageAddresses `json:"addresses,omitempty"`
+	PersonInfo PersonInfo       `json:"person_info,omitempty"`
+}
+
+// WebHookFailedCallback ...
+type WebHookFailedCallback struct {
+	AccountID string `json:"account_id,omitempty"`
+	WebhookID string `json:"webhook_id,omitempty"`
+	Data      string `json:"data,omitempty"`
+	Token     string `json:"token,omitempty"`
+	Signature string `json:"signature,omitempty"`
+
+	Timestamp int `json:"timestamp,omitempty"`
+}
+
+// WebHookCallbackAuthentication ...
+type WebHookCallbackAuthentication struct {
+	Token     string `json:"token,omitempty" valid:"required"`
+	Signature string `json:"signature,omitempty" valid:"required"`
+
+	Timestamp int `json:"timestamp,omitempty" valid:"required"`
 }
 
 // GetUserWebHooks gets listings of WebHooks configured for a user.

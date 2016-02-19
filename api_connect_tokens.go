@@ -2,7 +2,6 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/connect_tokens
 
-// Imports
 import (
 	"fmt"
 	"strings"
@@ -20,7 +19,7 @@ type GetConnectTokenResponse struct {
 	ServerLabel        string `json:"server_label,omitempty"`
 
 	AccountLite bool `json:"account_lite,omitempty"`
-	Expires bool `json:"expires,omitempty"`
+	Expires     bool `json:"expires,omitempty"`
 
 	Created int `json:"created,omitempty"`
 	Used    int `json:"used,omitempty"`
@@ -28,6 +27,7 @@ type GetConnectTokenResponse struct {
 	User GetConnectTokenUserResponse `json:"user,omitempty"`
 }
 
+// GetConnectTokenUserResponse ...
 type GetConnectTokenUserResponse struct {
 	ID             string   `json:"id,omitempty"`
 	EmailAddresses []string `json:"email_addresses,omitempty"`

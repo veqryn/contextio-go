@@ -2,7 +2,6 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages
 
-// Imports
 import (
 	"fmt"
 )
@@ -20,40 +19,9 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 	References      []string `json:"references,omitempty"`
 	ReceivedHeaders []string `json:"received_headers,omitempty"`
 
-	Addresses struct {
-		From []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"from,omitempty"`
+	Addresses MessageAddresses `json:"addresses,omitempty"`
 
-		To []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"to,omitempty"`
-
-		Cc []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"cc,omitempty"`
-
-		Bcc []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"bcc,omitempty"`
-
-		Sender []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"sender,omitempty"`
-
-		ReplyTo []struct {
-			Email string `json:"email,omitempty"`
-			Name  string `json:"name,omitempty"`
-		} `json:"reply_to,omitempty"`
-	} `json:"addresses,omitempty"`
-
-	PersonInfo map[string]interface {
-	} `json:"person_info,omitempty"`
+	PersonInfo PersonInfo `json:"person_info,omitempty"`
 
 	Attachments []struct {
 		Type               string `json:"type,omitempty"`
@@ -69,6 +37,42 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 
 	SentAt     int `json:"sent_at,omitempty"`
 	ReceivedAt int `json:"received_at,omitempty"`
+}
+
+// PersonInfo ...
+type PersonInfo map[string]interface{}
+
+// MessageAddresses ...
+type MessageAddresses struct {
+	From []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"from,omitempty"`
+
+	To []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"to,omitempty"`
+
+	Cc []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"cc,omitempty"`
+
+	Bcc []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"bcc,omitempty"`
+
+	Sender []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"sender,omitempty"`
+
+	ReplyTo []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"reply_to,omitempty"`
 }
 
 // MoveUserEmailAccountFolderMessageResponse ...
