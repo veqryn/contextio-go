@@ -11,8 +11,8 @@ import (
 	"strconv"
 )
 
-// GetUsersWebHooksResponse ...
-type GetUsersWebHooksResponse struct {
+// GetUsersWebhooksResponse ...
+type GetUsersWebhooksResponse struct {
 	CallbackURL        string `json:"callback_url,omitempty"`
 	FailureNotifURL    string `json:"failure_notif_url,omitempty"`
 	WebhookID          string `json:"webhook_id,omitempty"`
@@ -34,28 +34,28 @@ type GetUsersWebHooksResponse struct {
 	IncludeBody bool `json:"include_body,omitempty"`
 }
 
-// CreateUserWebHookResponse ...
-type CreateUserWebHookResponse struct {
+// CreateUserWebhookResponse ...
+type CreateUserWebhookResponse struct {
 	WebhookID   string `json:"webhook_id,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 
 	Success bool `json:"success,omitempty"`
 }
 
-// ModifyWebHookResponse ...
-type ModifyWebHookResponse struct {
+// ModifyWebhookResponse ...
+type ModifyWebhookResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 
 	Success bool `json:"success,omitempty"`
 }
 
-// DeleteWebHookResponse ...
-type DeleteWebHookResponse struct {
+// DeleteWebhookResponse ...
+type DeleteWebhookResponse struct {
 	Success bool `json:"success,omitempty"`
 }
 
-// WebHookCallback ...
-type WebHookCallback struct {
+// WebhookCallback ...
+type WebhookCallback struct {
 	AccountID string `json:"account_id,omitempty"`
 	WebhookID string `json:"webhook_id,omitempty"`
 	Token     string `json:"token,omitempty" valid:"required"`
@@ -66,11 +66,11 @@ type WebHookCallback struct {
 	// Data is an error message that gives more information about the cause of failure
 	Data string `json:"data,omitempty"`
 
-	MessageData WebHookMessageData `json:"message_data,omitempty"`
+	MessageData WebhookMessageData `json:"message_data,omitempty"`
 }
 
-// WebHookMessageData ...
-type WebHookMessageData struct {
+// WebhookMessageData ...
+type WebhookMessageData struct {
 	MessageID      string `json:"message_id,omitempty"`
 	EmailMessageID string `json:"email_message_id,omitempty"`
 	Subject        string `json:"subject,omitempty"`
@@ -81,7 +81,7 @@ type WebHookMessageData struct {
 	Date         int `json:"date,omitempty"`
 	DateReceived int `json:"date_received,omitempty"`
 
-	Addresses WebHookMessageDataAddresses `json:"addresses,omitempty"`
+	Addresses WebhookMessageDataAddresses `json:"addresses,omitempty"`
 
 	PersonInfo PersonInfo `json:"person_info,omitempty"`
 
@@ -122,8 +122,8 @@ type WebHookMessageData struct {
 	} `json:"files,omitempty"`
 }
 
-// WebHookMessageDataAddresses ...
-type WebHookMessageDataAddresses struct {
+// WebhookMessageDataAddresses ...
+type WebhookMessageDataAddresses struct {
 	From struct {
 		Email string `json:"email,omitempty"`
 		Name  string `json:"name,omitempty"`
@@ -155,9 +155,9 @@ type WebHookMessageDataAddresses struct {
 	} `json:"reply_to,omitempty"`
 }
 
-// GetUserWebHooks gets listings of WebHooks configured for a user.
+// GetUserWebhooks gets listings of Webhooks configured for a user.
 // 	https://context.io/docs/lite/users/webhooks#get
-func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksResponse, error) {
+func (cioLite *CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -166,7 +166,7 @@ func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksRespon
 	}
 
 	// Make response
-	var response []GetUsersWebHooksResponse
+	var response []GetUsersWebhooksResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -174,9 +174,9 @@ func (cioLite *CioLite) GetUserWebHooks(userID string) ([]GetUsersWebHooksRespon
 	return response, err
 }
 
-// GetUserWebHook gets the properties of a given WebHook.
+// GetUserWebhook gets the properties of a given Webhook.
 // 	https://context.io/docs/lite/users/webhooks#id-get
-func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUsersWebHooksResponse, error) {
+func (cioLite *CioLite) GetUserWebhook(userID string, webhookID string) (GetUsersWebhooksResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -185,7 +185,7 @@ func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUser
 	}
 
 	// Make response
-	var response GetUsersWebHooksResponse
+	var response GetUsersWebhooksResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -193,13 +193,13 @@ func (cioLite *CioLite) GetUserWebHook(userID string, webhookID string) (GetUser
 	return response, err
 }
 
-// CreateUserWebHook creates a new WebHook on a user.
+// CreateUserWebhook creates a new Webhook on a user.
 // formValues requires CioParams.CallbackURL, CioParams.FailureNotifUrl, and may optionally contain
 // CioParams.FilterTo, CioParams.FilterFrom, CioParams.FilterCC, CioParams.FilterSubject,
 // CioParams.FilterThread, CioParams.FilterNewImportant, CioParams.FilterFileName, CioParams.FilterFolderAdded,
 // CioParams.FilterToDomain, CioParams.FilterFromDomain, CioParams.IncludeBody, CioParams.BodyType
 // 	https://context.io/docs/lite/users/webhooks#post
-func (cioLite *CioLite) CreateUserWebHook(userID string, formValues CioParams) (CreateUserWebHookResponse, error) {
+func (cioLite *CioLite) CreateUserWebhook(userID string, formValues CioParams) (CreateUserWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -209,7 +209,7 @@ func (cioLite *CioLite) CreateUserWebHook(userID string, formValues CioParams) (
 	}
 
 	// Make response
-	var response CreateUserWebHookResponse
+	var response CreateUserWebhookResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -217,10 +217,10 @@ func (cioLite *CioLite) CreateUserWebHook(userID string, formValues CioParams) (
 	return response, err
 }
 
-// ModifyUserWebHook changes the properties of a given WebHook.
+// ModifyUserWebhook changes the properties of a given Webhook.
 // formValues requires CioParams.Active
 // 	https://context.io/docs/lite/users/webhooks#id-post
-func (cioLite *CioLite) ModifyUserWebHook(userID string, webhookID string, formValues CioParams) (ModifyWebHookResponse, error) {
+func (cioLite *CioLite) ModifyUserWebhook(userID string, webhookID string, formValues CioParams) (ModifyWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -230,7 +230,7 @@ func (cioLite *CioLite) ModifyUserWebHook(userID string, webhookID string, formV
 	}
 
 	// Make response
-	var response ModifyWebHookResponse
+	var response ModifyWebhookResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -238,9 +238,9 @@ func (cioLite *CioLite) ModifyUserWebHook(userID string, webhookID string, formV
 	return response, err
 }
 
-// DeleteUserWebHookAccount cancels a WebHook.
+// DeleteUserWebhookAccount cancels a Webhook.
 // 	https://context.io/docs/lite/users/webhooks#id-delete
-func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string) (DeleteWebHookResponse, error) {
+func (cioLite *CioLite) DeleteUserWebhookAccount(userID string, webhookID string) (DeleteWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -249,7 +249,7 @@ func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string
 	}
 
 	// Make response
-	var response DeleteWebHookResponse
+	var response DeleteWebhookResponse
 
 	// Request
 	err := cioLite.doFormRequest(request, &response)
@@ -257,8 +257,8 @@ func (cioLite *CioLite) DeleteUserWebHookAccount(userID string, webhookID string
 	return response, err
 }
 
-// Valid returns true if this WebHookCallback authenticates
-func (whc WebHookCallback) Valid(cioLite *CioLite) bool {
+// Valid returns true if this WebhookCallback authenticates
+func (whc WebhookCallback) Valid(cioLite *CioLite) bool {
 	// Hash timestamp and token with secret, compare to signature
 	message := strconv.Itoa(whc.Timestamp) + whc.Token
 	hash := hashHmac(sha256.New, message, cioLite.apiSecret)
