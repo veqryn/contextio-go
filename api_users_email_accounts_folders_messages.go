@@ -135,13 +135,13 @@ func (cioLite *CioLite) GetUserEmailAccountFolderMessage(userID string, label st
 // MoveUserEmailAccountFolderMessage moves a message.
 // formValues requires CioParams.NewFolderID, and may optionally contain CioParams.Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
-func (cioLite *CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, formValues CioParams) (MoveUserEmailAccountFolderMessageResponse, error) {
+func (cioLite *CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues CioParams) (MoveUserEmailAccountFolderMessageResponse, error) {
 
 	// Make request
 	request := clientRequest{
 		method:     "PUT",
 		path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
-		formValues: formValues,
+		queryValues: queryValues,
 	}
 
 	// Make response
