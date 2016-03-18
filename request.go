@@ -43,7 +43,7 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	cioLite.log.WithField("Body", bodyString).Debug("Creating new request to: " + url)
+	cioLite.log.WithField("payload", bodyString).Debug("Creating new request to: " + url)
 
 	// Construct the request
 	httpReq, err := http.NewRequest(request.method, url, bodyReader)
@@ -80,8 +80,8 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 		return fmt.Errorf("Could not read response: %s", err)
 	}
 	cioLite.log.WithFields(logrus.Fields{
-		"StatusCode":   res.StatusCode,
-		"ResponseBody": string(resBody),
+		"statusCode":   res.StatusCode,
+		"payload": string(resBody),
 	}).Debug("Response received from: " + url)
 
 	// Determine status
