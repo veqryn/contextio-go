@@ -13,12 +13,12 @@ func NewCioLite(key string, secret string) *CioLite {
 	return NewCioLiteWithLogger(key, secret, nil)
 }
 
-// NewCioLite returns a CIO Lite struct (with a logger) for accessing the CIO Lite API.
+// NewCioLiteWithLogger returns a CIO Lite struct (with a logger) for accessing the CIO Lite API.
 func NewCioLiteWithLogger(key string, secret string, logger Logger) *CioLite {
 	return &CioLite{apiKey: key, apiSecret: secret, log: logger}
 }
 
-// Logging interface which *log.Logger uses. Allows injection of user specified loggers.
+// Logger interface which *log.Logger uses. Allows injection of user specified loggers.
 type Logger interface {
 	Print(v ...interface{})
 	Printf(format string, v ...interface{})
