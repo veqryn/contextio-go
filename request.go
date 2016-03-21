@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 )
 
@@ -23,11 +22,11 @@ type clientRequest struct {
 }
 
 const (
-	// The default host of Medium's API
+	// The default host of API
 	host = "https://api.context.io/lite"
 
 	// The default timeout duration used on HTTP requests
-	defaultTimeout = 10 * time.Second
+	defaultTimeout = 20 * time.Second
 )
 
 // doFormRequest makes the actual request
@@ -43,7 +42,9 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	cioLite.log.WithField("payload", bodyString).Debug("Creating new request to: " + url)
+	if cioLite.log != nil {
+		cioLite.log.Println("Creating new request to: " + url + " with payload: " + bodyString)
+	}
 
 	// Construct the request
 	httpReq, err := http.NewRequest(request.method, url, bodyReader)
@@ -79,10 +80,11 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 	if err != nil {
 		return fmt.Errorf("Could not read response: %s", err)
 	}
-	cioLite.log.WithFields(logrus.Fields{
-		"statusCode":   res.StatusCode,
-		"payload": string(resBody),
-	}).Debug("Response received from: " + url)
+	if cioLite.log != nil {
+		cioLite.log.Println("Received response from: " + url +
+			" with status code: " + fmt.Sprintf("%d", res.StatusCode) +
+			" and payload: " + string(resBody))
+	}
 
 	// Determine status
 	if res.StatusCode >= 400 {
