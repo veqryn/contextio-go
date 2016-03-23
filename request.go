@@ -75,7 +75,12 @@ func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{})
 	}
 
 	// Parse the response
-	defer res.Body.Close()
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			cioLite.log.Println("Unable to close response body, with error: " + closeErr.Error())
+		}
+	}()
+
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("Could not read response: %s", err)

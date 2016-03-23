@@ -268,6 +268,8 @@ func (whc WebhookCallback) Valid(cioLite *CioLite) bool {
 // hashHmac ...
 func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) string {
 	h := hmac.New(hashAlgorithm, []byte(secret))
-	h.Write([]byte(message))
+	if _, err := h.Write([]byte(message)); err != nil {
+		panic("hash.Hash unable to write message bytes, with error: " + err.Error())
+	}
 	return hex.EncodeToString(h.Sum(nil))
 }
