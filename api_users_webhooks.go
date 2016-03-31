@@ -265,7 +265,7 @@ func (whc WebhookCallback) Valid(cioLite *CioLite) bool {
 	return len(hash) > 0 && whc.Signature == hash
 }
 
-// hashHmac ...
+// hashHmac returns the hash of a message hashed with the provided hash function, using the provided secret
 func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) string {
 	h := hmac.New(hashAlgorithm, []byte(secret))
 	if _, err := h.Write([]byte(message)); err != nil {

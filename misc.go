@@ -9,6 +9,8 @@ func InboxName(discoveryType string) string {
 		return "INBOX"
 	case "msliveconnect":
 		return "Inbox"
+	case "generic":
+		return "Inbox"
 	default:
 		panic("Unknown discovery type: " + discoveryType)
 	}

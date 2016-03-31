@@ -154,12 +154,19 @@ func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, ema
 
 	if emailAccounts != nil {
 
+		// Try to match against the username
+		for _, emailAccount := range emailAccounts {
+			if email == emailAccount.Username {
+				return emailAccount, nil
+			}
+		}
+
+		// Try to match the local part against the username or label
 		localPart := upToSeparator(email, "@")
 
 		for _, emailAccount := range emailAccounts {
 
-			if email == emailAccount.Username ||
-				localPart == upToSeparator(emailAccount.Username, "@") ||
+			if localPart == upToSeparator(emailAccount.Username, "@") ||
 				localPart == upToSeparator(emailAccount.Label, ":") {
 
 				return emailAccount, nil
