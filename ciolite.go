@@ -9,13 +9,13 @@ type CioLite struct {
 }
 
 // NewCioLite returns a CIO Lite struct (without a logger) for accessing the CIO Lite API.
-func NewCioLite(key string, secret string) *CioLite {
+func NewCioLite(key string, secret string) CioLite {
 	return NewCioLiteWithLogger(key, secret, nil)
 }
 
 // NewCioLiteWithLogger returns a CIO Lite struct (with a logger) for accessing the CIO Lite API.
-func NewCioLiteWithLogger(key string, secret string, logger Logger) *CioLite {
-	return &CioLite{apiKey: key, apiSecret: secret, log: logger}
+func NewCioLiteWithLogger(key string, secret string, logger Logger) CioLite {
+	return CioLite{apiKey: key, apiSecret: secret, log: logger}
 }
 
 // Logger interface which *log.Logger uses. Allows injection of user specified loggers.

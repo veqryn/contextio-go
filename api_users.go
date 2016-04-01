@@ -51,7 +51,7 @@ type DeleteUserResponse struct {
 // queryValues may optionally contain CioParams.Email, CioParams.Status,
 // CioParams.StatusOK, CioParams.Limit, CioParams.Offset
 // 	https://context.io/docs/lite/users#get
-func (cioLite *CioLite) GetUsers(queryValues CioParams) ([]GetUsersResponse, error) {
+func (cioLite CioLite) GetUsers(queryValues CioParams) ([]GetUsersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -71,7 +71,7 @@ func (cioLite *CioLite) GetUsers(queryValues CioParams) ([]GetUsersResponse, err
 
 // GetUser get details about a given user.
 // 	https://context.io/docs/lite/users#id-get
-func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
+func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -96,7 +96,7 @@ func (cioLite *CioLite) GetUser(userID string) (GetUsersResponse, error) {
 // and (if not OAUTH) CioParams.Password, and may optionally contain CioParams.MigrateAccountID,
 // CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
 // 	https://context.io/docs/lite/users#post
-func (cioLite *CioLite) CreateUser(formValues CioParams) (CreateUserResponse, error) {
+func (cioLite CioLite) CreateUser(formValues CioParams) (CreateUserResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -117,7 +117,7 @@ func (cioLite *CioLite) CreateUser(formValues CioParams) (CreateUserResponse, er
 // ModifyUser modifies a given user.
 // formValues requires CioParams.FirstName, CioParams.LastName
 // 	https://context.io/docs/lite/users#id-post
-func (cioLite *CioLite) ModifyUser(userID string, formValues CioParams) (ModifyUserResponse, error) {
+func (cioLite CioLite) ModifyUser(userID string, formValues CioParams) (ModifyUserResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -137,7 +137,7 @@ func (cioLite *CioLite) ModifyUser(userID string, formValues CioParams) (ModifyU
 
 // DeleteUser removes a given user.
 // 	https://context.io/docs/lite/users#id-delete
-func (cioLite *CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
+func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	// Make request
 	request := clientRequest{

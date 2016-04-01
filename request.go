@@ -30,7 +30,7 @@ const (
 )
 
 // doFormRequest makes the actual request
-func (cioLite *CioLite) doFormRequest(request clientRequest, result interface{}) error {
+func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
 	url := host + request.path + request.queryValues.QueryString()
