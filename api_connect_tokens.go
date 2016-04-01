@@ -135,3 +135,36 @@ func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenRespo
 func (user GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
 	return FindEmailAccountMatching(user.EmailAccounts, email)
 }
+
+// CheckConnectToken checks that the connect token was used and that CIO has access to the account
+func (cioLite CioLite) CheckConnectToken(email string, contextioToken string) (GetConnectTokenResponse, error) {
+
+	// Call Api
+	response, err := cioLite.GetConnectToken(contextioToken)
+	if err != nil {
+		return response, err
+	}
+
+	// Confirm email matches
+	if response.Email != email {
+		return response, fmt.Errorf("Email does not match Context.io token")
+	}
+
+	// Confirm token was used (accepted/authorized)
+	if response.Used == 0 {
+		return response, fmt.Errorf("Context.io token not used yet")
+	}
+
+	// Confirm user exists
+	if len(response.User.ID) == 0 {
+		return response, fmt.Errorf("Context.io user not created yet")
+	}
+
+	// Confirm we have access
+	account, err := response.User.EmailAccountMatching(email)
+	if err != nil || account.Status != "OK" {
+		return response, fmt.Errorf("Unable to access account using Context.io")
+	}
+
+	return response, nil
+}

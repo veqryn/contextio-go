@@ -257,8 +257,8 @@ func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string)
 	return response, err
 }
 
-// Valid returns true if this WebhookCallback authenticates
-func (whc WebhookCallback) Valid(cioLite CioLite) bool {
+// ValidateWebhookCallback returns true if this WebhookCallback authenticates
+func (cioLite CioLite) ValidateWebhookCallback(whc WebhookCallback) bool {
 	// Hash timestamp and token with secret, compare to signature
 	message := strconv.Itoa(whc.Timestamp) + whc.Token
 	hash := hashHmac(sha256.New, message, cioLite.apiSecret)
