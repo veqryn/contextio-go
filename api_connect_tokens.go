@@ -54,7 +54,7 @@ type DeleteConnectTokenResponse struct {
 
 // GetConnectTokens get a list of connect tokens created with your API key.
 // 	https://context.io/docs/lite/connect_tokens#get
-func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
+func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -73,7 +73,7 @@ func (cioLite *CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 
 // GetConnectToken gets information about a given connect token.
 // https://context.io/docs/lite/connect_tokens#id-get
-func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
+func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -94,7 +94,7 @@ func (cioLite *CioLite) GetConnectToken(token string) (GetConnectTokenResponse, 
 // formValues requires CioParams.CallbackURL, and optionally may have
 // CioParams.Email, CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
 // 	https://context.io/docs/lite/connect_tokens#post
-func (cioLite *CioLite) CreateConnectToken(formValues CioParams) (CreateConnectTokenResponse, error) {
+func (cioLite CioLite) CreateConnectToken(formValues CioParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -114,7 +114,7 @@ func (cioLite *CioLite) CreateConnectToken(formValues CioParams) (CreateConnectT
 
 // DeleteConnectToken removes a given connect token
 // 	https://context.io/docs/lite/connect_tokens#id-delete
-func (cioLite *CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResponse, error) {
+func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{

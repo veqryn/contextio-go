@@ -29,7 +29,7 @@ type DeleteOAuthProviderResponse struct {
 
 // GetOAuthProviders get the list of OAuth providers configured.
 // 	https://context.io/docs/lite/oauth_providers#get
-func (cioLite *CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error) {
+func (cioLite CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -48,7 +48,7 @@ func (cioLite *CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error)
 
 // GetOAuthProvider gets information about a given OAuth provider.
 // 	https://context.io/docs/lite/oauth_providers#id-get
-func (cioLite *CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, error) {
+func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -68,7 +68,7 @@ func (cioLite *CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse,
 // CreateOAuthProvider adds a new OAuth2 provider.
 // formValues requires CioParams.Type, CioParams.ProviderConsumerKey, and CioParams.ProviderConsumerSecret
 // 	https://context.io/docs/lite/oauth_providers#post
-func (cioLite *CioLite) CreateOAuthProvider(formValues CioParams) (CreateOAuthProviderResponse, error) {
+func (cioLite CioLite) CreateOAuthProvider(formValues CioParams) (CreateOAuthProviderResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -88,7 +88,7 @@ func (cioLite *CioLite) CreateOAuthProvider(formValues CioParams) (CreateOAuthPr
 
 // DeleteOAuthProvider removes a given OAuth provider.
 // 	https://context.io/docs/lite/oauth_providers#id-delete
-func (cioLite *CioLite) DeleteOAuthProvider(key string) (DeleteOAuthProviderResponse, error) {
+func (cioLite CioLite) DeleteOAuthProvider(key string) (DeleteOAuthProviderResponse, error) {
 
 	// Make request
 	request := clientRequest{

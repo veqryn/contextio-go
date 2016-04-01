@@ -9,7 +9,7 @@ import (
 
 // GetUserConnectTokens gets a list of connect tokens created for a user.
 // 	https://context.io/docs/lite/users/connect_tokens#get
-func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenResponse, error) {
+func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -28,7 +28,7 @@ func (cioLite *CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenRe
 
 // GetUserConnectToken gets information about a given connect token for a specific user.
 // 	https://context.io/docs/lite/users/connect_tokens#id-get
-func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokenResponse, error) {
+func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -49,7 +49,7 @@ func (cioLite *CioLite) GetUserConnectToken(userID string, token string) (GetCon
 // formValues requires CioParams.CallbackURL, and may optionally have CioParams.Email,
 // CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
 // 	https://context.io/docs/lite/users/connect_tokens#post
-func (cioLite *CioLite) CreateUserConnectToken(userID string, formValues CioParams) (CreateConnectTokenResponse, error) {
+func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CioParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -69,7 +69,7 @@ func (cioLite *CioLite) CreateUserConnectToken(userID string, formValues CioPara
 
 // DeleteUserConnectToken removes a given connect token for a specific user.
 // 	https://context.io/docs/lite/users/connect_tokens#id-delete
-func (cioLite *CioLite) DeleteUserConnectToken(userID string, token string) (DeleteConnectTokenResponse, error) {
+func (cioLite CioLite) DeleteUserConnectToken(userID string, token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{

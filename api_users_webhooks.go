@@ -157,7 +157,7 @@ type WebhookMessageDataAddresses struct {
 
 // GetUserWebhooks gets listings of Webhooks configured for a user.
 // 	https://context.io/docs/lite/users/webhooks#get
-func (cioLite *CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksResponse, error) {
+func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -176,7 +176,7 @@ func (cioLite *CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksRespon
 
 // GetUserWebhook gets the properties of a given Webhook.
 // 	https://context.io/docs/lite/users/webhooks#id-get
-func (cioLite *CioLite) GetUserWebhook(userID string, webhookID string) (GetUsersWebhooksResponse, error) {
+func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsersWebhooksResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -199,7 +199,7 @@ func (cioLite *CioLite) GetUserWebhook(userID string, webhookID string) (GetUser
 // CioParams.FilterThread, CioParams.FilterNewImportant, CioParams.FilterFileName, CioParams.FilterFolderAdded,
 // CioParams.FilterToDomain, CioParams.FilterFromDomain, CioParams.IncludeBody, CioParams.BodyType
 // 	https://context.io/docs/lite/users/webhooks#post
-func (cioLite *CioLite) CreateUserWebhook(userID string, formValues CioParams) (CreateUserWebhookResponse, error) {
+func (cioLite CioLite) CreateUserWebhook(userID string, formValues CioParams) (CreateUserWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -220,7 +220,7 @@ func (cioLite *CioLite) CreateUserWebhook(userID string, formValues CioParams) (
 // ModifyUserWebhook changes the properties of a given Webhook.
 // formValues requires CioParams.Active
 // 	https://context.io/docs/lite/users/webhooks#id-post
-func (cioLite *CioLite) ModifyUserWebhook(userID string, webhookID string, formValues CioParams) (ModifyWebhookResponse, error) {
+func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formValues CioParams) (ModifyWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -240,7 +240,7 @@ func (cioLite *CioLite) ModifyUserWebhook(userID string, webhookID string, formV
 
 // DeleteUserWebhookAccount cancels a Webhook.
 // 	https://context.io/docs/lite/users/webhooks#id-delete
-func (cioLite *CioLite) DeleteUserWebhookAccount(userID string, webhookID string) (DeleteWebhookResponse, error) {
+func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string) (DeleteWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -258,7 +258,7 @@ func (cioLite *CioLite) DeleteUserWebhookAccount(userID string, webhookID string
 }
 
 // Valid returns true if this WebhookCallback authenticates
-func (whc WebhookCallback) Valid(cioLite *CioLite) bool {
+func (whc WebhookCallback) Valid(cioLite CioLite) bool {
 	// Hash timestamp and token with secret, compare to signature
 	message := strconv.Itoa(whc.Timestamp) + whc.Token
 	hash := hashHmac(sha256.New, message, cioLite.apiSecret)

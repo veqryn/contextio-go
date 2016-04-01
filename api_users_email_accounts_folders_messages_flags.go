@@ -22,7 +22,7 @@ type GetUserEmailAccountsFolderMessageFlagsResponse struct {
 // GetUserEmailAccountsFolderMessageFlags returns the message flags.
 // queryValues may optionally contain CioParams.Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/flags#get
-func (cioLite *CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, label string, folder string, messageID string, queryValues CioParams) (GetUserEmailAccountsFolderMessageFlagsResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, label string, folder string, messageID string, queryValues CioParams) (GetUserEmailAccountsFolderMessageFlagsResponse, error) {
 
 	// Make request
 	request := clientRequest{
