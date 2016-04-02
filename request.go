@@ -57,11 +57,11 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	client.Credentials = oauth.Credentials{Token: cioLite.apiKey, Secret: cioLite.apiSecret}
 
 	// Add headers
-	httpReq.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	httpReq.Header.Add("Accept", "application/json")
-	httpReq.Header.Add("Accept-Charset", "utf-8")
+	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	httpReq.Header.Set("Accept", "application/json")
+	httpReq.Header.Set("Accept-Charset", "utf-8")
 	httpReq.Header.Set("User-Agent", "Golang CIOLite library v0.1")
-	httpReq.Header.Add("Authorization", client.AuthorizationHeader(nil, request.method, httpReq.URL, bodyValues))
+	httpReq.Header.Set("Authorization", client.AuthorizationHeader(nil, request.method, httpReq.URL, bodyValues))
 
 	// Create the HTTP client
 	httpClient := &http.Client{
