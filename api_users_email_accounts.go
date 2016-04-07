@@ -67,6 +67,7 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues CioParams
 
 // GetUserEmailAccount gets the parameters and status for an email account.
 // 	https://context.io/docs/lite/users/email_accounts#id-get
+// Status can be one of: OK, CONNECTION_IMPOSSIBLE, INVALID_CREDENTIALS, TEMP_DISABLED, DISABLED
 func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
