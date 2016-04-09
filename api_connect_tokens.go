@@ -6,7 +6,9 @@ import (
 	"fmt"
 )
 
-// GetConnectTokenResponse ...
+// GetConnectTokenResponse data struct
+// 	https://context.io/docs/lite/connect_tokens#get
+// 	https://context.io/docs/lite/connect_tokens#id-get
 type GetConnectTokenResponse struct {
 	Token              string `json:"token,omitempty"`
 	Email              string `json:"email,omitempty"`
@@ -26,7 +28,9 @@ type GetConnectTokenResponse struct {
 	User GetConnectTokenUserResponse `json:"user,omitempty"`
 }
 
-// GetConnectTokenUserResponse ...
+// GetConnectTokenUserResponse data struct within GetConnectTokenResponse
+// 	https://context.io/docs/lite/connect_tokens#get
+// 	https://context.io/docs/lite/connect_tokens#id-get
 type GetConnectTokenUserResponse struct {
 	ID             string   `json:"id,omitempty"`
 	EmailAddresses []string `json:"email_addresses,omitempty"`
@@ -37,7 +41,8 @@ type GetConnectTokenUserResponse struct {
 	EmailAccounts []GetUsersEmailAccountsResponse `json:"email_accounts,omitempty"`
 }
 
-// CreateConnectTokenResponse ...
+// CreateConnectTokenResponse data struct
+// 	https://context.io/docs/lite/connect_tokens#post
 type CreateConnectTokenResponse struct {
 	Success            bool   `json:"success,omitempty"`
 	Token              string `json:"token,omitempty"`
@@ -47,7 +52,8 @@ type CreateConnectTokenResponse struct {
 	AccessTokenSecret  string `json:"access_token_secret,omitempty"`
 }
 
-// DeleteConnectTokenResponse ...
+// DeleteConnectTokenResponse data struct
+// 	https://context.io/docs/lite/connect_tokens#id-delete
 type DeleteConnectTokenResponse struct {
 	Success bool `json:"success,omitempty"`
 }
@@ -72,7 +78,7 @@ func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 }
 
 // GetConnectToken gets information about a given connect token.
-// https://context.io/docs/lite/connect_tokens#id-get
+// 	https://context.io/docs/lite/connect_tokens#id-get
 func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
 
 	// Make request
@@ -131,7 +137,8 @@ func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenRespo
 	return response, err
 }
 
-// EmailAccountMatching ...
+// EmailAccountMatching searches its EmailAccounts array for the provided email address,
+// and returns the GetUsersEmailAccountsResponse Email Account that matches it.
 func (user GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
 	return FindEmailAccountMatching(user.EmailAccounts, email)
 }

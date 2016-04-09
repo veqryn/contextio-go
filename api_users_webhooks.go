@@ -11,7 +11,9 @@ import (
 	"strconv"
 )
 
-// GetUsersWebhooksResponse ...
+// GetUsersWebhooksResponse data struct
+// 	https://context.io/docs/lite/users/webhooks#get
+// 	https://context.io/docs/lite/users/webhooks#id-get
 type GetUsersWebhooksResponse struct {
 	CallbackURL        string `json:"callback_url,omitempty"`
 	FailureNotifURL    string `json:"failure_notif_url,omitempty"`
@@ -34,7 +36,8 @@ type GetUsersWebhooksResponse struct {
 	IncludeBody bool `json:"include_body,omitempty"`
 }
 
-// CreateUserWebhookResponse ...
+// CreateUserWebhookResponse data struct
+// 	https://context.io/docs/lite/users/webhooks#post
 type CreateUserWebhookResponse struct {
 	WebhookID   string `json:"webhook_id,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
@@ -42,19 +45,22 @@ type CreateUserWebhookResponse struct {
 	Success bool `json:"success,omitempty"`
 }
 
-// ModifyWebhookResponse ...
+// ModifyWebhookResponse data struct
+// 	https://context.io/docs/lite/users/webhooks#id-post
 type ModifyWebhookResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 
 	Success bool `json:"success,omitempty"`
 }
 
-// DeleteWebhookResponse ...
+// DeleteWebhookResponse data struct
+// 	https://context.io/docs/lite/users/webhooks#id-delete
 type DeleteWebhookResponse struct {
 	Success bool `json:"success,omitempty"`
 }
 
-// WebhookCallback ...
+// WebhookCallback data struct that will be received from CIO
+// 	https://context.io/docs/lite/users/webhooks#callbacks
 type WebhookCallback struct {
 	AccountID string `json:"account_id,omitempty"`
 	WebhookID string `json:"webhook_id,omitempty"`
@@ -69,7 +75,8 @@ type WebhookCallback struct {
 	MessageData WebhookMessageData `json:"message_data,omitempty"`
 }
 
-// WebhookMessageData ...
+// WebhookMessageData data struct within WebhookCallback
+// 	https://context.io/docs/lite/users/webhooks#callbacks
 type WebhookMessageData struct {
 	MessageID      string `json:"message_id,omitempty"`
 	EmailMessageID string `json:"email_message_id,omitempty"`
@@ -122,7 +129,8 @@ type WebhookMessageData struct {
 	} `json:"files,omitempty"`
 }
 
-// WebhookMessageDataAddresses ...
+// WebhookMessageDataAddresses struct within WebhookMessageData
+// 	https://context.io/docs/lite/users/webhooks#callbacks
 type WebhookMessageDataAddresses struct {
 	From struct {
 		Email string `json:"email,omitempty"`

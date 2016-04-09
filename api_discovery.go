@@ -2,7 +2,8 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/discovery
 
-// GetDiscoveryResponse ...
+// GetDiscoveryResponse data struct
+// 	https://context.io/docs/lite/discovery#get
 type GetDiscoveryResponse struct {
 	Email         string        `json:"email,omitempty"`
 	Type          string        `json:"type,omitempty"`

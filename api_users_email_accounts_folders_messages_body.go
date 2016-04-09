@@ -2,12 +2,12 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages/body
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetUserEmailAccountsFolderMessageBodyResponse ...
+// GetUserEmailAccountsFolderMessageBodyResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
 type GetUserEmailAccountsFolderMessageBodyResponse struct {
 	Type        string `json:"type,omitempty"`
 	Charset     string `json:"charset,omitempty"`

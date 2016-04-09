@@ -7,7 +7,9 @@ import (
 	"fmt"
 )
 
-// GetUsersEmailAccountFoldersResponse ...
+// GetUsersEmailAccountFoldersResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders#get
+// 	https://context.io/docs/lite/users/email_accounts/folders#id-get
 type GetUsersEmailAccountFoldersResponse struct {
 	Name             string `json:"name,omitempty"`
 	SymbolicName     string `json:"symbolic_name,omitempty"`
@@ -17,7 +19,8 @@ type GetUsersEmailAccountFoldersResponse struct {
 	ResourceURL      string `json:"resource_url,omitempty"`
 }
 
-// CreateEmailAccountFolderResponse ...
+// CreateEmailAccountFolderResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders#id-post
 type CreateEmailAccountFolderResponse struct {
 	Success bool `json:"success,omitempty"`
 }

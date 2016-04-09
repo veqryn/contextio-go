@@ -2,12 +2,13 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/connect_tokens
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetOAuthProvidersResponse ...
+// GetOAuthProvidersResponse data struct
+// 	https://context.io/docs/lite/oauth_providers#get
+// 	https://context.io/docs/lite/oauth_providers#id-get
 type GetOAuthProvidersResponse struct {
 	Type                   string `json:"type,omitempty"`
 	ProviderConsumerKey    string `json:"provider_consumer_key,omitempty"`
@@ -15,14 +16,16 @@ type GetOAuthProvidersResponse struct {
 	ResourceURL            string `json:"resource_url,omitempty"`
 }
 
-// CreateOAuthProviderResponse ...
+// CreateOAuthProviderResponse data struct
+// 	https://context.io/docs/lite/oauth_providers#post
 type CreateOAuthProviderResponse struct {
 	Success             bool   `json:"success,omitempty"`
 	ProviderConsumerKey string `json:"provider_consumer_key,omitempty"`
 	ResourceURL         string `json:"resource_url,omitempty"`
 }
 
-// DeleteOAuthProviderResponse ...
+// DeleteOAuthProviderResponse data struct
+// 	https://context.io/docs/lite/oauth_providers#id-delete
 type DeleteOAuthProviderResponse struct {
 	Success bool `json:"success,omitempty"`
 }

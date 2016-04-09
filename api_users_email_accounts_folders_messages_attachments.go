@@ -2,12 +2,13 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages/attachments
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetUserEmailAccountsFolderMessageAttachmentsResponse ...
+// GetUserEmailAccountsFolderMessageAttachmentsResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#id-get
 type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
 	Type               int `json:"type,omitempty"`
 	FileName           int `json:"file_name,omitempty"`

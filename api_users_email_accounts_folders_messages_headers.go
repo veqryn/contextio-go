@@ -2,12 +2,12 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages/headers
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetUserEmailAccountsFolderMessageHeadersResponse ...
+// GetUserEmailAccountsFolderMessageHeadersResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/headers#get
 type GetUserEmailAccountsFolderMessageHeadersResponse struct {
 	ResourceURL int `json:"resource_url,omitempty"`
 

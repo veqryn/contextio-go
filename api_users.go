@@ -2,12 +2,13 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetUsersResponse ...
+// GetUsersResponse data struct
+// 	https://context.io/docs/lite/users#get
+// 	https://context.io/docs/lite/users#id-get
 type GetUsersResponse struct {
 	ID             string   `json:"id,omitempty"`
 	Username       string   `json:"username,omitempty"`
@@ -23,7 +24,8 @@ type GetUsersResponse struct {
 	PasswordExpired int `json:"password_expired,omitempty"`
 }
 
-// CreateUserResponse ...
+// CreateUserResponse data struct
+// 	https://context.io/docs/lite/users#post
 type CreateUserResponse struct {
 	Success bool   `json:"success,omitempty"`
 	ID      string `json:"id,omitempty"`
@@ -35,13 +37,15 @@ type CreateUserResponse struct {
 	AccessTokenSecret string `json:"access_token_secret,omitempty"`
 }
 
-// ModifyUserResponse ...
+// ModifyUserResponse data struct
+// 	https://context.io/docs/lite/users#id-post
 type ModifyUserResponse struct {
 	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
-// DeleteUserResponse ...
+// DeleteUserResponse data struct
+// 	https://context.io/docs/lite/users#id-delete
 type DeleteUserResponse struct {
 	Success     bool   `json:"success,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
@@ -154,7 +158,8 @@ func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 	return response, err
 }
 
-// EmailAccountMatching ...
+// EmailAccountMatching searches its EmailAccounts array for the provided email address,
+// and returns the GetUsersEmailAccountsResponse Email Account that matches it.
 func (user GetUsersResponse) EmailAccountMatching(email string) (GetUsersEmailAccountsResponse, error) {
 	return FindEmailAccountMatching(user.EmailAccounts, email)
 }

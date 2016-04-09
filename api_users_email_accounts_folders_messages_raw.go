@@ -2,12 +2,12 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages/raw
 
-// Imports
 import (
 	"fmt"
 )
 
-// GetUserEmailAccountsFolderMessageRawResponse ...
+// GetUserEmailAccountsFolderMessageRawResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
 type GetUserEmailAccountsFolderMessageRawResponse string
 
 // GetUserEmailAccountsFolderMessageRaw fetches the raw RFC-822 message text of a given email.

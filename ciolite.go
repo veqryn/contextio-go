@@ -1,7 +1,8 @@
 // Package ciolite is the Golang client library for the Lite Context.IO API
 package ciolite
 
-// CioLite ...
+// CioLite struct contains the api key and secret, along with an optional logger,
+// and provides convenience functions for accessing all CIO Lite endpoints.
 type CioLite struct {
 	apiKey    string
 	apiSecret string

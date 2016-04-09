@@ -2,12 +2,13 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages/read
 
-// Imports
 import (
 	"fmt"
 )
 
-// UserEmailAccountsFolderMessageReadResponse ...
+// UserEmailAccountsFolderMessageReadResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#post
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#delete
 type UserEmailAccountsFolderMessageReadResponse struct {
 	Success bool `json:"success,omitempty"`
 }

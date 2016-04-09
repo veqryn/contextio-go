@@ -1,6 +1,5 @@
 package ciolite
 
-// Imports
 import (
 	"fmt"
 	"net/url"
@@ -8,7 +7,7 @@ import (
 	"strings"
 )
 
-// CioParams struct with all possible query and post form values
+// CioParams struct with all possible query and form post values
 type CioParams struct {
 	BodyType               string `json:"body_type,omitempty"`
 	CallbackURL            string `json:"callback_url,omitempty"`

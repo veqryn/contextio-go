@@ -1,6 +1,5 @@
 package ciolite
 
-// Imports
 import (
 	"bytes"
 	"encoding/json"

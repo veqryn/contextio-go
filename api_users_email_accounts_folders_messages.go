@@ -6,7 +6,9 @@ import (
 	"fmt"
 )
 
-// GetUsersEmailAccountFolderMessagesResponse ...
+// GetUsersEmailAccountFolderMessagesResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type GetUsersEmailAccountFolderMessagesResponse struct {
 	EmailMessageID string `json:"email_message_id,omitempty"`
 	Subject        string `json:"subject,omitempty"`
@@ -47,10 +49,14 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 	ReceivedAt int `json:"received_at,omitempty"`
 }
 
-// PersonInfo ...
+// PersonInfo data struct within GetUsersEmailAccountFolderMessagesResponse and WebhookMessageData
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type PersonInfo map[string]map[string]string
 
-// GetUsersEmailAccountFolderMessageAddresses ...
+// GetUsersEmailAccountFolderMessageAddresses data struct within GetUsersEmailAccountFolderMessagesResponse
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type GetUsersEmailAccountFolderMessageAddresses struct {
 	From []struct {
 		Email string `json:"email,omitempty"`
@@ -83,7 +89,8 @@ type GetUsersEmailAccountFolderMessageAddresses struct {
 	} `json:"reply_to,omitempty"`
 }
 
-// MoveUserEmailAccountFolderMessageResponse ...
+// MoveUserEmailAccountFolderMessageResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
 type MoveUserEmailAccountFolderMessageResponse struct {
 	Success bool `json:"success,omitempty"`
 }
@@ -139,8 +146,8 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label st
 
 	// Make request
 	request := clientRequest{
-		method:     "PUT",
-		path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
+		method:      "PUT",
+		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
 		queryValues: queryValues,
 	}
 

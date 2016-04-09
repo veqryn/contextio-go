@@ -2,13 +2,14 @@ package ciolite
 
 // Api functions that support: https://context.io/docs/lite/users/email_accounts
 
-// Imports
 import (
 	"fmt"
 	"strings"
 )
 
-// GetUsersEmailAccountsResponse ...
+// GetUsersEmailAccountsResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts#get
+// 	https://context.io/docs/lite/users/email_accounts#id-get
 type GetUsersEmailAccountsResponse struct {
 	Status             string `json:"status,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
@@ -23,21 +24,24 @@ type GetUsersEmailAccountsResponse struct {
 	Port int `json:"port,omitempty"`
 }
 
-// CreateEmailAccountResponse ...
+// CreateEmailAccountResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts#post
 type CreateEmailAccountResponse struct {
 	Status      string `json:"stats,omitempty"`
 	Label       string `json:"label,omitempty"`
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
-// ModifyEmailAccountResponse ...
+// ModifyEmailAccountResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts#id-post
 type ModifyEmailAccountResponse struct {
 	Success      bool   `json:"success,omitempty"`
 	ResourceURL  string `json:"resource_url,omitempty"`
 	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
-// DeleteEmailAccountResponse ...
+// DeleteEmailAccountResponse data struct
+// 	https://context.io/docs/lite/users/email_accounts#id-delete
 type DeleteEmailAccountResponse struct {
 	Success      bool   `json:"success,omitempty"`
 	ResourceURL  string `json:"resource_url,omitempty"`
@@ -150,7 +154,8 @@ func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (Dele
 	return response, err
 }
 
-// FindEmailAccountMatching ...
+// FindEmailAccountMatching searches an array of GetUsersEmailAccountsResponse's
+// for the one that matches the provided email address, and returns it.
 func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, email string) (GetUsersEmailAccountsResponse, error) {
 
 	if emailAccounts != nil {
@@ -177,6 +182,8 @@ func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, ema
 	return GetUsersEmailAccountsResponse{}, fmt.Errorf("No email accounts match %s in %v", email, emailAccounts)
 }
 
+// upToSeparator returns a string up to the separator, or the whole string
+// if the separator is not contained in the string
 func upToSeparator(s string, sep string) string {
 	idx := strings.Index(s, sep)
 	if idx >= 0 {
