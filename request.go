@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/garyburd/go-oauth/oauth"
 )
@@ -20,19 +19,11 @@ type clientRequest struct {
 	queryValues CioParams
 }
 
-const (
-	// The default host of API
-	host = "https://api.context.io/lite"
-
-	// The default timeout duration used on HTTP requests
-	defaultTimeout = 20 * time.Second
-)
-
 // doFormRequest makes the actual request
 func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
-	url := host + request.path + request.queryValues.QueryString()
+	url := cioLite.Host + request.path + request.queryValues.QueryString()
 
 	// Construct the body
 	var bodyReader io.Reader
@@ -65,7 +56,7 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,
-		Timeout:   defaultTimeout,
+		Timeout:   cioLite.RequestTimeout,
 	}
 
 	// Make the request
