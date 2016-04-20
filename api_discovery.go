@@ -22,10 +22,18 @@ type GetDiscoveryResponse struct {
 	} `json:"imap,omitempty"`
 }
 
-// GetDiscovery attempts to discover connection settings for a given email address.
-// queryValues requires CioParams.Email and CioParams.SourceType to be set.
+// GetDiscoveryParams query values data struct
 // 	https://context.io/docs/lite/discovery#get
-func (cioLite CioLite) GetDiscovery(queryValues CioParams) (GetDiscoveryResponse, error) {
+type GetDiscoveryParams struct {
+	// Required:
+	SourceType string `json:"source_type,omitempty"`
+	Email      string `json:"email,omitempty"`
+}
+
+// GetDiscovery attempts to discover connection settings for a given email address.
+// queryValues requires SourceType and Email to be set.
+// 	https://context.io/docs/lite/discovery#get
+func (cioLite CioLite) GetDiscovery(queryValues GetDiscoveryParams) (GetDiscoveryResponse, error) {
 
 	// Make request
 	request := clientRequest{
