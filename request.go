@@ -15,19 +15,19 @@ import (
 type clientRequest struct {
 	method      string
 	path        string
-	formValues  CioParams
-	queryValues CioParams
+	formValues  interface{}
+	queryValues interface{}
 }
 
 // doFormRequest makes the actual request
 func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
-	url := cioLite.Host + request.path + request.queryValues.QueryString()
+	url := cioLite.Host + request.path + QueryString(request.queryValues)
 
 	// Construct the body
 	var bodyReader io.Reader
-	bodyValues := request.formValues.FormValues()
+	bodyValues := FormValues(request.formValues)
 	bodyString := bodyValues.Encode()
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))

@@ -59,7 +59,7 @@ type CioParams struct {
 }
 
 // FormValues returns valid FormValues for CIO Lite
-func (cioParams CioParams) FormValues() url.Values {
+func FormValues(cioParams interface{}) url.Values {
 
 	// Values
 	values := url.Values{}
@@ -102,10 +102,10 @@ func (cioParams CioParams) FormValues() url.Values {
 }
 
 // QueryString returns a query string
-func (cioParams CioParams) QueryString() string {
+func QueryString(cioParams interface{}) string {
 
 	// Encode parameters
-	encoded := cioParams.FormValues().Encode()
+	encoded := FormValues(cioParams).Encode()
 	if encoded == "" {
 		return encoded
 	}
