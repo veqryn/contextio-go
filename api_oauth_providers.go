@@ -79,7 +79,7 @@ func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, 
 }
 
 // CreateOAuthProvider adds a new OAuth2 provider.
-// formValues requires CioParams.Type, CioParams.ProviderConsumerKey, and CioParams.ProviderConsumerSecret
+// formValues requires Type, ProviderConsumerKey, and ProviderConsumerSecret
 // 	https://context.io/docs/lite/oauth_providers#post
 func (cioLite CioLite) CreateOAuthProvider(formValues CreateOAuthProviderParams) (CreateOAuthProviderResponse, error) {
 

@@ -6,6 +6,15 @@ import (
 	"fmt"
 )
 
+// GetUserEmailAccountsFolderMessageBodyParams query values data struct.
+// Optional: Delimiter, Type.
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
+type GetUserEmailAccountsFolderMessageBodyParams struct {
+	// Optional:
+	Delimiter string `json:"delimiter,omitempty"`
+	Type      string `json:"type,omitempty"`
+}
+
 // GetUserEmailAccountsFolderMessageBodyResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
 type GetUserEmailAccountsFolderMessageBodyResponse struct {
@@ -16,9 +25,9 @@ type GetUserEmailAccountsFolderMessageBodyResponse struct {
 }
 
 // GetUserEmailAccountsFolderMessageBody fetches the message body of a given email.
-// queryValues may optionally contain CioParams.Delimiter, CioParams.Type
+// queryValues may optionally contain Delimiter, Type
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/body#get
-func (cioLite CioLite) GetUserEmailAccountsFolderMessageBody(userID string, label string, folder string, messageID string, queryValues CioParams) ([]GetUserEmailAccountsFolderMessageBodyResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessageBody(userID string, label string, folder string, messageID string, queryValues GetUserEmailAccountsFolderMessageBodyParams) ([]GetUserEmailAccountsFolderMessageBodyResponse, error) {
 
 	// Make request
 	request := clientRequest{

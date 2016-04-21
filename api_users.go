@@ -6,8 +6,8 @@ import (
 	"fmt"
 )
 
-// GetUsersParams query values data struct
-// Optional: Email, Status, StatusOK, Limit, Offset
+// GetUsersParams query values data struct.
+// Optional: Email, Status, StatusOK, Limit, Offset.
 // 	https://context.io/docs/lite/users#get
 type GetUsersParams struct {
 	// Optional:
@@ -41,9 +41,11 @@ type GetUsersResponse struct {
 // but if creating a user and an email account at the same time then it is required to have:
 // Email, Server, Username, UseSSL, Port, Type,
 // and (if OAUTH) ProviderRefreshToken and ProviderConsumerKey,
-// and (if not OAUTH) Password, and may optionally contain MigrateAccountID,
-// FirstName, LastName, StatusCallbackURL.
+// and (if not OAUTH) Password,
+// and may optionally contain StatusCallbackURL,
+// and (only for CreateUser) MigrateAccountID, FirstName, LastName.
 // 	https://context.io/docs/lite/users#post
+// 	https://context.io/docs/lite/users/email_accounts#post
 type CreateUserParams struct {
 	// Optional, but Required for creating an Email Account
 	Email    string `json:"email,omitempty"`
@@ -61,10 +63,12 @@ type CreateUserParams struct {
 	Password string `json:"password,omitempty"`
 
 	// Optional:
+	StatusCallbackURL string `json:"status_callback_url,omitempty"`
+
+	// Optional for CreaseUser only (not used by CreateUserEmailAccount):
 	MigrateAccountID  string `json:"migrate_account_id,omitempty"`
 	FirstName         string `json:"first_name,omitempty"`
 	LastName          string `json:"last_name,omitempty"`
-	StatusCallbackURL string `json:"status_callback_url,omitempty"`
 }
 
 // CreateUserResponse data struct

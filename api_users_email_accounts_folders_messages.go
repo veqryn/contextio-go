@@ -6,6 +6,24 @@ import (
 	"fmt"
 )
 
+// GetUserEmailAccountsFolderMessageParams query values data struct.
+// Optional: Delimiter, IncludeBody, BodyType, IncludeHeaders, IncludeFlags,
+// and (for GetUserEmailAccountsFolderMessages only) Limit, Offset.
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
+type GetUserEmailAccountsFolderMessageParams struct {
+	// Optional:
+	Delimiter      string `json:"delimiter,omitempty"`
+	BodyType       string `json:"body_type,omitempty"`
+	IncludeBody    bool   `json:"include_body,omitempty"`
+	IncludeHeaders bool   `json:"include_headers,omitempty"`
+	IncludeFlags   bool   `json:"include_flags,omitempty"`
+
+	// Optional for GetUserEmailAccountsFolderMessages (not used by GetUserEmailAccountFolderMessage):
+	Limit  int `json:"limit,omitempty"`
+	Offset int `json:"offset,omitempty"`
+}
+
 // GetUsersEmailAccountFolderMessagesResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
@@ -89,6 +107,16 @@ type GetUsersEmailAccountFolderMessageAddresses struct {
 	} `json:"reply_to,omitempty"`
 }
 
+// MoveUserEmailAccountFolderMessageParams form values data struct.
+// Requires: NewFolderID, and may optionally contain Delimiter.
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
+type MoveUserEmailAccountFolderMessageParams struct {
+	// Required:
+	NewFolderID string `json:"new_folder_id,omitempty"`
+	// Optional:
+	Delimiter string `json:"delimiter,omitempty"`
+}
+
 // MoveUserEmailAccountFolderMessageResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
 type MoveUserEmailAccountFolderMessageResponse struct {
@@ -96,10 +124,10 @@ type MoveUserEmailAccountFolderMessageResponse struct {
 }
 
 // GetUserEmailAccountsFolderMessages gets listings of email messages for a user.
-// queryValues may optionally contain CioParams.Delimiter, CioParams.IncludeBody, CioParams.BodyType,
-// CioParams.IncludeHeaders, CioParams.IncludeFlags, CioParams.Limit, CioParams.Offset
+// queryValues may optionally contain Delimiter, IncludeBody, BodyType,
+// IncludeHeaders, IncludeFlags, Limit, Offset
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
-func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label string, folder string, queryValues CioParams) ([]GetUsersEmailAccountFolderMessagesResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label string, folder string, queryValues GetUserEmailAccountsFolderMessageParams) ([]GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -118,10 +146,9 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label s
 }
 
 // GetUserEmailAccountFolderMessage gets file, contact and other information about a given email message.
-// queryValues may optionally contain CioParams.Delimiter, CioParams.IncludeBody,
-// CioParams.BodyType, CioParams.IncludeHeaders, CioParams.IncludeFlags
+// queryValues may optionally contain Delimiter, IncludeBody, BodyType, IncludeHeaders, IncludeFlags
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
-func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues CioParams) (GetUsersEmailAccountFolderMessagesResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues GetUserEmailAccountsFolderMessageParams) (GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -140,9 +167,9 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 }
 
 // MoveUserEmailAccountFolderMessage moves a message.
-// formValues requires CioParams.NewFolderID, and may optionally contain CioParams.Delimiter
+// formValues requires NewFolderID, and may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
-func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues CioParams) (MoveUserEmailAccountFolderMessageResponse, error) {
+func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues MoveUserEmailAccountFolderMessageParams) (MoveUserEmailAccountFolderMessageResponse, error) {
 
 	// Make request
 	request := clientRequest{

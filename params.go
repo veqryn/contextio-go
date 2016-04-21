@@ -7,56 +7,15 @@ import (
 	"strings"
 )
 
-
-type Params struct {
-	BodyType               string `json:"body_type,omitempty"`
-	CallbackURL            string `json:"callback_url,omitempty"`
-	Delimiter              string `json:"delimiter,omitempty"`
-	Email                  string `json:"email,omitempty"`
-	FailureNotifURL        string `json:"failure_notif_url,omitempty"`
-	FirstName              string `json:"first_name,omitempty"`
-	MigrateAccountID       string `json:"migrate_account_id,omitempty"`
-	NewFolderID            string `json:"new_folder_id,omitempty"`
-	LastName               string `json:"last_name,omitempty"`
-	Password               string `json:"password,omitempty"`
-	ProviderRefreshToken   string `json:"provider_refresh_token,omitempty"`
-	ProviderToken          string `json:"provider_token,omitempty"`
-	ProviderTokenSecret    string `json:"provider_token_secret,omitempty"`
-	ProviderConsumerKey    string `json:"provider_consumer_key,omitempty"`
-	ProviderConsumerSecret string `json:"provider_consumer_secret,omitempty"`
-	Server                 string `json:"server,omitempty"`
-	SourceType             string `json:"source_type,omitempty"`
-	Status                 string `json:"status,omitempty"`
-	StatusCallbackURL      string `json:"status_callback_url,omitempty"`
-	StatusOK               string `json:"status_ok,omitempty"`
-	Type                   string `json:"type,omitempty"`
-	Username               string `json:"username,omitempty"`
-
-	Active            bool `json:"active,omitempty"`
-	ForceStatusCheck  bool `json:"force_status_check,omitempty"`
-	IncludeBody       bool `json:"include_body,omitempty"`
-	IncludeHeaders    bool `json:"include_headers,omitempty"`
-	IncludeFlags      bool `json:"include_flags,omitempty"`
-	IncludeNamesOnly  bool `json:"include_names_only,omitempty"`
-	Raw               bool `json:"raw,omitempty"`
-	RawFileList       bool `json:"raw_file_list,omitempty"`
-	SourceRawFileList bool `json:"source_raw_file_list,omitempty"`
-	UseSSL            bool `json:"use_ssl,omitempty"`
-
-	Limit  int `json:"limit,omitempty"`
-	Offset int `json:"offset,omitempty"`
-	Port   int `json:"port,omitempty"`
-}
-
 // FormValues returns valid FormValues for CIO Lite
-func FormValues(cioParams interface{}) url.Values {
+func FormValues(cioFormValueParams interface{}) url.Values {
 
 	// Values
 	values := url.Values{}
 
 	// dynamically iterate through struct fields
-	refVal := reflect.ValueOf(cioParams)
-	refType := reflect.TypeOf(cioParams)
+	refVal := reflect.ValueOf(cioFormValueParams)
+	refType := reflect.TypeOf(cioFormValueParams)
 	for i, numFields := 0, refVal.NumField(); i < numFields; i++ {
 		fieldValue := refVal.Field(i)
 		fieldType := refType.Field(i)
@@ -84,7 +43,7 @@ func FormValues(cioParams interface{}) url.Values {
 			}
 
 		default:
-			panic("Unexpected CioParams type: " + fieldValue.Kind().String())
+			panic("Unexpected parameter type: " + fieldValue.Kind().String())
 		}
 	}
 
@@ -92,10 +51,10 @@ func FormValues(cioParams interface{}) url.Values {
 }
 
 // QueryString returns a query string
-func QueryString(cioParams interface{}) string {
+func QueryString(cioQueryValueParams interface{}) string {
 
 	// Encode parameters
-	encoded := FormValues(cioParams).Encode()
+	encoded := FormValues(cioQueryValueParams).Encode()
 	if encoded == "" {
 		return encoded
 	}
@@ -109,7 +68,7 @@ func jsonName(sf reflect.StructField) string {
 	jsonTag := sf.Tag.Get("json")
 	indexComma := strings.Index(jsonTag, ",")
 	if len(jsonTag) == 0 || indexComma == 0 {
-		panic(fmt.Sprintf("CioParam %s missing json name tag", sf.Name))
+		panic(fmt.Sprintf("Parameter %s missing json name tag", sf.Name))
 	}
 	if indexComma >= 0 {
 		return jsonTag[:indexComma]

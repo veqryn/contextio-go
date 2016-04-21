@@ -7,6 +7,15 @@ import (
 	"strings"
 )
 
+// GetUserEmailAccountsParams query values data struct.
+// Optional: Status, StatusOK
+// 	https://context.io/docs/lite/users#get
+type GetUserEmailAccountsParams struct {
+	// Optional:
+	Status   string `json:"status,omitempty"`
+	StatusOK string `json:"status_ok,omitempty"`
+}
+
 // GetUsersEmailAccountsResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts#get
 // 	https://context.io/docs/lite/users/email_accounts#id-get
@@ -32,6 +41,20 @@ type CreateEmailAccountResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 }
 
+// ModifyUserEmailAccountParams form values data struct.
+// formValues optionally may contain Status, ForceStatusCheck, Password,
+// ProviderRefreshToken, ProviderConsumerKey, StatusCallbackURL
+// 	https://context.io/docs/lite/users/email_accounts#id-post
+type ModifyUserEmailAccountParams struct {
+	// Optional:
+	Status               string `json:"status,omitempty"`
+	Password             string `json:"password,omitempty"`
+	ProviderRefreshToken string `json:"provider_refresh_token,omitempty"`
+	ProviderConsumerKey  string `json:"provider_consumer_key,omitempty"`
+	StatusCallbackURL    string `json:"status_callback_url,omitempty"`
+	ForceStatusCheck     bool   `json:"force_status_check,omitempty"`
+}
+
 // ModifyEmailAccountResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts#id-post
 type ModifyEmailAccountResponse struct {
@@ -49,9 +72,9 @@ type DeleteEmailAccountResponse struct {
 }
 
 // GetUserEmailAccounts gets a list of email accounts assigned to a user.
-// queryValues may optionally contain CioParams.Status, CioParams.StatusOK
+// queryValues may optionally contain Status, StatusOK
 // 	https://context.io/docs/lite/users/email_accounts#get
-func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues CioParams) ([]GetUsersEmailAccountsResponse, error) {
+func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEmailAccountsParams) ([]GetUsersEmailAccountsResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -90,12 +113,12 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 }
 
 // CreateUserEmailAccount adds a mailbox to a given user.
-// formValues requires CioParams.Email, CioParams.Server, CioParams.Username,
-// CioParams.UseSSL, CioParams.Port, CioParams.Type,
-// and (if OAUTH) CioParams.ProviderRefreshToken and CioParams.ProviderConsumerKey,
-// and (if not OAUTH) CioParams.Password, and may optionally contain CioParams.StatusCallbackURL
+// formValues requires Email, Server, Username, UseSSL, Port, Type,
+// and (if OAUTH) ProviderRefreshToken and ProviderConsumerKey,
+// and (if not OAUTH) Password,
+// and may optionally contain StatusCallbackURL
 // 	https://context.io/docs/lite/users/email_accounts#post
-func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CioParams) (CreateEmailAccountResponse, error) {
+func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUserParams) (CreateEmailAccountResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -114,10 +137,10 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CioParam
 }
 
 // ModifyUserEmailAccount modifies an email account on a given user.
-// formValues optionally may contain CioParams.Status, CioParams.ForceStatusCheck, CioParams.Password,
-// CioParams.ProviderRefreshToken, CioParams.ProviderConsumerKey, CioParams.StatusCallbackURL
+// formValues optionally may contain Status, ForceStatusCheck, Password,
+// ProviderRefreshToken, ProviderConsumerKey, StatusCallbackURL
 // 	https://context.io/docs/lite/users/email_accounts#id-post
-func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formValues CioParams) (ModifyEmailAccountResponse, error) {
+func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formValues ModifyUserEmailAccountParams) (ModifyEmailAccountResponse, error) {
 
 	// Make request
 	request := clientRequest{

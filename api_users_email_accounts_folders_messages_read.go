@@ -14,9 +14,9 @@ type UserEmailAccountsFolderMessageReadResponse struct {
 }
 
 // MarkUserEmailAccountsFolderMessageRead marks the message as read.
-// formValues may optionally contain CioParams.Delimiter
+// formValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#post
-func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, label string, folder string, messageID string, formValues CioParams) (UserEmailAccountsFolderMessageReadResponse, error) {
+func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, label string, folder string, messageID string, formValues EmailAccountFolderParams) (UserEmailAccountsFolderMessageReadResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -35,9 +35,9 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, lab
 }
 
 // MarkUserEmailAccountsFolderMessageUnRead marks the message as unread.
-// formValues may optionally contain CioParams.Delimiter
+// formValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#delete
-func (cioLite CioLite) MarkUserEmailAccountsFolderMessageUnRead(userID string, label string, folder string, messageID string, formValues CioParams) (UserEmailAccountsFolderMessageReadResponse, error) {
+func (cioLite CioLite) MarkUserEmailAccountsFolderMessageUnRead(userID string, label string, folder string, messageID string, formValues EmailAccountFolderParams) (UserEmailAccountsFolderMessageReadResponse, error) {
 
 	// Make request
 	request := clientRequest{
