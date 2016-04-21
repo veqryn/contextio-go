@@ -27,7 +27,7 @@ type GetUsersEmailAccountFoldersResponse struct {
 	ResourceURL      string `json:"resource_url,omitempty"`
 }
 
-// EmailAccountFolderParams query values data struct.
+// EmailAccountFolderDelimiterParam query values data struct.
 // Optional: Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-get
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-post
@@ -37,7 +37,7 @@ type GetUsersEmailAccountFoldersResponse struct {
 //  https://context.io/docs/lite/users/email_accounts/folders/messages/raw#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#post
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/read#delete
-type EmailAccountFolderParams struct {
+type EmailAccountFolderDelimiterParam struct {
 	// Optional:
 	Delimiter string `json:"delimiter,omitempty"`
 }
@@ -72,7 +72,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 // GetUserEmailAccountFolder gets information about a given folder.
 // queryValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-get
-func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, folder string, queryValues EmailAccountFolderParams) (GetUsersEmailAccountFoldersResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, folder string, queryValues EmailAccountFolderDelimiterParam) (GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -94,7 +94,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 // This call will fail if the folder already exists.
 // queryValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders#id-post
-func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderParams) (CreateEmailAccountFolderResponse, error) {
+func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderDelimiterParam) (CreateEmailAccountFolderResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -115,7 +115,7 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 // SafeCreateUserEmailAccountFolder will safely check if a folder exists, and create it if it does not.
 // This function returns a bool representing whether it had to create a folder, and any errors it received.
 // queryValues may optionally contain Delimiter
-func (cioLite CioLite) SafeCreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderParams) (bool, error) {
+func (cioLite CioLite) SafeCreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderDelimiterParam) (bool, error) {
 
 	existsResponse, err := cioLite.GetUserEmailAccountFolder(userID, label, folder, formValues)
 	if err == nil && existsResponse.Name == folder {

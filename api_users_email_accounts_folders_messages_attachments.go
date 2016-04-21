@@ -24,7 +24,7 @@ type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
 // GetUserEmailAccountsFolderMessageAttachments gets listings of email attachments.
 // queryValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#get
-func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderParams) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -45,7 +45,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID strin
 // GetUserEmailAccountsFolderMessageAttachment retrieves an email attachment.
 // queryValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#id-get
-func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string, messageID string, attachmentID string, queryValues EmailAccountFolderParams) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string, messageID string, attachmentID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
 	request := clientRequest{

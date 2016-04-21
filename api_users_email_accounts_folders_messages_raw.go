@@ -13,7 +13,7 @@ type GetUserEmailAccountsFolderMessageRawResponse string
 // GetUserEmailAccountsFolderMessageRaw fetches the raw RFC-822 message text of a given email.
 // queryValues may optionally contain Delimiter
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/raw#get
-func (cioLite CioLite) GetUserEmailAccountsFolderMessageRaw(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderParams) (GetUserEmailAccountsFolderMessageRawResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolderMessageRaw(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageRawResponse, error) {
 
 	// Make request
 	request := clientRequest{
