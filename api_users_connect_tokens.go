@@ -45,10 +45,10 @@ func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConn
 }
 
 // CreateUserConnectToken creates and obtains a new connect_token for a specific user.
-// formValues requires CioParams.CallbackURL, and may optionally have CioParams.Email,
-// CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
+// formValues requires CallbackURL, and may optionally have
+// Email, FirstName, LastName, StatusCallbackURL
 // 	https://context.io/docs/lite/users/connect_tokens#post
-func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CioParams) (CreateConnectTokenResponse, error) {
+func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateConnectTokenParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{

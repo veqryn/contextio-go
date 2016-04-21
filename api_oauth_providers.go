@@ -16,6 +16,16 @@ type GetOAuthProvidersResponse struct {
 	ResourceURL            string `json:"resource_url,omitempty"`
 }
 
+// CreateOAuthProviderParams form values data struct.
+// Requires Type, ProviderConsumerKey, ProviderConsumerSecret.
+// 	https://context.io/docs/lite/oauth_providers#post
+type CreateOAuthProviderParams struct {
+	// Requires:
+	Type                   string `json:"type,omitempty"`
+	ProviderConsumerKey    string `json:"provider_consumer_key,omitempty"`
+	ProviderConsumerSecret string `json:"provider_consumer_secret,omitempty"`
+}
+
 // CreateOAuthProviderResponse data struct
 // 	https://context.io/docs/lite/oauth_providers#post
 type CreateOAuthProviderResponse struct {
@@ -71,7 +81,7 @@ func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, 
 // CreateOAuthProvider adds a new OAuth2 provider.
 // formValues requires CioParams.Type, CioParams.ProviderConsumerKey, and CioParams.ProviderConsumerSecret
 // 	https://context.io/docs/lite/oauth_providers#post
-func (cioLite CioLite) CreateOAuthProvider(formValues CioParams) (CreateOAuthProviderResponse, error) {
+func (cioLite CioLite) CreateOAuthProvider(formValues CreateOAuthProviderParams) (CreateOAuthProviderResponse, error) {
 
 	// Make request
 	request := clientRequest{

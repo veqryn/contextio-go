@@ -7,24 +7,14 @@ import (
 	"strings"
 )
 
-// CioParams struct with all possible query and form post values
-type CioParams struct {
+
+type Params struct {
 	BodyType               string `json:"body_type,omitempty"`
 	CallbackURL            string `json:"callback_url,omitempty"`
 	Delimiter              string `json:"delimiter,omitempty"`
 	Email                  string `json:"email,omitempty"`
 	FailureNotifURL        string `json:"failure_notif_url,omitempty"`
 	FirstName              string `json:"first_name,omitempty"`
-	FilterTo               string `json:"filter_to,omitempty"`
-	FilterFrom             string `json:"filter_from,omitempty"`
-	FilterCC               string `json:"filter_cc,omitempty"`
-	FilterSubject          string `json:"filter_subject,omitempty"`
-	FilterThread           string `json:"filter_thread,omitempty"`
-	FilterNewImportant     string `json:"filter_new_important,omitempty"`
-	FilterFileName         string `json:"filter_file_name,omitempty"`
-	FilterFolderAdded      string `json:"filter_folder_added,omitempty"`
-	FilterToDomain         string `json:"filter_to_domain,omitempty"`
-	FilterFromDomain       string `json:"filter_from_domain,omitempty"`
 	MigrateAccountID       string `json:"migrate_account_id,omitempty"`
 	NewFolderID            string `json:"new_folder_id,omitempty"`
 	LastName               string `json:"last_name,omitempty"`

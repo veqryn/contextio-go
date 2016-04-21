@@ -6,6 +6,18 @@ import (
 	"fmt"
 )
 
+// GetUsersParams query values data struct
+// Optional: Email, Status, StatusOK, Limit, Offset
+// 	https://context.io/docs/lite/users#get
+type GetUsersParams struct {
+	// Optional:
+	Email    string `json:"email,omitempty"`
+	Status   string `json:"status,omitempty"`
+	StatusOK string `json:"status_ok,omitempty"`
+	Limit    int    `json:"limit,omitempty"`
+	Offset   int    `json:"offset,omitempty"`
+}
+
 // GetUsersResponse data struct
 // 	https://context.io/docs/lite/users#get
 // 	https://context.io/docs/lite/users#id-get
@@ -24,6 +36,37 @@ type GetUsersResponse struct {
 	PasswordExpired int `json:"password_expired,omitempty"`
 }
 
+// CreateUserParams form values data struct.
+// Can optionally be empty if just creating a user without any email accounts,
+// but if creating a user and an email account at the same time then it is required to have:
+// Email, Server, Username, UseSSL, Port, Type,
+// and (if OAUTH) ProviderRefreshToken and ProviderConsumerKey,
+// and (if not OAUTH) Password, and may optionally contain MigrateAccountID,
+// FirstName, LastName, StatusCallbackURL.
+// 	https://context.io/docs/lite/users#post
+type CreateUserParams struct {
+	// Optional, but Required for creating an Email Account
+	Email    string `json:"email,omitempty"`
+	Server   string `json:"server,omitempty"`
+	Username string `json:"username,omitempty"`
+	Type     string `json:"type,omitempty"`
+	UseSSL   bool   `json:"use_ssl,omitempty"`
+	Port     int    `json:"port,omitempty"`
+
+	// Optional, but Required for OAUTH:
+	ProviderRefreshToken string `json:"provider_refresh_token,omitempty"`
+	ProviderConsumerKey  string `json:"provider_consumer_key,omitempty"`
+
+	// Optional, but Required for non-OAUTH:
+	Password string `json:"password,omitempty"`
+
+	// Optional:
+	MigrateAccountID  string `json:"migrate_account_id,omitempty"`
+	FirstName         string `json:"first_name,omitempty"`
+	LastName          string `json:"last_name,omitempty"`
+	StatusCallbackURL string `json:"status_callback_url,omitempty"`
+}
+
 // CreateUserResponse data struct
 // 	https://context.io/docs/lite/users#post
 type CreateUserResponse struct {
@@ -35,6 +78,15 @@ type CreateUserResponse struct {
 	ResourceURL       string `json:"resource_url,omitempty"`
 	AccessToken       string `json:"access_token,omitempty"`
 	AccessTokenSecret string `json:"access_token_secret,omitempty"`
+}
+
+// ModifyUserParams form values data struct.
+// Requires: FirstName, LastName.
+// 	https://context.io/docs/lite/users#id-post
+type ModifyUserParams struct {
+	// Requires:
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
 }
 
 // ModifyUserResponse data struct
@@ -52,10 +104,9 @@ type DeleteUserResponse struct {
 }
 
 // GetUsers gets a list of users.
-// queryValues may optionally contain CioParams.Email, CioParams.Status,
-// CioParams.StatusOK, CioParams.Limit, CioParams.Offset
+// queryValues may optionally contain Email, Status, StatusOK, Limit, Offset
 // 	https://context.io/docs/lite/users#get
-func (cioLite CioLite) GetUsers(queryValues CioParams) ([]GetUsersResponse, error) {
+func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -95,12 +146,12 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 // CreateUser create a new user.
 // formValues can optionally be empty if just creating a user without any email accounts,
 // but if creating a user and an email account at the same time then it is required to have:
-// CioParams.Email, CioParams.Server, CioParams.Username, CioParams.UseSSL, CioParams.Port, CioParams.Type,
-// and (if OAUTH) CioParams.ProviderRefreshToken and CioParams.ProviderConsumerKey,
-// and (if not OAUTH) CioParams.Password, and may optionally contain CioParams.MigrateAccountID,
-// CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
+// Email, Server, Username, UseSSL, Port, Type,
+// and (if OAUTH) ProviderRefreshToken and ProviderConsumerKey,
+// and (if not OAUTH) Password, and may optionally contain MigrateAccountID,
+// FirstName, LastName, StatusCallbackURL
 // 	https://context.io/docs/lite/users#post
-func (cioLite CioLite) CreateUser(formValues CioParams) (CreateUserResponse, error) {
+func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -119,9 +170,9 @@ func (cioLite CioLite) CreateUser(formValues CioParams) (CreateUserResponse, err
 }
 
 // ModifyUser modifies a given user.
-// formValues requires CioParams.FirstName, CioParams.LastName
+// formValues requires FirstName, LastName
 // 	https://context.io/docs/lite/users#id-post
-func (cioLite CioLite) ModifyUser(userID string, formValues CioParams) (ModifyUserResponse, error) {
+func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (ModifyUserResponse, error) {
 
 	// Make request
 	request := clientRequest{

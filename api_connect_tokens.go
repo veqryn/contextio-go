@@ -41,6 +41,21 @@ type GetConnectTokenUserResponse struct {
 	EmailAccounts []GetUsersEmailAccountsResponse `json:"email_accounts,omitempty"`
 }
 
+// CreateConnectTokenParams form values data struct.
+// Requires CallbackURL, and optionally may have
+// Email, FirstName, LastName, StatusCallbackURL.
+// 	https://context.io/docs/lite/connect_tokens#post
+type CreateConnectTokenParams struct {
+	// Required:
+	CallbackURL string `json:"callback_url,omitempty"`
+
+	// Optional:
+	Email             string `json:"email,omitempty"`
+	FirstName         string `json:"first_name,omitempty"`
+	LastName          string `json:"last_name,omitempty"`
+	StatusCallbackURL string `json:"status_callback_url,omitempty"`
+}
+
 // CreateConnectTokenResponse data struct
 // 	https://context.io/docs/lite/connect_tokens#post
 type CreateConnectTokenResponse struct {
@@ -97,10 +112,10 @@ func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, e
 }
 
 // CreateConnectToken creates and obtains a new connect token.
-// formValues requires CioParams.CallbackURL, and optionally may have
-// CioParams.Email, CioParams.FirstName, CioParams.LastName, CioParams.StatusCallbackURL
+// formValues requires CallbackURL, and optionally may have
+// Email, FirstName, LastName, StatusCallbackURL
 // 	https://context.io/docs/lite/connect_tokens#post
-func (cioLite CioLite) CreateConnectToken(formValues CioParams) (CreateConnectTokenResponse, error) {
+func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
 	request := clientRequest{

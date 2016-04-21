@@ -36,6 +36,32 @@ type GetUsersWebhooksResponse struct {
 	IncludeBody bool `json:"include_body,omitempty"`
 }
 
+// CreateUserWebhookParams form values data struct.
+// Requires: CallbackURL, FailureNotifUrl, and may optionally contain
+// FilterTo, FilterFrom, FilterCC, FilterSubject, FilterThread,
+// FilterNewImportant, FilterFileName, FilterFolderAdded, FilterToDomain,
+// FilterFromDomain, IncludeBody, BodyType
+// 	https://context.io/docs/lite/users/webhooks#post
+type CreateUserWebhookParams struct {
+	// Requires:
+	CallbackURL     string `json:"callback_url,omitempty"`
+	FailureNotifURL string `json:"failure_notif_url,omitempty"`
+
+	// Optional:
+	FilterTo           string `json:"filter_to,omitempty"`
+	FilterFrom         string `json:"filter_from,omitempty"`
+	FilterCC           string `json:"filter_cc,omitempty"`
+	FilterSubject      string `json:"filter_subject,omitempty"`
+	FilterThread       string `json:"filter_thread,omitempty"`
+	FilterNewImportant string `json:"filter_new_important,omitempty"`
+	FilterFileName     string `json:"filter_file_name,omitempty"`
+	FilterFolderAdded  string `json:"filter_folder_added,omitempty"`
+	FilterToDomain     string `json:"filter_to_domain,omitempty"`
+	FilterFromDomain   string `json:"filter_from_domain,omitempty"`
+	BodyType           string `json:"body_type,omitempty"`
+	IncludeBody        bool   `json:"include_body,omitempty"`
+}
+
 // CreateUserWebhookResponse data struct
 // 	https://context.io/docs/lite/users/webhooks#post
 type CreateUserWebhookResponse struct {
@@ -43,6 +69,14 @@ type CreateUserWebhookResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 
 	Success bool `json:"success,omitempty"`
+}
+
+// ModifyUserWebhookParams form values data struct.
+// formValues requires Active
+// 	https://context.io/docs/lite/users/webhooks#id-post
+type ModifyUserWebhookParams struct {
+	// Required:
+	Active bool `json:"active,omitempty"`
 }
 
 // ModifyWebhookResponse data struct
@@ -202,12 +236,12 @@ func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsers
 }
 
 // CreateUserWebhook creates a new Webhook on a user.
-// formValues requires CioParams.CallbackURL, CioParams.FailureNotifUrl, and may optionally contain
-// CioParams.FilterTo, CioParams.FilterFrom, CioParams.FilterCC, CioParams.FilterSubject,
-// CioParams.FilterThread, CioParams.FilterNewImportant, CioParams.FilterFileName, CioParams.FilterFolderAdded,
-// CioParams.FilterToDomain, CioParams.FilterFromDomain, CioParams.IncludeBody, CioParams.BodyType
+// formValues requires CallbackURL, FailureNotifUrl, and may optionally contain
+// FilterTo, FilterFrom, FilterCC, FilterSubject, FilterThread,
+// FilterNewImportant, FilterFileName, FilterFolderAdded, FilterToDomain,
+// FilterFromDomain, IncludeBody, BodyType
 // 	https://context.io/docs/lite/users/webhooks#post
-func (cioLite CioLite) CreateUserWebhook(userID string, formValues CioParams) (CreateUserWebhookResponse, error) {
+func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWebhookParams) (CreateUserWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
@@ -226,9 +260,9 @@ func (cioLite CioLite) CreateUserWebhook(userID string, formValues CioParams) (C
 }
 
 // ModifyUserWebhook changes the properties of a given Webhook.
-// formValues requires CioParams.Active
+// formValues requires Active
 // 	https://context.io/docs/lite/users/webhooks#id-post
-func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formValues CioParams) (ModifyWebhookResponse, error) {
+func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formValues ModifyUserWebhookParams) (ModifyWebhookResponse, error) {
 
 	// Make request
 	request := clientRequest{
