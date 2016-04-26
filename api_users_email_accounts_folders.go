@@ -7,10 +7,10 @@ import (
 	"fmt"
 )
 
-// GetUserEmailAcountsFoldersParams query values data struct.
+// GetUserEmailAccountsFoldersParams query values data struct.
 // Optional: IncludeNamesOnly.
 // 	https://context.io/docs/lite/users/email_accounts/folders#get
-type GetUserEmailAcountsFoldersParams struct {
+type GetUserEmailAccountsFoldersParams struct {
 	// Optional:
 	IncludeNamesOnly bool `json:"include_names_only,omitempty"`
 }
@@ -51,7 +51,7 @@ type CreateEmailAccountFolderResponse struct {
 // GetUserEmailAccountsFolders gets a list of folders in an email account.
 // queryValues may optionally contain IncludeNamesOnly
 // 	https://context.io/docs/lite/users/email_accounts/folders#get
-func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, queryValues GetUserEmailAcountsFoldersParams) ([]GetUsersEmailAccountFoldersResponse, error) {
+func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, queryValues GetUserEmailAccountsFoldersParams) ([]GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
 	request := clientRequest{
