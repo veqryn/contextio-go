@@ -21,9 +21,9 @@ type GetOAuthProvidersResponse struct {
 // 	https://context.io/docs/lite/oauth_providers#post
 type CreateOAuthProviderParams struct {
 	// Requires:
-	Type                   string `json:"type,omitempty"`
-	ProviderConsumerKey    string `json:"provider_consumer_key,omitempty"`
-	ProviderConsumerSecret string `json:"provider_consumer_secret,omitempty"`
+	Type                   string `json:"type"`
+	ProviderConsumerKey    string `json:"provider_consumer_key"`
+	ProviderConsumerSecret string `json:"provider_consumer_secret"`
 }
 
 // CreateOAuthProviderResponse data struct

@@ -44,8 +44,8 @@ type GetUsersWebhooksResponse struct {
 // 	https://context.io/docs/lite/users/webhooks#post
 type CreateUserWebhookParams struct {
 	// Requires:
-	CallbackURL     string `json:"callback_url,omitempty"`
-	FailureNotifURL string `json:"failure_notif_url,omitempty"`
+	CallbackURL     string `json:"callback_url"`
+	FailureNotifURL string `json:"failure_notif_url"`
 
 	// Optional:
 	FilterTo           string `json:"filter_to,omitempty"`
@@ -76,7 +76,7 @@ type CreateUserWebhookResponse struct {
 // 	https://context.io/docs/lite/users/webhooks#id-post
 type ModifyUserWebhookParams struct {
 	// Required:
-	Active bool `json:"active,omitempty"`
+	Active bool `json:"active"`
 }
 
 // ModifyWebhookResponse data struct

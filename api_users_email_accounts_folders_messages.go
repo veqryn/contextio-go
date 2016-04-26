@@ -112,7 +112,7 @@ type GetUsersEmailAccountFolderMessageAddresses struct {
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-put
 type MoveUserEmailAccountFolderMessageParams struct {
 	// Required:
-	NewFolderID string `json:"new_folder_id,omitempty"`
+	NewFolderID string `json:"new_folder_id"`
 	// Optional:
 	Delimiter string `json:"delimiter,omitempty"`
 }

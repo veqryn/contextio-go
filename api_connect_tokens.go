@@ -48,7 +48,7 @@ type GetConnectTokenUserResponse struct {
 // 	https://context.io/docs/lite/users/connect_tokens#post
 type CreateConnectTokenParams struct {
 	// Required:
-	CallbackURL string `json:"callback_url,omitempty"`
+	CallbackURL string `json:"callback_url"`
 
 	// Optional:
 	Email             string `json:"email,omitempty"`

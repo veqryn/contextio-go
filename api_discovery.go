@@ -7,8 +7,8 @@ package ciolite
 // 	https://context.io/docs/lite/discovery#get
 type GetDiscoveryParams struct {
 	// Required:
-	SourceType string `json:"source_type,omitempty"`
-	Email      string `json:"email,omitempty"`
+	SourceType string `json:"source_type"`
+	Email      string `json:"email"`
 }
 
 // GetDiscoveryResponse data struct
