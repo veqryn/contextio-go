@@ -13,6 +13,11 @@ func FormValues(cioFormValueParams interface{}) url.Values {
 	// Values
 	values := url.Values{}
 
+	// If uninitialized, return empty url.Values
+	if cioFormValueParams == nil {
+		return values
+	}
+
 	// dynamically iterate through struct fields
 	refVal := reflect.ValueOf(cioFormValueParams)
 	refType := reflect.TypeOf(cioFormValueParams)
