@@ -16,7 +16,7 @@ const (
 type CioLite struct {
 	apiKey         string
 	apiSecret      string
-	log            Logger
+	Log            Logger
 	Host           string
 	RequestTimeout time.Duration
 }
@@ -31,7 +31,7 @@ func NewCioLiteWithLogger(key string, secret string, logger Logger) CioLite {
 	return CioLite{
 		apiKey:         key,
 		apiSecret:      secret,
-		log:            logger,
+		Log:            logger,
 		Host:           DefaultHost,
 		RequestTimeout: DefaultRequestTimeout,
 	}
@@ -42,5 +42,4 @@ type Logger interface {
 	Print(v ...interface{})
 	Printf(format string, v ...interface{})
 	Println(v ...interface{})
-	Fatalf(format string, v ...interface{})
 }

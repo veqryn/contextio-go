@@ -7,7 +7,9 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 )
 
@@ -23,7 +25,7 @@ type clientRequest struct {
 func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
-	url := cioLite.Host + request.path + QueryString(request.queryValues)
+	cioURL := cioLite.Host + request.path + QueryString(request.queryValues)
 
 	// Construct the body
 	var bodyReader io.Reader
@@ -32,14 +34,30 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	if cioLite.log != nil {
-		cioLite.log.Println("Creating new request to: " + url + " with payload: " + bodyString)
+	if cioLite.Log != nil {
+		if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
+			logrusLogger.WithFields(logrus.Fields{"url": cioURL, "payload": bodyString}).Debug("Creating new request to CIO")
+		} else {
+			cioLite.Log.Println("Creating new request to: " + cioURL + " with payload: " + bodyString)
+		}
 	}
 
 	// Construct the request
-	httpReq, err := http.NewRequest(request.method, url, bodyReader)
+	httpReq, err := cioLite.createRequest(request, cioURL, bodyReader, bodyValues)
 	if err != nil {
-		return fmt.Errorf("Could not create request: %s", err)
+		return err
+	}
+
+	// Send the request
+	return cioLite.sendRequest(httpReq, result, cioURL)
+}
+
+// createRequest creates the *http.Request object
+func (cioLite CioLite) createRequest(request clientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
+	// Construct the request
+	httpReq, err := http.NewRequest(request.method, cioURL, bodyReader)
+	if err != nil {
+		return httpReq, fmt.Errorf("Could not create request: %s", err)
 	}
 
 	// oAuth signature
@@ -53,6 +71,11 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	httpReq.Header.Set("User-Agent", "Golang CIOLite library v0.1")
 	httpReq.Header.Set("Authorization", client.AuthorizationHeader(nil, request.method, httpReq.URL, bodyValues))
 
+	return httpReq, nil
+}
+
+// sendRequest sends the *http.Request
+func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, cioURL string) error {
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,
@@ -67,8 +90,12 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 
 	// Parse the response
 	defer func() {
-		if closeErr := res.Body.Close(); closeErr != nil {
-			cioLite.log.Println("Unable to close response body, with error: " + closeErr.Error())
+		if closeErr := res.Body.Close(); closeErr != nil && cioLite.Log != nil {
+			if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
+				logrusLogger.WithError(closeErr).Warn("Unable to close response body from CIO")
+			} else {
+				cioLite.Log.Println("Unable to close response body from CIO, with error: " + closeErr.Error())
+			}
 		}
 	}()
 
@@ -76,10 +103,18 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	if err != nil {
 		return fmt.Errorf("Could not read response: %s", err)
 	}
-	if cioLite.log != nil {
-		cioLite.log.Println("Received response from: " + url +
-			" with status code: " + fmt.Sprintf("%d", res.StatusCode) +
-			" and payload: " + string(resBody))
+	if cioLite.Log != nil {
+		if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
+			logrusLogger.WithFields(logrus.Fields{
+				"url":        cioURL,
+				"statusCode": fmt.Sprintf("%d", res.StatusCode),
+				"payload":    string(resBody),
+			}).Debug("Received response from CIO")
+		} else {
+			cioLite.Log.Println("Received response from: " + cioURL +
+				" with status code: " + fmt.Sprintf("%d", res.StatusCode) +
+				" and payload: " + string(resBody))
+		}
 	}
 
 	// Determine status
