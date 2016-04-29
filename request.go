@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"crypto/md5"
+
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 )
@@ -34,13 +36,7 @@ func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) 
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	if cioLite.Log != nil {
-		if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
-			logrusLogger.WithFields(logrus.Fields{"url": cioURL, "payload": bodyString}).Debug("Creating new request to CIO")
-		} else {
-			cioLite.Log.Println("Creating new request to: " + cioURL + " with payload: " + bodyString)
-		}
-	}
+	logRequest(cioLite.Log, cioURL, bodyValues)
 
 	// Construct the request
 	httpReq, err := cioLite.createRequest(request, cioURL, bodyReader, bodyValues)
@@ -90,12 +86,8 @@ func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, ci
 
 	// Parse the response
 	defer func() {
-		if closeErr := res.Body.Close(); closeErr != nil && cioLite.Log != nil {
-			if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
-				logrusLogger.WithError(closeErr).Warn("Unable to close response body from CIO")
-			} else {
-				cioLite.Log.Println("Unable to close response body from CIO, with error: " + closeErr.Error())
-			}
+		if closeErr := res.Body.Close(); closeErr != nil {
+			logBodyCloseError(cioLite.Log, closeErr)
 		}
 	}()
 
@@ -103,25 +95,94 @@ func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, ci
 	if err != nil {
 		return fmt.Errorf("Could not read response: %s", err)
 	}
-	if cioLite.Log != nil {
-		if logrusLogger, ok := cioLite.Log.(*logrus.Logger); ok {
-			logrusLogger.WithFields(logrus.Fields{
-				"url":        cioURL,
-				"statusCode": fmt.Sprintf("%d", res.StatusCode),
-				"payload":    string(resBody),
-			}).Debug("Received response from CIO")
-		} else {
-			cioLite.Log.Println("Received response from: " + cioURL +
-				" with status code: " + fmt.Sprintf("%d", res.StatusCode) +
-				" and payload: " + string(resBody))
-		}
-	}
-
-	// Determine status
-	if res.StatusCode >= 400 {
-		return fmt.Errorf("Invalid status code: %d", res.StatusCode)
-	}
+	resBodyString := string(resBody)
 
 	// Unmarshal result
-	return json.Unmarshal(resBody, &result)
+	err = json.Unmarshal(resBody, &result)
+
+	// Log the response
+	logResponse(cioLite.Log, cioURL, res.StatusCode, resBodyString, err)
+
+	// Return special error if Status Code >= 400
+	if res.StatusCode >= 400 {
+		return fmt.Errorf("%d Status Code with Payload %s", res.StatusCode, resBodyString)
+	}
+
+	// Return Unmarshal error (if any) if Status Code is < 400
+	return err
+}
+
+// logRequest logs the request about to be made to CIO, redacting sensitive information in the body
+func logRequest(log Logger, cioURL string, bodyValues url.Values) {
+	if log != nil {
+
+		// Copy url.Values
+		redactedValues := url.Values{}
+		for k, v := range bodyValues {
+			redactedValues[k] = v
+		}
+
+		// Redact sensitive information
+		if val := redactedValues.Get("password"); len(val) > 0 {
+			redactedValues.Set("password", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+		}
+		if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
+			redactedValues.Set("provider_refresh_token", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+		}
+		if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
+			redactedValues.Set("provider_consumer_key", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+		}
+		if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
+			redactedValues.Set("provider_consumer_secret", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+		}
+
+		// Actually log
+		if logrusLogger, ok := log.(*logrus.Logger); ok {
+			// If logrus, use structured fields
+			logrusLogger.WithFields(logrus.Fields{"url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
+		} else {
+			// Else just log with Println
+			log.Println("Creating new request to: " + cioURL + " with payload: " + redactedValues.Encode())
+		}
+	}
+}
+
+// logBodyCloseError logs any error that happens when trying to close the *http.Response.Body
+func logBodyCloseError(log Logger, closeError error) {
+	if log != nil {
+		if logrusLogger, ok := log.(*logrus.Logger); ok {
+			// If logrus, use structured fields
+			logrusLogger.WithError(closeError).Warn("Unable to close response body from CIO")
+		} else {
+			// Else just log with Println
+			log.Println("Unable to close response body from CIO, with error: " + closeError.Error())
+		}
+	}
+}
+
+// logResponse logs the response from CIO, if any logger is set
+func logResponse(log Logger, cioURL string, statusCode int, responseBody string, unmarshalError error) {
+	if log != nil {
+
+		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
+
+		if logrusLogger, ok := log.(*logrus.Logger); ok {
+			// If logrus, use structured fields
+			logEntry := logrusLogger.WithFields(logrus.Fields{
+				"url":        cioURL,
+				"statusCode": fmt.Sprintf("%d", statusCode),
+				"payload":    responseBody})
+			if unmarshalError != nil || statusCode >= 400 {
+				logEntry.Warn("Received response from CIO")
+			} else {
+				logEntry.Debug("Received response from CIO")
+			}
+
+		} else {
+			// Else just log with Println
+			log.Println("Received response from: " + cioURL +
+				" with status code: " + fmt.Sprintf("%d", statusCode) +
+				" and payload: " + responseBody)
+		}
+	}
 }

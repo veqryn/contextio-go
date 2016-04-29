@@ -66,9 +66,9 @@ type CreateUserParams struct {
 	StatusCallbackURL string `json:"status_callback_url,omitempty"`
 
 	// Optional for CreaseUser only (not used by CreateUserEmailAccount):
-	MigrateAccountID  string `json:"migrate_account_id,omitempty"`
-	FirstName         string `json:"first_name,omitempty"`
-	LastName          string `json:"last_name,omitempty"`
+	MigrateAccountID string `json:"migrate_account_id,omitempty"`
+	FirstName        string `json:"first_name,omitempty"`
+	LastName         string `json:"last_name,omitempty"`
 }
 
 // CreateUserResponse data struct
@@ -82,6 +82,9 @@ type CreateUserResponse struct {
 	ResourceURL       string `json:"resource_url,omitempty"`
 	AccessToken       string `json:"access_token,omitempty"`
 	AccessTokenSecret string `json:"access_token_secret,omitempty"`
+
+	ConnectionLog string `json:"connection_log,omitempty"`
+	FeedbackCode  string `json:"feedback_code,omitempty"`
 }
 
 // ModifyUserParams form values data struct.
