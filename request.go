@@ -2,14 +2,13 @@ package ciolite
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-
-	"crypto/md5"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
