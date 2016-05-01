@@ -31,7 +31,7 @@ func TestActualDiscoveryRequestToCioForGoogle(t *testing.T) {
 	expected.Documentation = response.Documentation
 
 	if err != nil || !reflect.DeepEqual(expected, response) {
-		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err)
+		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err, "; With Log: ", logger.String())
 	}
 
 	// googleapps
@@ -44,7 +44,7 @@ func TestActualDiscoveryRequestToCioForGoogle(t *testing.T) {
 	expected.Documentation = response.Documentation
 
 	if err != nil || !reflect.DeepEqual(expected, response) {
-		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err)
+		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err, "; With Log: ", logger.String())
 	}
 
 	if len(logger.String()) < 20 {

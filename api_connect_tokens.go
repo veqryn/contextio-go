@@ -20,9 +20,9 @@ type GetConnectTokenResponse struct {
 	ServerLabel        string `json:"server_label,omitempty"`
 
 	AccountLite bool `json:"account_lite,omitempty"`
-	Expires     bool `json:"expires,omitempty"`
 
 	Created int `json:"created,omitempty"`
+	Expires int `json:"expires,omitempty"`
 	Used    int `json:"used,omitempty"`
 
 	User GetConnectTokenUserResponse `json:"user,omitempty"`
