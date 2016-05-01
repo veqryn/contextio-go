@@ -20,15 +20,19 @@ type GetDiscoveryResponse struct {
 
 	Found bool `json:"found,omitempty"`
 
-	IMAP struct {
-		Server   string `json:"server,omitempty"`
-		Username string `json:"username,omitempty"`
+	IMAP GetDiscoveryIMAPResponse `json:"imap,omitempty"`
+}
 
-		UseSSL bool `json:"use_ssl,omitempty"`
-		OAuth  bool `json:"oauth,omitempty"`
+// GetDiscoveryIMAPResponse embedded data struct
+// 	https://context.io/docs/lite/discovery#get
+type GetDiscoveryIMAPResponse struct {
+	Server   string `json:"server,omitempty"`
+	Username string `json:"username,omitempty"`
 
-		Port int `json:"port,omitempty"`
-	} `json:"imap,omitempty"`
+	UseSSL bool `json:"use_ssl,omitempty"`
+	OAuth  bool `json:"oauth,omitempty"`
+
+	Port int `json:"port,omitempty"`
 }
 
 // GetDiscovery attempts to discover connection settings for a given email address.
