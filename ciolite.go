@@ -1,7 +1,11 @@
 // Package ciolite is the Golang client library for the Lite Context.IO API
 package ciolite
 
-import "time"
+import (
+	"net/http"
+	"net/http/httptest"
+	"time"
+)
 
 const (
 	// DefaultHost is the default host of CIO Lite API
@@ -42,4 +46,22 @@ type Logger interface {
 	Print(v ...interface{})
 	Printf(format string, v ...interface{})
 	Println(v ...interface{})
+}
+
+// NewTestCioLiteServer is a convenience function that returns a CioLite object
+// and a *httptest.Server (which must be closed when done being used).
+// The CioLite instance will hit the test server for all requests.
+func NewTestCioLiteServer(key string, secret string, logger Logger, handler http.Handler) (CioLite, *httptest.Server) {
+
+	testServer := httptest.NewServer(handler)
+
+	testCioLite := CioLite{
+		apiKey:         key,
+		apiSecret:      secret,
+		Log:            logger,
+		Host:           testServer.URL,
+		RequestTimeout: 10 * time.Second,
+	}
+
+	return testCioLite, testServer
 }

@@ -3,6 +3,8 @@ package ciolite
 import (
 	"bytes"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 )
@@ -19,6 +21,13 @@ func TestNewCioLiteWithLogger(t *testing.T) {
 	NewTestCioLiteWithLogger(t)
 }
 
+// TestNewCioLiteWithLogger tests the construction of CioLite and *TestLogger objects
+func TestNewTestCioLiteServer(t *testing.T) {
+	t.Parallel()
+	_, _, testServer, _ := NewTestCioLiteWithLoggerAndTestServer(t)
+	defer testServer.Close()
+}
+
 // NewTestCioLite returns a new CioLite object
 func NewTestCioLite(t *testing.T) CioLite {
 	return NewCioLite(getEnv(t, "UNSUB_CIO_API_KEY"), getEnv(t, "UNSUB_CIO_API_SECRET"))
@@ -26,9 +35,17 @@ func NewTestCioLite(t *testing.T) CioLite {
 
 // NewTestCioLiteWithLogger returns a new CioLite object and *TestLogger object
 func NewTestCioLiteWithLogger(t *testing.T) (CioLite, *TestLogger) {
-	logger := &TestLogger{Buffer: &bytes.Buffer{}}
+	logger := &TestLogger{Buffer: &bytes.Buffer{}, t: t}
 	cioLite := NewCioLiteWithLogger(getEnv(t, "UNSUB_CIO_API_KEY"), getEnv(t, "UNSUB_CIO_API_SECRET"), logger)
 	return cioLite, logger
+}
+
+// NewTestCioLiteWithLoggerAndTestServer returns a new CioLite, *TestLogger, and *httptest.Server objects
+func NewTestCioLiteWithLoggerAndTestServer(t *testing.T) (CioLite, *TestLogger, *httptest.Server, *http.ServeMux) {
+	logger := &TestLogger{Buffer: &bytes.Buffer{}, t: t}
+	mux := http.NewServeMux()
+	cioLite, server := NewTestCioLiteServer(getEnv(t, "UNSUB_CIO_API_KEY"), getEnv(t, "UNSUB_CIO_API_SECRET"), logger, mux)
+	return cioLite, logger, server, mux
 }
 
 // getEnv returns the named environment variable, or causes t.Fatal
@@ -67,5 +84,12 @@ func (l *TestLogger) Printf(format string, v ...interface{}) {
 	_, err := l.Write([]byte(fmt.Sprintf(format, v...)))
 	if err != nil {
 		l.t.Error("Error writing to logger: ", err)
+	}
+}
+
+// Must panics if error is not nil
+func Must(err error) {
+	if err != nil {
+		panic(err)
 	}
 }
