@@ -4,6 +4,8 @@ package ciolite
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 // GetConnectTokenResponse data struct
@@ -22,8 +24,9 @@ type GetConnectTokenResponse struct {
 	AccountLite bool `json:"account_lite,omitempty"`
 
 	Created int `json:"created,omitempty"`
-	Expires int `json:"expires,omitempty"`
 	Used    int `json:"used,omitempty"`
+
+	Expires ExpiresMixed `json:"expires,omitempty"`
 
 	User GetConnectTokenUserResponse `json:"user,omitempty"`
 }
@@ -190,4 +193,47 @@ func (cioLite CioLite) CheckConnectToken(email string, contextioToken string) (G
 	}
 
 	return response, nil
+}
+
+// ExpiresMixed is a special type to handle the fact that 'expires' can be an int or false.
+// 	Unix timestamp of when this token will expire and be purged.
+// 	Once the token is used, this property will be set to false
+// 	https://context.io/docs/lite/users/connect_tokens
+type ExpiresMixed struct {
+	Expires *int
+}
+
+// Unused returns true if Expires is a Unix timestamp,
+// and returns false if this token has been used.
+func (expires *ExpiresMixed) Unused() bool {
+	return expires.Expires != nil
+}
+
+// Timestamp returns the expires timestamp if the token is unused,
+// and returns -1 if the token has been used.
+func (expires *ExpiresMixed) Timestamp() int {
+	if expires.Expires == nil {
+		return -1
+	}
+	return *expires.Expires
+}
+
+// MarshalJSON allows ExpiresMixed to implement json.Marshaler
+func (expires ExpiresMixed) MarshalJSON() ([]byte, error) {
+	if expires.Expires == nil {
+		return []byte(`false`), nil
+	}
+	return []byte(strconv.Itoa(*expires.Expires)), nil
+}
+
+// UnmarshalJSON allows ExpiresMixed to implement json.Unmarshaler
+func (expires *ExpiresMixed) UnmarshalJSON(data []byte) error {
+	//panic("blargunmarshal")
+	stringData := string(data)
+	if strings.ToLower(stringData) == "false" {
+		return nil
+	}
+	expiresInt, err := strconv.Atoi(stringData)
+	expires.Expires = &expiresInt
+	return err
 }

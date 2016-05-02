@@ -1,6 +1,7 @@
 package ciolite
 
 import (
+	"encoding/json"
 	"reflect"
 	"strings"
 	"testing"
@@ -84,5 +85,55 @@ func TestActualConnectTokenRequestToCio(t *testing.T) {
 
 	if len(logger.String()) < 20 {
 		t.Error("Expected some output from logger; Got: ", logger.String())
+	}
+}
+
+// TestExpiresMixed tests the mixed type json encoding/decoding of the "expires" field.
+func TestExpiresMixed(t *testing.T) {
+	t.Parallel()
+
+	type ExpiresTest struct {
+		MyField ExpiresMixed `json:"my_field"`
+	}
+
+	falseExpectedJSON := `{"my_field":false}`
+	falseExpectedExpires := ExpiresTest{MyField: ExpiresMixed{}}
+
+	timestamp := 1234509876
+	timestampExpectedJSON := `{"my_field":1234509876}`
+	timestampExpectedExpires := ExpiresTest{MyField: ExpiresMixed{Expires: &timestamp}}
+
+	// Test FALSE
+	var falseExpires ExpiresTest
+	Must(json.Unmarshal([]byte(falseExpectedJSON), &falseExpires))
+
+	if !reflect.DeepEqual(falseExpires, falseExpectedExpires) ||
+		falseExpires.MyField.Unused() ||
+		falseExpires.MyField.Timestamp() != -1 {
+		t.Error(falseExpires)
+	}
+
+	falseJSON, err := json.Marshal(falseExpires)
+	Must(err)
+
+	if string(falseJSON) != falseExpectedJSON {
+		t.Error(string(falseJSON))
+	}
+
+	// Test timestamp
+	var timestampExpires ExpiresTest
+	Must(json.Unmarshal([]byte(timestampExpectedJSON), &timestampExpires))
+
+	if !reflect.DeepEqual(timestampExpires, timestampExpectedExpires) ||
+		!timestampExpires.MyField.Unused() ||
+		timestampExpires.MyField.Timestamp() != timestamp {
+		t.Error(timestampExpires)
+	}
+
+	timestampJSON, err := json.Marshal(timestampExpires)
+	Must(err)
+
+	if string(timestampJSON) != timestampExpectedJSON {
+		t.Error(string(timestampJSON))
 	}
 }

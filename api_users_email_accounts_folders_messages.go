@@ -13,11 +13,13 @@ import (
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type GetUserEmailAccountsFolderMessageParams struct {
 	// Optional:
-	Delimiter      string `json:"delimiter,omitempty"`
-	BodyType       string `json:"body_type,omitempty"`
-	IncludeBody    bool   `json:"include_body,omitempty"`
-	IncludeHeaders bool   `json:"include_headers,omitempty"`
-	IncludeFlags   bool   `json:"include_flags,omitempty"`
+	Delimiter    string `json:"delimiter,omitempty"`
+	BodyType     string `json:"body_type,omitempty"`
+	IncludeBody  bool   `json:"include_body,omitempty"`
+	IncludeFlags bool   `json:"include_flags,omitempty"`
+
+	// IncludeHeaders can be "0", "1", or "raw"
+	IncludeHeaders string `json:"include_headers,omitempty"`
 
 	// Optional for GetUserEmailAccountsFolderMessages (not used by GetUserEmailAccountFolderMessage):
 	Limit  int `json:"limit,omitempty"`
