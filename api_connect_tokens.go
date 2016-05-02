@@ -14,11 +14,13 @@ import (
 type GetConnectTokenResponse struct {
 	Token              string `json:"token,omitempty"`
 	Email              string `json:"email,omitempty"`
+	EmailAccountID     string `json:"email_account_id,omitempty"`
 	CallbackURL        string `json:"callback_url,omitempty"`
+	StatusCallbackURL  string `json:"status_callback_url,omitempty"`
 	FirstName          string `json:"first_name,omitempty"`
 	LastName           string `json:"last_name,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
-	BrowserRedirectURL string `json:"browser_redirect_url,omitempty"`
+	BrowserRedirectURL string `json:"browser_redirect_url,omitempty"` // TODO: reconfirm which fields the response includes
 	ServerLabel        string `json:"server_label,omitempty"`
 
 	AccountLite bool `json:"account_lite,omitempty"`

@@ -2,6 +2,8 @@ package ciolite
 
 import (
 	"encoding/json"
+	"io"
+	"net/http"
 	"reflect"
 	"strings"
 	"testing"
@@ -81,6 +83,102 @@ func TestActualConnectTokenRequestToCio(t *testing.T) {
 
 	if err != nil || !deleteResponse.Success {
 		t.Error("Expected successful delete of connect token; Got: ", deleteResponse, "; With Error: ", err, "; With Log: ", logger.String())
+	}
+
+	if len(logger.String()) < 20 {
+		t.Error("Expected some output from logger; Got: ", logger.String())
+	}
+}
+
+// TestSimulatedGetConnectToken tests GetConnectToken with a simulated server
+func TestSimulatedGetConnectToken(t *testing.T) {
+	t.Parallel()
+
+	tokenString := "axjogv7yipqnhj9c"
+	responseString := `
+{
+  "token": "axjogv7yipqnhj9c",
+  "email": "test@gmail.com",
+  "account_lite": true,
+  "created": 1462217246,
+  "used": 1462217259,
+  "status_callback_url": "https://yoursite.com/api/unsubscriber/v1/cio/account_status/callback",
+  "callback_url": "https://yoursite.com",
+  "user": {
+    "id": "5727aa2a0be9af5d658b4568",
+    "email_accounts": [
+      {
+        "status": "OK",
+        "resource_url": "https://api.context.io/lite/users/5727aa2a0be9af5d658b4568/email_accounts/test%3A%3Agmail",
+        "type": "imap",
+        "authentication_type": "oauth2",
+        "use_ssl": true,
+        "server": "imap.googlemail.com",
+        "label": "test::gmail",
+        "username": "test@gmail.com",
+        "port": 993
+      }
+    ],
+    "email_addresses": [
+      "test@gmail.com"
+    ],
+    "created": 1462217251,
+    "first_name": "test@gmail.com",
+    "last_name": "",
+    "resource_url": "https://api.context.io/lite/users/5727aa2a0be9af5d658b4568"
+  },
+  "email_account_id": "test::gmail",
+  "resource_url": "https://api.context.io/lite/connect_tokens/axjogv7yipqnhj9c",
+  "expires": false
+}`
+
+	cioLite, logger, testServer, mux := NewTestCioLiteWithLoggerAndTestServer(t)
+	defer testServer.Close()
+
+	mux.HandleFunc("/connect_tokens/axjogv7yipqnhj9c", func(w http.ResponseWriter, r *http.Request) {
+		_, err := io.WriteString(w, responseString)
+		Must(err)
+	})
+
+	expected := GetConnectTokenResponse{
+		Token:             "axjogv7yipqnhj9c",
+		Email:             "test@gmail.com",
+		EmailAccountID:    "test::gmail",
+		CallbackURL:       "https://yoursite.com",
+		StatusCallbackURL: "https://yoursite.com/api/unsubscriber/v1/cio/account_status/callback",
+		ResourceURL:       "https://api.context.io/lite/connect_tokens/axjogv7yipqnhj9c",
+		// FirstName:      "test@gmail.com",
+		// LastName:       "",
+		// BrowserRedirectURL:  "", Not included yet for some reason...
+		// ServerLabel:         "", Not included yet for some reason...
+		AccountLite: true,
+		Created:     1462217246,
+		Used:        1462217259,
+		Expires:     ExpiresMixed{Expires: nil},
+		User: GetConnectTokenUserResponse{
+			ID:             "5727aa2a0be9af5d658b4568",
+			EmailAddresses: []string{"test@gmail.com"},
+			FirstName:      "test@gmail.com",
+			LastName:       "",
+			Created:        1462217251,
+			EmailAccounts: []GetUsersEmailAccountsResponse{GetUsersEmailAccountsResponse{
+				Status:             "OK",
+				ResourceURL:        "https://api.context.io/lite/users/5727aa2a0be9af5d658b4568/email_accounts/test%3A%3Agmail",
+				Type:               "imap",
+				AuthenticationType: "oauth2",
+				Server:             "imap.googlemail.com",
+				Label:              "test::gmail",
+				Username:           "test@gmail.com",
+				UseSSL:             true,
+				Port:               993,
+			}},
+		},
+	}
+
+	connectToken, err := cioLite.GetConnectToken(tokenString)
+
+	if err != nil || !reflect.DeepEqual(connectToken, expected) {
+		t.Error("Expected: ", expected, "; Got: ", connectToken, "; With Error: ", err, "; With Log: ", logger.String())
 	}
 
 	if len(logger.String()) < 20 {
