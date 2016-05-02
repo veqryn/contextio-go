@@ -18,9 +18,12 @@ func TestFormValuesAndQueryString(t *testing.T) {
 		IntLarge    int    `json:"int_large"`
 		IntZero     int    `json:"int_zero"`
 	}{
-		StringFull: "hello world",
-		BoolTrue:   true,
-		IntLarge:   8194723,
+		StringFull:  "hello world",
+		StringEmpty: "",
+		BoolTrue:    true,
+		BoolFalse:   false,
+		IntLarge:    8194723,
+		IntZero:     0,
 	}
 
 	expectedFormValues := url.Values{
