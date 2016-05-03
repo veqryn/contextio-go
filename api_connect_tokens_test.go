@@ -58,14 +58,14 @@ func TestActualConnectTokenRequestToCio(t *testing.T) {
 	}
 
 	// check with bad email
-	_, err = cioLite.CheckConnectToken("not_correct@gmail.com", connectToken.Token)
+	err = cioLite.CheckConnectToken(getConnectToken, "not_correct@gmail.com")
 	expectedErrorText := "Email does not match Context.io token"
 	if err.Error() != expectedErrorText {
 		t.Error("Expected error: ", expectedErrorText, "; Got: ", err)
 	}
 
 	// check with good email
-	_, err = cioLite.CheckConnectToken("test@gmail.com", connectToken.Token)
+	err = cioLite.CheckConnectToken(getConnectToken, "test@gmail.com")
 	expectedErrorText = "Context.io token not used yet"
 	if err.Error() != expectedErrorText {
 		t.Error("Expected error: ", expectedErrorText, "; Got: ", err)
@@ -175,10 +175,23 @@ func TestSimulatedGetConnectToken(t *testing.T) {
 		},
 	}
 
-	connectToken, err := cioLite.GetConnectToken(tokenString)
+	// Get Connect Token
+	getConnectToken, err := cioLite.GetConnectToken(tokenString)
 
-	if err != nil || !reflect.DeepEqual(connectToken, expected) {
-		t.Error("Expected: ", expected, "; Got: ", connectToken, "; With Error: ", err, "; With Log: ", logger.String())
+	if err != nil || !reflect.DeepEqual(getConnectToken, expected) {
+		t.Error("Expected: ", expected, "; Got: ", getConnectToken, "; With Error: ", err, "; With Log: ", logger.String())
+	}
+
+	// Check Connect Token
+	err = cioLite.CheckConnectToken(getConnectToken, "test@gmail.com")
+	if err != nil {
+		t.Error("Expected successful check connect token; Got: ", err)
+	}
+
+	// Check if accepted token's email accounts match (they shouldn't since its not accepted)
+	emailAccount, err := getConnectToken.User.EmailAccountMatching("test@gmail.com")
+	if err != nil || !reflect.DeepEqual(emailAccount, expected.User.EmailAccounts[0]) {
+		t.Error("Expected: ", expected.User.EmailAccounts[0], "; Got: ", emailAccount, "; With Error: ", err, "; With Log: ", logger.String())
 	}
 
 	if len(logger.String()) < 20 {

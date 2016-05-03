@@ -164,37 +164,32 @@ func (user GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetU
 	return FindEmailAccountMatching(user.EmailAccounts, email)
 }
 
-// CheckConnectToken checks that the connect token was used and that CIO has access to the account
-func (cioLite CioLite) CheckConnectToken(email string, contextioToken string) (GetConnectTokenResponse, error) {
-
-	// Call Api
-	response, err := cioLite.GetConnectToken(contextioToken)
-	if err != nil {
-		return response, err
-	}
+// CheckConnectToken checks and returns nil if the connect token was used, the email
+// authorized matches the expected email, and that CIO has access to the account.
+func (cioLite CioLite) CheckConnectToken(connectToken GetConnectTokenResponse, email string) error {
 
 	// Confirm email matches
-	if response.Email != email {
-		return response, fmt.Errorf("Email does not match Context.io token")
+	if connectToken.Email != email {
+		return fmt.Errorf("Email does not match Context.io token")
 	}
 
 	// Confirm token was used (accepted/authorized)
-	if response.Used == 0 {
-		return response, fmt.Errorf("Context.io token not used yet")
+	if connectToken.Used == 0 || connectToken.Expires.Unused() {
+		return fmt.Errorf("Context.io token not used yet")
 	}
 
 	// Confirm user exists
-	if len(response.User.ID) == 0 {
-		return response, fmt.Errorf("Context.io user not created yet")
+	if len(connectToken.User.ID) == 0 {
+		return fmt.Errorf("Context.io user not created yet")
 	}
 
 	// Confirm we have access
-	account, err := response.User.EmailAccountMatching(email)
+	account, err := connectToken.User.EmailAccountMatching(email)
 	if err != nil || account.Status != "OK" {
-		return response, fmt.Errorf("Unable to access account using Context.io")
+		return fmt.Errorf("Unable to access account using Context.io")
 	}
 
-	return response, nil
+	return nil
 }
 
 // ExpiresMixed is a special type to handle the fact that 'expires' can be an int or false.
