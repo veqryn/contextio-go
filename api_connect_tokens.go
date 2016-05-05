@@ -225,7 +225,6 @@ func (expires ExpiresMixed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON allows ExpiresMixed to implement json.Unmarshaler
 func (expires *ExpiresMixed) UnmarshalJSON(data []byte) error {
-	//panic("blargunmarshal")
 	stringData := string(data)
 	if strings.ToLower(stringData) == "false" {
 		return nil
