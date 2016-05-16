@@ -1,4 +1,4 @@
-package ciolite
+package cioutil
 
 import (
 	"bytes"
@@ -14,67 +14,67 @@ import (
 	"github.com/garyburd/go-oauth/oauth"
 )
 
-// clientRequest defines information that can be used to make a request
-type clientRequest struct {
-	method      string
-	path        string
-	formValues  interface{}
-	queryValues interface{}
+// ClientRequest defines information that can be used to make a request
+type ClientRequest struct {
+	Method      string
+	Path        string
+	FormValues  interface{}
+	QueryValues interface{}
 }
 
-// doFormRequest makes the actual request
-func (cioLite CioLite) doFormRequest(request clientRequest, result interface{}) error {
+// DoFormRequest makes the actual request
+func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 	// Construct the url
-	cioURL := cioLite.Host + request.path + QueryString(request.queryValues)
+	cioURL := cio.Host + request.Path + QueryString(request.QueryValues)
 
 	// Construct the body
 	var bodyReader io.Reader
-	bodyValues := FormValues(request.formValues)
+	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	logRequest(cioLite.Log, cioURL, bodyValues)
+	logRequest(cio.Log, cioURL, bodyValues)
 
 	// Construct the request
-	httpReq, err := cioLite.createRequest(request, cioURL, bodyReader, bodyValues)
+	httpReq, err := cio.createRequest(request, cioURL, bodyReader, bodyValues)
 	if err != nil {
 		return err
 	}
 
 	// Send the request
-	return cioLite.sendRequest(httpReq, result, cioURL)
+	return cio.sendRequest(httpReq, result, cioURL)
 }
 
 // createRequest creates the *http.Request object
-func (cioLite CioLite) createRequest(request clientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
+func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
 	// Construct the request
-	httpReq, err := http.NewRequest(request.method, cioURL, bodyReader)
+	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
 		return httpReq, fmt.Errorf("Could not create request: %s", err)
 	}
 
 	// oAuth signature
 	var client oauth.Client
-	client.Credentials = oauth.Credentials{Token: cioLite.apiKey, Secret: cioLite.apiSecret}
+	client.Credentials = oauth.Credentials{Token: cio.apiKey, Secret: cio.apiSecret}
 
 	// Add headers
 	httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	httpReq.Header.Set("Accept", "application/json")
 	httpReq.Header.Set("Accept-Charset", "utf-8")
-	httpReq.Header.Set("User-Agent", "Golang CIOLite library v0.1")
-	httpReq.Header.Set("Authorization", client.AuthorizationHeader(nil, request.method, httpReq.URL, bodyValues))
+	httpReq.Header.Set("User-Agent", "Golang CIO Library")
+	httpReq.Header.Set("Authorization", client.AuthorizationHeader(nil, request.Method, httpReq.URL, bodyValues))
 
 	return httpReq, nil
 }
 
 // sendRequest sends the *http.Request
-func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, cioURL string) error {
+func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL string) error {
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,
-		Timeout:   cioLite.RequestTimeout,
+		Timeout:   cio.RequestTimeout,
 	}
 
 	// Make the request
@@ -86,7 +86,7 @@ func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, ci
 	// Parse the response
 	defer func() {
 		if closeErr := res.Body.Close(); closeErr != nil {
-			logBodyCloseError(cioLite.Log, closeErr)
+			logBodyCloseError(cio.Log, closeErr)
 		}
 	}()
 
@@ -100,7 +100,7 @@ func (cioLite CioLite) sendRequest(httpReq *http.Request, result interface{}, ci
 	err = json.Unmarshal(resBody, &result)
 
 	// Log the response
-	logResponse(cioLite.Log, cioURL, res.StatusCode, resBodyString, err)
+	logResponse(cio.Log, cioURL, res.StatusCode, resBodyString, err)
 
 	// Return special error if Status Code >= 400
 	if res.StatusCode >= 400 {

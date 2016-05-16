@@ -4,6 +4,8 @@ package ciolite
 
 import (
 	"fmt"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetOAuthProvidersResponse data struct
@@ -45,16 +47,16 @@ type DeleteOAuthProviderResponse struct {
 func (cioLite CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   "/oauth_providers",
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   "/oauth_providers",
 	}
 
 	// Make response
 	var response []GetOAuthProvidersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -64,16 +66,16 @@ func (cioLite CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error) 
 func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/oauth_providers/%s", key),
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   fmt.Sprintf("/oauth_providers/%s", key),
 	}
 
 	// Make response
 	var response GetOAuthProvidersResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -84,17 +86,17 @@ func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, 
 func (cioLite CioLite) CreateOAuthProvider(formValues CreateOAuthProviderParams) (CreateOAuthProviderResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       "/oauth_providers",
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       "/oauth_providers",
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response CreateOAuthProviderResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -104,16 +106,16 @@ func (cioLite CioLite) CreateOAuthProvider(formValues CreateOAuthProviderParams)
 func (cioLite CioLite) DeleteOAuthProvider(key string) (DeleteOAuthProviderResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "DELETE",
-		path:   fmt.Sprintf("/oauth_providers/%s", key),
+	request := cioutil.ClientRequest{
+		Method: "DELETE",
+		Path:   fmt.Sprintf("/oauth_providers/%s", key),
 	}
 
 	// Make response
 	var response DeleteOAuthProviderResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }

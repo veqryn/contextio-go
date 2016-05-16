@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"time"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 const (
@@ -18,11 +20,7 @@ const (
 // CioLite struct contains the api key and secret, along with an optional logger,
 // and provides convenience functions for accessing all CIO Lite endpoints.
 type CioLite struct {
-	apiKey         string
-	apiSecret      string
-	Log            Logger
-	Host           string
-	RequestTimeout time.Duration
+	cioutil.Cio
 }
 
 // NewCioLite returns a CIO Lite struct (without a logger) for accessing the CIO Lite API.
@@ -31,37 +29,15 @@ func NewCioLite(key string, secret string) CioLite {
 }
 
 // NewCioLiteWithLogger returns a CIO Lite struct (with a logger) for accessing the CIO Lite API.
-func NewCioLiteWithLogger(key string, secret string, logger Logger) CioLite {
-	return CioLite{
-		apiKey:         key,
-		apiSecret:      secret,
-		Log:            logger,
-		Host:           DefaultHost,
-		RequestTimeout: DefaultRequestTimeout,
-	}
-}
-
-// Logger interface which *log.Logger uses. Allows injection of user specified loggers.
-type Logger interface {
-	Print(v ...interface{})
-	Printf(format string, v ...interface{})
-	Println(v ...interface{})
+func NewCioLiteWithLogger(key string, secret string, logger cioutil.Logger) CioLite {
+	return CioLite{Cio: cioutil.NewCio(key, secret, logger, DefaultHost, DefaultRequestTimeout)}
 }
 
 // NewTestCioLiteServer is a convenience function that returns a CioLite object
 // and a *httptest.Server (which must be closed when done being used).
 // The CioLite instance will hit the test server for all requests.
-func NewTestCioLiteServer(key string, secret string, logger Logger, handler http.Handler) (CioLite, *httptest.Server) {
-
+func NewTestCioLiteServer(key string, secret string, logger cioutil.Logger, handler http.Handler) (CioLite, *httptest.Server) {
 	testServer := httptest.NewServer(handler)
-
-	testCioLite := CioLite{
-		apiKey:         key,
-		apiSecret:      secret,
-		Log:            logger,
-		Host:           testServer.URL,
-		RequestTimeout: 10 * time.Second,
-	}
-
+	testCioLite := CioLite{Cio: cioutil.NewCio(key, secret, logger, testServer.URL, 5*time.Second)}
 	return testCioLite, testServer
 }

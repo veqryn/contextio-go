@@ -5,6 +5,8 @@ package ciolite
 import (
 	"fmt"
 	"strings"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUserEmailAccountsParams query values data struct.
@@ -77,17 +79,17 @@ type DeleteEmailAccountResponse struct {
 func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEmailAccountsParams) ([]GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:      "GET",
-		path:        fmt.Sprintf("/users/%s/email_accounts", userID),
-		queryValues: queryValues,
+	request := cioutil.ClientRequest{
+		Method:      "GET",
+		Path:        fmt.Sprintf("/users/%s/email_accounts", userID),
+		QueryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -98,16 +100,16 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEm
 func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 	}
 
 	// Make response
 	var response GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -121,17 +123,17 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUserParams) (CreateEmailAccountResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       fmt.Sprintf("/users/%s/email_accounts", userID),
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       fmt.Sprintf("/users/%s/email_accounts", userID),
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response CreateEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -143,17 +145,17 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUs
 func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formValues ModifyUserEmailAccountParams) (ModifyEmailAccountResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response ModifyEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -163,16 +165,16 @@ func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formV
 func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (DeleteEmailAccountResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "DELETE",
-		path:   fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+	request := cioutil.ClientRequest{
+		Method: "DELETE",
+		Path:   fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 	}
 
 	// Make response
 	var response DeleteEmailAccountResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
