@@ -4,6 +4,8 @@ package ciolite
 
 import (
 	"fmt"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUserEmailAccountsFolderMessageAttachmentsResponse data struct
@@ -27,17 +29,17 @@ type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:      "GET",
-		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, folder, messageID),
-		queryValues: queryValues,
+	request := cioutil.ClientRequest{
+		Method:      "GET",
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, folder, messageID),
+		QueryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -48,17 +50,17 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID strin
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string, messageID string, attachmentID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:      "GET",
-		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, folder, messageID, attachmentID),
-		queryValues: queryValues,
+	request := cioutil.ClientRequest{
+		Method:      "GET",
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, folder, messageID, attachmentID),
+		QueryValues: queryValues,
 	}
 
 	// Make response
 	var response GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }

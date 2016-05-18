@@ -3,12 +3,9 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/users/webhooks
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
-	"hash"
-	"strconv"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUsersWebhooksResponse data struct
@@ -202,16 +199,16 @@ type WebhookMessageDataAddresses struct {
 func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/webhooks", userID),
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   fmt.Sprintf("/users/%s/webhooks", userID),
 	}
 
 	// Make response
 	var response []GetUsersWebhooksResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -221,16 +218,16 @@ func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksRespons
 func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsersWebhooksResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 	}
 
 	// Make response
 	var response GetUsersWebhooksResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -244,17 +241,17 @@ func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsers
 func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWebhookParams) (CreateUserWebhookResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       fmt.Sprintf("/users/%s/webhooks", userID),
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       fmt.Sprintf("/users/%s/webhooks", userID),
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response CreateUserWebhookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -265,17 +262,17 @@ func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWeb
 func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formValues ModifyUserWebhookParams) (ModifyWebhookResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response ModifyWebhookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -285,33 +282,16 @@ func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formVa
 func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string) (DeleteWebhookResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "DELETE",
-		path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+	request := cioutil.ClientRequest{
+		Method: "DELETE",
+		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 	}
 
 	// Make response
 	var response DeleteWebhookResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
-}
-
-// ValidateWebhookCallback returns true if this WebhookCallback authenticates
-func (cioLite CioLite) ValidateWebhookCallback(whc WebhookCallback) bool {
-	// Hash timestamp and token with secret, compare to signature
-	message := strconv.Itoa(whc.Timestamp) + whc.Token
-	hash := hashHmac(sha256.New, message, cioLite.apiSecret)
-	return len(hash) > 0 && whc.Signature == hash
-}
-
-// hashHmac returns the hash of a message hashed with the provided hash function, using the provided secret
-func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) string {
-	h := hmac.New(hashAlgorithm, []byte(secret))
-	if _, err := h.Write([]byte(message)); err != nil {
-		panic("hash.Hash unable to write message bytes, with error: " + err.Error())
-	}
-	return hex.EncodeToString(h.Sum(nil))
 }

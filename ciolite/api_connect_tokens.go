@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetConnectTokenResponse data struct
@@ -84,16 +86,16 @@ type DeleteConnectTokenResponse struct {
 func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   "/connect_tokens",
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   "/connect_tokens",
 	}
 
 	// Make response
 	var response []GetConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -103,16 +105,16 @@ func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "GET",
-		path:   fmt.Sprintf("/connect_tokens/%s", token),
+	request := cioutil.ClientRequest{
+		Method: "GET",
+		Path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}
 
 	// Make response
 	var response GetConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -124,17 +126,17 @@ func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, e
 func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:     "POST",
-		path:       "/connect_tokens",
-		formValues: formValues,
+	request := cioutil.ClientRequest{
+		Method:     "POST",
+		Path:       "/connect_tokens",
+		FormValues: formValues,
 	}
 
 	// Make response
 	var response CreateConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }
@@ -144,16 +146,16 @@ func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (
 func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method: "DELETE",
-		path:   fmt.Sprintf("/connect_tokens/%s", token),
+	request := cioutil.ClientRequest{
+		Method: "DELETE",
+		Path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}
 
 	// Make response
 	var response DeleteConnectTokenResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }

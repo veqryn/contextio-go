@@ -4,6 +4,8 @@ package ciolite
 
 import (
 	"fmt"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUserEmailAccountsFolderMessageFlagsResponse data struct
@@ -25,17 +27,17 @@ type GetUserEmailAccountsFolderMessageFlagsResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageFlagsResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:      "GET",
-		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, folder, messageID),
-		queryValues: queryValues,
+	request := cioutil.ClientRequest{
+		Method:      "GET",
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, folder, messageID),
+		QueryValues: queryValues,
 	}
 
 	// Make response
 	var response GetUserEmailAccountsFolderMessageFlagsResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }

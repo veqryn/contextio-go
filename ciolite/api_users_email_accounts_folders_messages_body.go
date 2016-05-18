@@ -4,6 +4,8 @@ package ciolite
 
 import (
 	"fmt"
+
+	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUserEmailAccountsFolderMessageBodyParams query values data struct.
@@ -30,17 +32,17 @@ type GetUserEmailAccountsFolderMessageBodyResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageBody(userID string, label string, folder string, messageID string, queryValues GetUserEmailAccountsFolderMessageBodyParams) ([]GetUserEmailAccountsFolderMessageBodyResponse, error) {
 
 	// Make request
-	request := clientRequest{
-		method:      "GET",
-		path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/body", userID, label, folder, messageID),
-		queryValues: queryValues,
+	request := cioutil.ClientRequest{
+		Method:      "GET",
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/body", userID, label, folder, messageID),
+		QueryValues: queryValues,
 	}
 
 	// Make response
 	var response []GetUserEmailAccountsFolderMessageBodyResponse
 
 	// Request
-	err := cioLite.doFormRequest(request, &response)
+	err := cioLite.DoFormRequest(request, &response)
 
 	return response, err
 }

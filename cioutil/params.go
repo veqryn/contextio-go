@@ -1,4 +1,4 @@
-package ciolite
+package cioutil
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// FormValues returns valid FormValues for CIO Lite
+// FormValues returns valid FormValues for CIO
 func FormValues(cioFormValueParams interface{}) url.Values {
 
 	// Values
