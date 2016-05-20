@@ -1,6 +1,8 @@
 # contextio-go
 [Context.IO](https://context.io/) API Golang Library
 
+This library is currently in BETA, and as such we make no promises; the use of this library is provided without warranty.
+
 ## Installation
 
 ```bash
@@ -41,7 +43,8 @@ func main() {
 	}
 
 	// Responses are simple structs, all fields accessible. The following line prints:
-	// {Email:test@gmail.com Type:gmail Documentation:[] Found:true IMAP:{Server:imap.gmail.com Username:test@gmail.com UseSSL:true OAuth:true Port:993}}
+	// {Email:test@gmail.com Type:gmail Documentation:[] Found:true
+	// IMAP:{Server:imap.gmail.com Username:test@gmail.com UseSSL:true OAuth:true Port:993}}
 	fmt.Printf("%+v", discoveryResp)
 
 	// Get a slice of users
