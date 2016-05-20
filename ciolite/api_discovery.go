@@ -16,8 +16,12 @@ type GetDiscoveryParams struct {
 // GetDiscoveryResponse data struct
 // 	https://context.io/docs/lite/discovery#get
 type GetDiscoveryResponse struct {
-	Email         string        `json:"email,omitempty"`
-	Type          string        `json:"type,omitempty"`
+	Email string `json:"email,omitempty"`
+	Type  string `json:"type,omitempty"`
+
+	// Value only appears if there is an error message
+	Value string `json:"value,omitempty"`
+
 	Documentation []interface{} `json:"documentation,omitempty"`
 
 	Found bool `json:"found,omitempty"`
