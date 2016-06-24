@@ -22,7 +22,7 @@ type GetUserEmailAccountsFolderMessageHeadersParams struct {
 type GetUserEmailAccountsFolderMessageHeadersResponse struct {
 	ResourceURL int `json:"resource_url,omitempty"`
 
-	Headers map[string]interface{} `json:"headers,omitempty"`
+	Headers map[string][]string `json:"headers,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageHeaders gets the complete headers of a given email message.
