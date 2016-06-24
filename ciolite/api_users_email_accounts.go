@@ -63,6 +63,7 @@ type ModifyEmailAccountResponse struct {
 	Success      bool   `json:"success,omitempty"`
 	ResourceURL  string `json:"resource_url,omitempty"`
 	FeedbackCode string `json:"feedback_code,omitempty"`
+	ConnectionLog string `json:"connection_log,omitempty"`
 }
 
 // DeleteEmailAccountResponse data struct
