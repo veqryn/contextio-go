@@ -12,12 +12,12 @@ import (
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/attachments#id-get
 type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
-	Type               int `json:"type,omitempty"`
-	FileName           int `json:"file_name,omitempty"`
-	BodySection        int `json:"body_section,omitempty"`
-	ContentDisposition int `json:"content_disposition,omitempty"`
-	EmailMessageID     int `json:"email_message_id,omitempty"`
-	XAttachmentID      int `json:"x_attachment_id,omitempty"`
+	Type               string `json:"type,omitempty"`
+	FileName           string `json:"file_name,omitempty"`
+	BodySection        string `json:"body_section,omitempty"`
+	ContentDisposition string `json:"content_disposition,omitempty"`
+	EmailMessageID     string `json:"email_message_id,omitempty"`
+	XAttachmentID      string `json:"x_attachment_id,omitempty"`
 
 	Size         int `json:"size,omitempty"`
 	AttachmentID int `json:"attachment_id,omitempty"`
