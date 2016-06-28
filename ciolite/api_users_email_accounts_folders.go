@@ -5,6 +5,7 @@ package ciolite
 import (
 	"errors"
 	"fmt"
+	"net/url"
 
 	"github.com/contextio/contextio-go/cioutil"
 )
@@ -79,7 +80,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		QueryValues: queryValues,
 	}
 
@@ -101,7 +102,7 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		Path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		FormValues: formValues,
 	}
 

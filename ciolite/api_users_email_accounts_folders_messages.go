@@ -137,7 +137,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label s
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages", userID, label, folder),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages", userID, label, url.QueryEscape(folder)),
 		QueryValues: queryValues,
 	}
 
@@ -158,7 +158,7 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, url.QueryEscape(messageID)),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues: queryValues,
 	}
 
@@ -179,7 +179,7 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label st
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "PUT",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, url.QueryEscape(messageID)),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues: queryValues,
 	}
 

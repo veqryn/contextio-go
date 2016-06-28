@@ -4,6 +4,7 @@ package ciolite
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/contextio/contextio-go/cioutil"
 )
@@ -34,7 +35,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageBody(userID string, labe
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/body", userID, label, folder, messageID),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/body", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues: queryValues,
 	}
 
