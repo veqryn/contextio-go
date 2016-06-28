@@ -20,7 +20,7 @@ type GetUserEmailAccountsFolderMessageHeadersParams struct {
 // GetUserEmailAccountsFolderMessageHeadersResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages/headers#get
 type GetUserEmailAccountsFolderMessageHeadersResponse struct {
-	ResourceURL int `json:"resource_url,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 
 	Headers map[string][]string `json:"headers,omitempty"`
 }
