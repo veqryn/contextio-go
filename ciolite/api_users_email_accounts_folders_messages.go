@@ -4,6 +4,7 @@ package ciolite
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/contextio/contextio-go/cioutil"
 )
@@ -157,7 +158,7 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, url.QueryEscape(messageID)),
 		QueryValues: queryValues,
 	}
 
@@ -178,7 +179,7 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label st
 	// Make request
 	request := cioutil.ClientRequest{
 		Method:      "PUT",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
+		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, url.QueryEscape(messageID)),
 		QueryValues: queryValues,
 	}
 
