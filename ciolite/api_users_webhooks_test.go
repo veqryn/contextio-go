@@ -2,11 +2,12 @@ package ciolite
 
 import (
 	"encoding/json"
+	"reflect"
 	"testing"
 )
 
-// TestReceivingWebhook tests receiving and parsing WebhookCallback
-func TestSimulatedReceivingWebhook(t *testing.T) {
+// TestReceivingWebhookEmptyAddresses tests receiving and parsing WebhookCallback with empty addresses field
+func TestReceivingWebhookEmptyAddresses(t *testing.T) {
 	t.Parallel()
 
 	emptyAddressesJSON := `
@@ -38,6 +39,28 @@ func TestSimulatedReceivingWebhook(t *testing.T) {
 	"signature": "fake123Signature"
 }`
 
+	// Test Empty Addresses Array
+	var emptyAddresses WebhookCallback
+	Must(json.Unmarshal([]byte(emptyAddressesJSON), &emptyAddresses))
+
+	if emptyAddresses.AccountID != "abc4567XYZ" {
+		t.Error("Expected AccountID: ", "abc4567XYZ", "; Got: ", emptyAddresses.AccountID)
+	}
+
+	if len(emptyAddresses.MessageData.Folders) != 1 || emptyAddresses.MessageData.Folders[0] != "Inbox" {
+		t.Error("Expected MessageData.Folders: ", "[Inbox]", "; Got: ", emptyAddresses.MessageData.Folders)
+	}
+
+	emptyExpected := WebhookMessageDataAddresses{}
+	if !reflect.DeepEqual(emptyAddresses.MessageData.Addresses, emptyExpected) {
+		t.Error("Expected MessageData.Addresses: ", emptyExpected, "; Got: ", emptyAddresses.MessageData.Addresses)
+	}
+}
+
+// TestSimulatedReceivingWebhookFullAddresses tests receiving and parsing WebhookCallback with filled in addresses field
+func TestSimulatedReceivingWebhookFullAddresses(t *testing.T) {
+	t.Parallel()
+
 	fullAddressesJSON := `
 {
 	"account_id": "abc4567XYZ",
@@ -56,13 +79,12 @@ func TestSimulatedReceivingWebhook(t *testing.T) {
 			"from": {
 				"email": "from@test.com",
 				"name": "John"
-			},
-			"to": [{
-				"email": "to@test.com"
-			}],
-			"reply_to": [{
-				"email": "reply@test.com"
-			}]
+			}
+		},
+		"person_info": {
+			"noreply@test.com": {
+				"thumbnail": "https://test.com/test.png"
+			}
 		},
 		"flags": {
 			"seen": true
@@ -71,51 +93,36 @@ func TestSimulatedReceivingWebhook(t *testing.T) {
 	}
 }`
 
-	//type ExpiresTest struct {
-	//	MyField ExpiresMixed `json:"my_field"`
-	//}
-	//
-	//falseExpectedJSON := `{"my_field":false}`
-	//falseExpectedExpires := ExpiresTest{MyField: ExpiresMixed{}}
-	//
-	//timestamp := 1234509876
-	//timestampExpectedJSON := `{"my_field":1234509876}`
-	//timestampExpectedExpires := ExpiresTest{MyField: ExpiresMixed{Expires: &timestamp}}
-
-	// Test Empty Address Array
-	var emptyAddresses WebhookCallback
-	Must(json.Unmarshal([]byte(emptyAddressesJSON), &emptyAddresses))
-
+	// Test filled addresses field
 	var fullAddresses WebhookCallback
 	Must(json.Unmarshal([]byte(fullAddressesJSON), &fullAddresses))
 
-	//if !reflect.DeepEqual(falseExpires, falseExpectedExpires) ||
-	//falseExpires.MyField.Unused() ||
-	//falseExpires.MyField.Timestamp() != -1 {
-	//	t.Error(falseExpires)
-	//}
-	//
-	//falseJSON, err := json.Marshal(falseExpires)
-	//Must(err)
-	//
-	//if string(falseJSON) != falseExpectedJSON {
-	//	t.Error(string(falseJSON))
-	//}
-	//
-	//// Test timestamp
-	//var timestampExpires ExpiresTest
-	//Must(json.Unmarshal([]byte(timestampExpectedJSON), &timestampExpires))
-	//
-	//if !reflect.DeepEqual(timestampExpires, timestampExpectedExpires) ||
-	//!timestampExpires.MyField.Unused() ||
-	//timestampExpires.MyField.Timestamp() != timestamp {
-	//	t.Error(timestampExpires)
-	//}
-	//
-	//timestampJSON, err := json.Marshal(timestampExpires)
-	//Must(err)
-	//
-	//if string(timestampJSON) != timestampExpectedJSON {
-	//	t.Error(string(timestampJSON))
-	//}
+	if fullAddresses.AccountID != "abc4567XYZ" {
+		t.Error("Expected AccountID: ", "abc4567XYZ", "; Got: ", fullAddresses.AccountID)
+	}
+
+	if len(fullAddresses.MessageData.Folders) != 1 || fullAddresses.MessageData.Folders[0] != "Inbox" {
+		t.Error("Expected MessageData.Folders: ", "[Inbox]", "; Got: ", fullAddresses.MessageData.Folders)
+	}
+
+	type address struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	}
+
+	addressesExpected := WebhookMessageDataAddresses{
+		From: address{
+			Email: "from@test.com",
+			Name:  "John",
+		},
+	}
+	if !reflect.DeepEqual(fullAddresses.MessageData.Addresses, addressesExpected) {
+		t.Error("Expected MessageData.Addresses: ", addressesExpected, "; Got: ", fullAddresses.MessageData.Addresses)
+	}
+
+	personInfoExpected := map[string]map[string]string{"noreply@test.com": {"thumbnail": "https://test.com/test.png"}}
+
+	if !reflect.DeepEqual(fullAddresses.MessageData.PersonInfo["noreply@test.com"], personInfoExpected["noreply@test.com"]) {
+		t.Error("Expected MessageData.PersonInfo: ", personInfoExpected, "; Got: ", fullAddresses.MessageData.PersonInfo)
+	}
 }
