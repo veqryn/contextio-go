@@ -3,6 +3,8 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/users/webhooks
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/contextio/contextio-go/cioutil"
@@ -192,6 +194,24 @@ type WebhookMessageDataAddresses struct {
 		Email string `json:"email,omitempty"`
 		Name  string `json:"name,omitempty"`
 	} `json:"reply_to,omitempty"`
+}
+
+// UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
+func (m *WebhookMessageDataAddresses) UnmarshalJSON(b []byte) error {
+	if bytes.Equal([]byte(`[]`), b) {
+		// its the empty array, set an empty struct
+		*m = WebhookMessageDataAddresses{}
+		return nil
+	}
+	// avoid recursion
+	type webhookMessageDataAddressesTemp WebhookMessageDataAddresses
+	var tmp webhookMessageDataAddressesTemp
+
+	if err := json.Unmarshal(b, &tmp); err != nil {
+		return err
+	}
+	*m = WebhookMessageDataAddresses(tmp)
+	return nil
 }
 
 // GetUserWebhooks gets listings of Webhooks configured for a user.

@@ -3,6 +3,8 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders/messages
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/url"
 
@@ -76,6 +78,22 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type PersonInfo map[string]map[string]string
+
+// UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
+func (m *PersonInfo) UnmarshalJSON(b []byte) error {
+	if bytes.Equal([]byte(`[]`), b) {
+		// its the empty array, set an empty map
+		*m = make(map[string]map[string]string)
+		return nil
+	}
+	mp := make(map[string]map[string]string)
+	err := json.Unmarshal(b, &mp)
+	if err != nil {
+		return err
+	}
+	*m = mp
+	return nil
+}
 
 // GetUsersEmailAccountFolderMessageAddresses data struct within GetUsersEmailAccountFolderMessagesResponse
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
