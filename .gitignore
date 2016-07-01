@@ -26,3 +26,6 @@ _testmain.go
 # OS and IDE
 *.iml
 .idea/
+
+# Vendor
+vendor/

@@ -1,0 +1,6 @@
+package: github.com/contextio/contextio-go
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/garyburd/go-oauth
+  subpackages:
+  - oauth
