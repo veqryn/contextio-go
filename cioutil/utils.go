@@ -33,8 +33,8 @@ func NewCio(key string, secret string, logger Logger, host string, requestTimeou
 	}
 }
 
-// ValidateWebhookCallback returns true if this Webhook Callback authenticates
-func (cio Cio) ValidateWebhookCallback(token string, signature string, timestamp int) bool {
+// ValidateCallback returns true if this Webhook Callback or User Account Status Callback authenticates
+func (cio Cio) ValidateCallback(token string, signature string, timestamp int) bool {
 	// Hash timestamp and token with secret, compare to signature
 	message := strconv.Itoa(timestamp) + token
 	hash := hashHmac(sha256.New, message, cio.apiSecret)

@@ -74,6 +74,22 @@ type DeleteEmailAccountResponse struct {
 	FeedbackCode string `json:"feedback_code,omitempty"`
 }
 
+// StatusCallback data struct that will be received from CIO when a user's status changes
+// 	https://context.io/docs/lite/users/email_accounts#post
+// 	https://context.io/docs/lite/users/email_accounts#id-post
+type StatusCallback struct {
+	AccountID    string `json:"account_id,omitempty"`
+	UserID       string `json:"user_id,omitempty"`
+	ServerLabel  string `json:"server_label,omitempty"`
+	EmailAccount string `json:"email_account,omitempty"`
+	Failure      string `json:"failure,omitempty"`
+
+	Token     string `json:"token,omitempty" valid:"required"`
+	Signature string `json:"signature,omitempty" valid:"required"`
+
+	Timestamp int `json:"timestamp,omitempty" valid:"required"`
+}
+
 // GetUserEmailAccounts gets a list of email accounts assigned to a user.
 // queryValues may optionally contain Status, StatusOK
 // 	https://context.io/docs/lite/users/email_accounts#get
