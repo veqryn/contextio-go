@@ -171,7 +171,7 @@ func (user GetConnectTokenUserResponse) EmailAccountMatching(email string) (GetU
 func (cioLite CioLite) CheckConnectToken(connectToken GetConnectTokenResponse, email string) error {
 
 	// Confirm email matches
-	if connectToken.Email != email {
+	if strings.ToLower(connectToken.Email) != strings.ToLower(email) {
 		return fmt.Errorf("Email does not match Context.io token")
 	}
 

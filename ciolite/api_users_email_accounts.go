@@ -60,9 +60,9 @@ type ModifyUserEmailAccountParams struct {
 // ModifyEmailAccountResponse data struct
 // 	https://context.io/docs/lite/users/email_accounts#id-post
 type ModifyEmailAccountResponse struct {
-	Success      bool   `json:"success,omitempty"`
-	ResourceURL  string `json:"resource_url,omitempty"`
-	FeedbackCode string `json:"feedback_code,omitempty"`
+	Success       bool   `json:"success,omitempty"`
+	ResourceURL   string `json:"resource_url,omitempty"`
+	FeedbackCode  string `json:"feedback_code,omitempty"`
 	ConnectionLog string `json:"connection_log,omitempty"`
 }
 
@@ -188,18 +188,18 @@ func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, ema
 
 		// Try to match against the username
 		for _, emailAccount := range emailAccounts {
-			if email == emailAccount.Username {
+			if strings.ToLower(email) == strings.ToLower(emailAccount.Username) {
 				return emailAccount, nil
 			}
 		}
 
 		// Try to match the local part against the username or label
-		localPart := upToSeparator(email, "@")
+		localPart := strings.ToLower(upToSeparator(email, "@"))
 
 		for _, emailAccount := range emailAccounts {
 
-			if localPart == upToSeparator(emailAccount.Username, "@") ||
-				localPart == upToSeparator(emailAccount.Label, ":") {
+			if localPart == strings.ToLower(upToSeparator(emailAccount.Username, "@")) ||
+				localPart == strings.ToLower(upToSeparator(emailAccount.Label, ":")) {
 
 				return emailAccount, nil
 			}
