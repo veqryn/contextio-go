@@ -2,7 +2,6 @@ package cioutil
 
 import (
 	"bytes"
-	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -123,16 +122,16 @@ func logRequest(log Logger, method string, cioURL string, bodyValues url.Values)
 
 		// Redact sensitive information
 		if val := redactedValues.Get("password"); len(val) > 0 {
-			redactedValues.Set("password", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+			redactedValues.Set("password", "redacted")
 		}
 		if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
-			redactedValues.Set("provider_refresh_token", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+			redactedValues.Set("provider_refresh_token", "redacted")
 		}
 		if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_key", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+			redactedValues.Set("provider_consumer_key", "redacted")
 		}
 		if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_secret", fmt.Sprintf("%x", md5.Sum([]byte(val))))
+			redactedValues.Set("provider_consumer_secret", "redacted")
 		}
 
 		// Actually log
