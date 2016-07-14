@@ -35,7 +35,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	logRequest(cio.Log, cioURL, bodyValues)
+	logRequest(cio.Log, request.Method, cioURL, bodyValues)
 
 	// Construct the request
 	httpReq, err := cio.createRequest(request, cioURL, bodyReader, bodyValues)
@@ -100,7 +100,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	err = json.Unmarshal(resBody, &result)
 
 	// Log the response
-	logResponse(cio.Log, cioURL, res.StatusCode, resBodyString, err)
+	logResponse(cio.Log, httpReq.Method, cioURL, res.StatusCode, resBodyString, err)
 
 	// Return special error if Status Code >= 400
 	if res.StatusCode >= 400 {
@@ -112,7 +112,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 }
 
 // logRequest logs the request about to be made to CIO, redacting sensitive information in the body
-func logRequest(log Logger, cioURL string, bodyValues url.Values) {
+func logRequest(log Logger, method string, cioURL string, bodyValues url.Values) {
 	if log != nil {
 
 		// Copy url.Values
@@ -138,10 +138,10 @@ func logRequest(log Logger, cioURL string, bodyValues url.Values) {
 		// Actually log
 		if logrusLogger, ok := log.(*logrus.Logger); ok {
 			// If logrus, use structured fields
-			logrusLogger.WithFields(logrus.Fields{"url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
+			logrusLogger.WithFields(logrus.Fields{"httpMethod": method, "url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
 		} else {
 			// Else just log with Println
-			log.Println("Creating new request to: " + cioURL + " with payload: " + redactedValues.Encode())
+			log.Println("Creating new " + method + " request to: " + cioURL + " with payload: " + redactedValues.Encode())
 		}
 	}
 }
@@ -160,7 +160,7 @@ func logBodyCloseError(log Logger, closeError error) {
 }
 
 // logResponse logs the response from CIO, if any logger is set
-func logResponse(log Logger, cioURL string, statusCode int, responseBody string, unmarshalError error) {
+func logResponse(log Logger, method string, cioURL string, statusCode int, responseBody string, unmarshalError error) {
 	if log != nil {
 
 		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
@@ -168,6 +168,7 @@ func logResponse(log Logger, cioURL string, statusCode int, responseBody string,
 		if logrusLogger, ok := log.(*logrus.Logger); ok {
 			// If logrus, use structured fields
 			logEntry := logrusLogger.WithFields(logrus.Fields{
+				"httpMethod": method,
 				"url":        cioURL,
 				"statusCode": fmt.Sprintf("%d", statusCode),
 				"payload":    responseBody})
@@ -179,7 +180,7 @@ func logResponse(log Logger, cioURL string, statusCode int, responseBody string,
 
 		} else {
 			// Else just log with Println
-			log.Println("Received response from: " + cioURL +
+			log.Println("Received response from " + method + " to: " + cioURL +
 				" with status code: " + fmt.Sprintf("%d", statusCode) +
 				" and payload: " + responseBody)
 		}
