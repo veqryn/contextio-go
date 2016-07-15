@@ -152,7 +152,7 @@ type WebhookMessageData struct {
 		ContentDisposition string `json:"content_disposition,omitempty"`
 		MainFileName       string `json:"main_file_name,omitempty"`
 
-		// XAttachmentID []string `json:"x_attachment_id,omitempty"` // might also be just a string, in addition to a string array?
+		XAttachmentID interface{} `json:"x_attachment_id,omitempty"` // appears to be a single string and also an array of strings
 
 		FileNameStructure [][]string `json:"file_name_structure,omitempty"`
 
