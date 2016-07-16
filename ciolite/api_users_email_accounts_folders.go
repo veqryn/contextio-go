@@ -126,12 +126,22 @@ func (cioLite CioLite) SafeCreateUserEmailAccountFolder(userID string, label str
 		return false, nil
 	}
 
+	// CIO seems to have issues Getting a single specific folder, and Posting a new folder always gives an error if it already exists, so try getting the folder list and see if it is there already
+	allFolders, err := cioLite.GetUserEmailAccountsFolders(userID, label, GetUserEmailAccountsFoldersParams{IncludeNamesOnly: true})
+	if err == nil {
+		for _, singleFolder := range allFolders {
+			if singleFolder.Name == folder {
+				return false, nil
+			}
+		}
+	}
+
 	createResponse, err := cioLite.CreateUserEmailAccountFolder(userID, label, folder, formValues)
 	if err != nil {
 		return true, err
 	}
 	if !createResponse.Success {
-		return true, errors.New("Unable to create folder")
+		return true, errors.New("Unable to create folder. CIO returned 200 but with Success=false")
 	}
 	// Created successfully
 	return true, nil
