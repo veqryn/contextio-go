@@ -144,7 +144,7 @@ func logRequest(log Logger, method string, cioURL string, bodyValues url.Values)
 			logrusLogger.WithFields(logrus.Fields{"httpMethod": method, "url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
 		} else {
 			// Else just log with Println
-			log.Println("Creating new " + method + " request to: " + cioURL + " with payload: " + redactedValues.Encode())
+			log.Printf("Creating new %s request to: %s with payload: %s\n", method, cioURL, redactedValues.Encode())
 		}
 	}
 }
@@ -157,7 +157,7 @@ func logBodyCloseError(log Logger, closeError error) {
 			logrusLogger.WithError(closeError).Warn("Unable to close response body from CIO")
 		} else {
 			// Else just log with Println
-			log.Println("Unable to close response body from CIO, with error: " + closeError.Error())
+			log.Printf("Unable to close response body from CIO, with error: %s\n", closeError.Error())
 		}
 	}
 }
@@ -188,9 +188,7 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 
 		} else {
 			// Else just log with Println
-			log.Println("Received response from " + method + " to: " + cioURL +
-				" with status code: " + fmt.Sprintf("%d", statusCode) +
-				" and payload snippet: " + responseBody)
+			log.Printf("Received response from %s to: %s with status code: %d and payload snippet: %s\n", method, cioURL, statusCode, responseBody)
 		}
 	}
 }
