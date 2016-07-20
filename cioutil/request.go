@@ -11,6 +11,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
+	"github.com/pkg/errors"
 )
 
 // ClientRequest defines information that can be used to make a request
@@ -19,10 +20,6 @@ type ClientRequest struct {
 	Path        string
 	FormValues  interface{}
 	QueryValues interface{}
-}
-
-type RequestError struct {
-
 }
 
 // DoFormRequest makes the actual request
@@ -55,7 +52,7 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
-		return httpReq, fmt.Errorf("Could not create request: %s", err)
+		return httpReq, RequestError{error: errors.Wrapf(err, "CIO: Failed to form request"), Method: request.Method, URL: cioURL}
 	}
 
 	// oAuth signature
@@ -83,7 +80,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Make the request
 	res, err := httpClient.Do(httpReq)
 	if err != nil {
-		return fmt.Errorf("Failed to make request: %s", err)
+		return RequestError{error: errors.Wrapf(err, "CIO: Failed to make request"), Method: httpReq.Method, URL: cioURL}
 	}
 
 	// Parse the response
@@ -94,10 +91,10 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	}()
 
 	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("Could not read response: %s", err)
-	}
 	resBodyString := string(resBody)
+	if err != nil {
+		return RequestError{error: errors.Wrapf(err, "CIO: Could not read response"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
+	}
 
 	// Unmarshal result
 	err = json.Unmarshal(resBody, &result)
@@ -105,13 +102,16 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Log the response
 	logResponse(cio.Log, httpReq.Method, cioURL, res.StatusCode, resBodyString, err)
 
-	// Return special error if Status Code >= 400
+	// Return own error if Status Code >= 400
 	if res.StatusCode >= 400 {
-		return fmt.Errorf("%d Status Code with Payload %s", res.StatusCode, resBodyString)
+		return RequestError{error: errors.Errorf("CIO: Status Code >= 400"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
 	}
 
 	// Return Unmarshal error (if any) if Status Code is < 400
-	return err
+	if err != nil {
+		return RequestError{error: errors.Wrapf(err, "CIO: Could not unmarshal payload"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
+	}
+	return nil
 }
 
 // logRequest logs the request about to be made to CIO, redacting sensitive information in the body
