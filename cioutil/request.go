@@ -21,6 +21,10 @@ type ClientRequest struct {
 	QueryValues interface{}
 }
 
+type RequestError struct {
+
+}
+
 // DoFormRequest makes the actual request
 func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 

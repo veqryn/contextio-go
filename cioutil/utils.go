@@ -67,7 +67,7 @@ type TestLogger struct {
 func (l *TestLogger) Print(v ...interface{}) {
 	_, err := l.Write([]byte(fmt.Sprint(v...)))
 	if err != nil {
-		panic("Error writing to logger: " + err.Error())
+		panic("Error writing to test logger: " + err.Error())
 	}
 }
 
@@ -75,7 +75,7 @@ func (l *TestLogger) Print(v ...interface{}) {
 func (l *TestLogger) Println(v ...interface{}) {
 	_, err := l.Write([]byte(fmt.Sprint(v...) + "\n"))
 	if err != nil {
-		panic("Error writing to logger: " + err.Error())
+		panic("Error writing to test logger: " + err.Error())
 	}
 }
 
@@ -83,6 +83,6 @@ func (l *TestLogger) Println(v ...interface{}) {
 func (l *TestLogger) Printf(format string, v ...interface{}) {
 	_, err := l.Write([]byte(fmt.Sprintf(format, v...)))
 	if err != nil {
-		panic("Error writing to logger: " + err.Error())
+		panic("Error writing to test logger: " + err.Error())
 	}
 }
