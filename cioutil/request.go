@@ -52,7 +52,7 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
-		return httpReq, RequestError{error: errors.Wrap(err, "CIO: Failed to form request"), Method: request.Method, URL: cioURL}
+		return httpReq, RequestError{errors.Wrap(err, "CIO: Failed to form request"), ErrorMetaData{Method: request.Method, URL: cioURL}}
 	}
 
 	// oAuth signature
@@ -80,7 +80,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Make the request
 	res, err := httpClient.Do(httpReq)
 	if err != nil {
-		return RequestError{error: errors.Wrap(err, "CIO: Failed to make request"), Method: httpReq.Method, URL: cioURL}
+		return RequestError{errors.Wrap(err, "CIO: Failed to make request"), ErrorMetaData{Method: httpReq.Method, URL: cioURL}}
 	}
 
 	// Parse the response
@@ -93,7 +93,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	resBody, err := ioutil.ReadAll(res.Body)
 	resBodyString := string(resBody)
 	if err != nil {
-		return RequestError{error: errors.Wrap(err, "CIO: Could not read response"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
+		return RequestError{errors.Wrap(err, "CIO: Could not read response"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 
 	// Unmarshal result
@@ -104,12 +104,12 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 
 	// Return own error if Status Code >= 400
 	if res.StatusCode >= 400 {
-		return RequestError{error: errors.New("CIO: Status Code >= 400"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
+		return RequestError{errors.New("CIO: Status Code >= 400"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 
 	// Return Unmarshal error (if any) if Status Code is < 400
 	if err != nil {
-		return RequestError{error: errors.Wrap(err, "CIO: Could not unmarshal payload"), Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}
+		return RequestError{errors.Wrap(err, "CIO: Could not unmarshal payload"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 	return nil
 }

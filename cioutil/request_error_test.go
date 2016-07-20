@@ -13,11 +13,11 @@ func nilError() error {
 }
 
 func newError() error {
-	return RequestError{error: fmt.Errorf("fmt %s", "error"), StatusCode: 400, Payload: "new", Method: "POST", URL: "http://cio"}
+	return RequestError{fmt.Errorf("fmt %s", "error"), ErrorMetaData{StatusCode: 400, Payload: "new", Method: "POST", URL: "http://cio"}}
 }
 
 func wrappedError() error {
-	return RequestError{error: errors.Wrap(fmt.Errorf("cause %s", "error"), "outer error"), StatusCode: 500, Payload: "wrapped", Method: "PUT", URL: "https://cio"}
+	return RequestError{errors.Wrap(fmt.Errorf("cause %s", "error"), "outer error"), ErrorMetaData{StatusCode: 500, Payload: "wrapped", Method: "PUT", URL: "https://cio"}}
 }
 
 // TestRequestErrorWrapped tests the behavior of a RequestError that wrapped a causing error
@@ -29,7 +29,8 @@ func TestRequestErrorWrapped(t *testing.T) {
 		t.Fatal("Expected non-nil error; Got: ", err)
 	}
 
-	if err.Error() != "outer error: cause error" {
+	expectedSuffix := "{StatusCode:500 Payload:wrapped Method:PUT URL:https://cio}"
+	if err.Error() != ("outer error: cause error; " + expectedSuffix) {
 		t.Error("Expected error string of: ", "outer error: cause error", "; Got: ", err.Error())
 	}
 
@@ -38,7 +39,6 @@ func TestRequestErrorWrapped(t *testing.T) {
 	}
 
 	expectedPrefix := "cause error\nouter error\ngithub.com/contextio/contextio-go/cioutil.wrappedError\n"
-	expectedSuffix := "\n{StatusCode:500 Payload:wrapped Method:PUT URL:https://cio}"
 	if plusV := fmt.Sprintf("%+v", err); !strings.HasPrefix(plusV, expectedPrefix) || !strings.HasSuffix(plusV, expectedSuffix) {
 		t.Error("Expected +v formatting of: ", expectedPrefix, expectedSuffix, "; Got: ", plusV)
 	}
@@ -74,7 +74,8 @@ func TestRequestErrorNew(t *testing.T) {
 		t.Fatal("Expected non-nil error; Got: ", err)
 	}
 
-	if err.Error() != "fmt error" {
+	expectedSuffix := "{StatusCode:400 Payload:new Method:POST URL:http://cio}"
+	if err.Error() != ("fmt error; " + expectedSuffix) {
 		t.Error("Expected error string of: ", "fmt error", "; Got: ", err.Error())
 	}
 
@@ -82,7 +83,7 @@ func TestRequestErrorNew(t *testing.T) {
 		t.Error("Expected error cause string of: ", "fmt error", "; Got: ", err.Error())
 	}
 
-	expectedPlusV := "fmt error\n{StatusCode:400 Payload:new Method:POST URL:http://cio}"
+	expectedPlusV := "fmt error\n" + expectedSuffix
 	if plusV := fmt.Sprintf("%+v", err); plusV != expectedPlusV {
 		t.Error("Expected +v formatting of: ", expectedPlusV, "; Got: ", plusV)
 	}

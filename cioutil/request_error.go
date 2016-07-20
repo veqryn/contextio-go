@@ -10,41 +10,19 @@ import (
 // RequestError is the error type returned by DoFormRequest and all cio api calls
 type RequestError struct {
 	error
+	ErrorMetaData
+}
+
+// ErrorMetaData holds some meta-data about the error: StatusCode, Response Payload, Method used, and URL
+type ErrorMetaData struct {
 	StatusCode int
 	Payload    string
 	Method     string
 	URL        string
 }
 
-// String returns the same as Error()
-func (e RequestError) String() string {
-	return e.Error()
-}
-
-// Format prints out the error, any causes, a stacktrace, and the other fields in the struct
-func (e RequestError) Format(s fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		if s.Flag('+') {
-			_, _ = fmt.Fprintf(s, "%+v\n", e.error)
-			type temp struct {
-				StatusCode int
-				Payload    string
-				Method     string
-				URL        string
-			}
-			_, _ = fmt.Fprintf(s, "%+v", temp{StatusCode: e.StatusCode, Payload: e.Payload, Method: e.Method, URL: e.URL})
-			return
-		}
-		fallthrough
-	case 's':
-		_, _ = io.WriteString(s, e.Error())
-	case 'q':
-		_, _ = fmt.Fprintf(s, "%q", e.Error())
-	}
-}
-
-// Cause returns the cause of any wrapped errors, or just the base error if no wrapped error
+// Cause returns the cause of any wrapped errors, or just the base error if no wrapped error.
+// Can use with github.com/pkg/errors
 func (e RequestError) Cause() error {
 	return errors.Cause(e.error)
 }
@@ -91,4 +69,30 @@ func ErrorURL(err error) string {
 		return e.URL
 	}
 	return ""
+}
+
+// Format prints out the error, any causes, a stacktrace, and the other fields in the struct
+func (e RequestError) Format(s fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if s.Flag('+') {
+			_, _ = fmt.Fprintf(s, "%+v\n%+v", e.error, e.ErrorMetaData)
+			return
+		}
+		fallthrough
+	case 's':
+		_, _ = io.WriteString(s, e.Error())
+	case 'q':
+		_, _ = fmt.Fprintf(s, "%q", e.Error())
+	}
+}
+
+// Error returns the Error string, any Wrapped Causes, and any StatusCode, Payload, Method, and URL that were set
+func (e RequestError) Error() string {
+	return fmt.Sprintf("%s; %+v", e.error, e.ErrorMetaData)
+}
+
+// String returns the same as Error()
+func (e RequestError) String() string {
+	return e.Error()
 }
