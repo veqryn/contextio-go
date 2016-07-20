@@ -164,13 +164,18 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 
 		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
 
+		// Take only the first 2000 characters from the responseBody, which should be more than enough to debug anything
+		if bodyLen := len(responseBody); bodyLen > 2000 {
+			responseBody = responseBody[:2000]
+		}
+
 		if logrusLogger, ok := log.(*logrus.Logger); ok {
 			// If logrus, use structured fields
 			logEntry := logrusLogger.WithFields(logrus.Fields{
-				"httpMethod": method,
-				"url":        cioURL,
-				"statusCode": fmt.Sprintf("%d", statusCode),
-				"payload":    responseBody})
+				"httpMethod":     method,
+				"url":            cioURL,
+				"statusCode":     fmt.Sprintf("%d", statusCode),
+				"payloadSnippet": responseBody})
 			if unmarshalError != nil || statusCode >= 400 {
 				logEntry.Warn("Received response from CIO")
 			} else {
@@ -181,7 +186,7 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 			// Else just log with Println
 			log.Println("Received response from " + method + " to: " + cioURL +
 				" with status code: " + fmt.Sprintf("%d", statusCode) +
-				" and payload: " + responseBody)
+				" and payload snippet: " + responseBody)
 		}
 	}
 }
