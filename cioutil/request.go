@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/Sirupsen/logrus"
@@ -37,11 +38,19 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 
 	// Retry if Status Code >= 500 and RetryServerErr is set to true
-	if cio.RetryServerErr && ErrorStatusCode(err) >= 500 {
+	if cio.RetryServerErr && shouldRetryOnce(err) {
 		time.Sleep(1 * time.Second)
 		err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 	}
 	return err
+}
+
+// shouldRetryOnce returns true if the request should be retried
+func shouldRetryOnce(err error) bool {
+	// Retry on CIO Server errors, and also if the nonce has been used
+	// (CIO seems to have issues with nonce collisions).
+	return ErrorStatusCode(err) >= 500 ||
+		(ErrorStatusCode(err) == 401 && strings.Contains(strings.ToLower(ErrorPayload(err)), "nonce"))
 }
 
 // createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response
