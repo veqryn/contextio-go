@@ -20,6 +20,7 @@ type Cio struct {
 	Log            Logger
 	Host           string
 	RequestTimeout time.Duration
+	RetryServerErr bool
 }
 
 // NewCio returns a CIO struct for embedding in a concrete type.
