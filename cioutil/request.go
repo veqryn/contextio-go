@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
@@ -37,6 +38,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 	// Retry if Status Code >= 500 and RetryServerErr is set to true
 	if cio.RetryServerErr && ErrorStatusCode(err) >= 500 {
+		time.Sleep(1 * time.Second)
 		err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 	}
 	return err
