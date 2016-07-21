@@ -40,11 +40,12 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	// Retry if Status Code >= 500 and RetryServerErr is set to true
 	if cio.RetryServerErr && shouldRetryOnce(statusCode, err) {
 		time.Sleep(1 * time.Second)
+		logResponse(cio.Log, true, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 	}
 
 	// Log the response
-	logResponse(cio.Log, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
+	logResponse(cio.Log, false, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
 
 	return err
 }
@@ -189,7 +190,7 @@ func logBodyCloseError(log Logger, closeError error) {
 }
 
 // logResponse logs the response from CIO, if any logger is set
-func logResponse(log Logger, method string, cioURL string, statusCode int, responseBody string, err error) {
+func logResponse(log Logger, retry bool, method string, cioURL string, statusCode int, responseBody string, err error) {
 	if log != nil {
 
 		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
@@ -206,7 +207,7 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 				"url":            cioURL,
 				"statusCode":     fmt.Sprintf("%d", statusCode),
 				"payloadSnippet": responseBody})
-			if err != nil || statusCode >= 400 {
+			if !retry && (err != nil || statusCode >= 400) {
 				if err != nil {
 					logEntry = logEntry.WithError(err)
 				}
