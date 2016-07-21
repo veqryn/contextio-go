@@ -21,6 +21,13 @@ type ErrorMetaData struct {
 	URL        string
 }
 
+const (
+	UnknownStatusCode = -1
+	UnknownPayload    = "UNKNOWN"
+	UnknownMethod     = "UNKNOWN"
+	UnknownURL        = "UNKNOWN"
+)
+
 // Cause returns the cause of any wrapped errors, or just the base error if no wrapped error.
 // Can use with github.com/pkg/errors
 func (e RequestError) Cause() error {
@@ -35,7 +42,7 @@ func ErrorStatusCode(err error) int {
 	if e, ok := err.(RequestError); ok {
 		return e.StatusCode
 	}
-	return 0
+	return UnknownStatusCode
 }
 
 // ErrorPayload returns the payload of the error, or an empty string
@@ -46,7 +53,7 @@ func ErrorPayload(err error) string {
 	if e, ok := err.(RequestError); ok {
 		return e.Payload
 	}
-	return ""
+	return UnknownPayload
 }
 
 // ErrorMethod returns the method of the error, or an empty string
@@ -57,7 +64,7 @@ func ErrorMethod(err error) string {
 	if e, ok := err.(RequestError); ok {
 		return e.Method
 	}
-	return ""
+	return UnknownMethod
 }
 
 // ErrorURL returns the URL of the error, or an empty string
@@ -68,7 +75,7 @@ func ErrorURL(err error) string {
 	if e, ok := err.(RequestError); ok {
 		return e.URL
 	}
-	return ""
+	return UnknownURL
 }
 
 // Format prints out the error, any causes, a stacktrace, and the other fields in the struct
