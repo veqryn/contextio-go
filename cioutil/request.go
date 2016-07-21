@@ -29,18 +29,31 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	cioURL := cio.Host + request.Path + QueryString(request.QueryValues)
 
 	// Construct the body
-	var bodyReader io.Reader
 	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
+	logRequest(cio.Log, request.Method, cioURL, bodyValues)
+
+	err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+
+	// Retry if Status Code >= 500 and RetryServerErr is set to true
+	if cio.RetryServerErr && ErrorStatusCode(err) >= 500 {
+		err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+	}
+	return err
+}
+
+// createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response
+func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) error {
+
+	var bodyReader io.Reader
 	if len(bodyString) > 0 {
 		bodyReader = bytes.NewReader([]byte(bodyString))
 	}
-	logRequest(cio.Log, request.Method, cioURL, bodyValues)
 
 	// Construct the request
-	httpReq, err := cio.createRequest(request, cioURL, bodyReader, bodyValues)
-	if err != nil {
-		return err
+	httpReq, creatErr := cio.createRequest(request, cioURL, bodyReader, bodyValues)
+	if creatErr != nil {
+		return creatErr
 	}
 
 	// Send the request
