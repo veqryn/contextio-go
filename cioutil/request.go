@@ -35,13 +35,17 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	bodyString := bodyValues.Encode()
 	logRequest(cio.Log, request.Method, cioURL, bodyValues)
 
-	err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+	statusCode, resBody, err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 
 	// Retry if Status Code >= 500 and RetryServerErr is set to true
 	if cio.RetryServerErr && shouldRetryOnce(err) {
 		time.Sleep(1 * time.Second)
-		err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 	}
+
+	// Log the response
+	logResponse(cio.Log, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
+
 	return err
 }
 
@@ -53,8 +57,9 @@ func shouldRetryOnce(err error) bool {
 		(ErrorStatusCode(err) == 401 && strings.Contains(strings.ToLower(ErrorPayload(err)), "nonce"))
 }
 
-// createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response
-func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) error {
+// createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response.
+// Returns the status code, the response body, and any error
+func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
 
 	var bodyReader io.Reader
 	if len(bodyString) > 0 {
@@ -64,7 +69,7 @@ func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodySt
 	// Construct the request
 	httpReq, err := cio.createRequest(request, cioURL, bodyReader, bodyValues)
 	if err != nil {
-		return err
+		return 0, "", err
 	}
 
 	// Send the request
@@ -93,8 +98,8 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 	return httpReq, nil
 }
 
-// sendRequest sends the *http.Request
-func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL string) error {
+// sendRequest sends the *http.Request, and returns the status code, the response body, and any error
+func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,
@@ -104,7 +109,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Make the request
 	res, err := httpClient.Do(httpReq)
 	if err != nil {
-		return RequestError{errors.Wrap(err, "CIO: Failed to make request"), ErrorMetaData{Method: httpReq.Method, URL: cioURL}}
+		return 0, "", RequestError{errors.Wrap(err, "CIO: Failed to make request"), ErrorMetaData{Method: httpReq.Method, URL: cioURL}}
 	}
 
 	// Parse the response
@@ -117,25 +122,22 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	resBody, err := ioutil.ReadAll(res.Body)
 	resBodyString := string(resBody)
 	if err != nil {
-		return RequestError{errors.Wrap(err, "CIO: Could not read response"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
+		return res.StatusCode, resBodyString, RequestError{errors.Wrap(err, "CIO: Could not read response"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 
 	// Unmarshal result
 	err = json.Unmarshal(resBody, &result)
 
-	// Log the response
-	logResponse(cio.Log, httpReq.Method, cioURL, res.StatusCode, resBodyString, err)
-
 	// Return own error if Status Code >= 400
 	if res.StatusCode >= 400 {
-		return RequestError{errors.New("CIO: Status Code >= 400"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
+		return res.StatusCode, resBodyString, RequestError{errors.New("CIO: Status Code >= 400"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 
 	// Return Unmarshal error (if any) if Status Code is < 400
 	if err != nil {
-		return RequestError{errors.Wrap(err, "CIO: Could not unmarshal payload"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
+		return res.StatusCode, resBodyString, RequestError{errors.Wrap(err, "CIO: Could not unmarshal payload"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
-	return nil
+	return res.StatusCode, resBodyString, nil
 }
 
 // logRequest logs the request about to be made to CIO, redacting sensitive information in the body
@@ -187,7 +189,7 @@ func logBodyCloseError(log Logger, closeError error) {
 }
 
 // logResponse logs the response from CIO, if any logger is set
-func logResponse(log Logger, method string, cioURL string, statusCode int, responseBody string, unmarshalError error) {
+func logResponse(log Logger, method string, cioURL string, statusCode int, responseBody string, err error) {
 	if log != nil {
 
 		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
@@ -204,7 +206,10 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 				"url":            cioURL,
 				"statusCode":     fmt.Sprintf("%d", statusCode),
 				"payloadSnippet": responseBody})
-			if unmarshalError != nil || statusCode >= 400 {
+			if err != nil || statusCode >= 400 {
+				if err != nil {
+					logEntry = logEntry.WithError(err)
+				}
 				logEntry.Warn("Received response from CIO")
 			} else {
 				logEntry.Debug("Received response from CIO")
@@ -212,7 +217,11 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 
 		} else {
 			// Else just log with Println
-			log.Printf("Received response from %s to: %s with status code: %d and payload snippet: %s\n", method, cioURL, statusCode, responseBody)
+			if err != nil {
+				log.Printf("Received response from %s to: %s with status code: %d and error: %s and payload snippet: %s\n", method, cioURL, statusCode, err, responseBody)
+			} else {
+				log.Printf("Received response from %s to: %s with status code: %d and payload snippet: %s\n", method, cioURL, statusCode, responseBody)
+			}
 		}
 	}
 }
