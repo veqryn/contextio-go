@@ -51,9 +51,9 @@ func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodySt
 	}
 
 	// Construct the request
-	httpReq, creatErr := cio.createRequest(request, cioURL, bodyReader, bodyValues)
-	if creatErr != nil {
-		return creatErr
+	httpReq, err := cio.createRequest(request, cioURL, bodyReader, bodyValues)
+	if err != nil {
+		return err
 	}
 
 	// Send the request
