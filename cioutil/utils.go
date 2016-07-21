@@ -53,9 +53,7 @@ func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) str
 // Logger interface which *log.Logger uses.
 // Allows injection of user specified loggers, such as log.Logger or logrus.
 type Logger interface {
-	Print(v ...interface{})
 	Printf(format string, v ...interface{})
-	Println(v ...interface{})
 }
 
 // TestLogger is a *bytes.Buffer that implements the logging interface
@@ -63,26 +61,10 @@ type TestLogger struct {
 	*bytes.Buffer
 }
 
-// Print prints the arguments to the buffer, using fmt.Sprint
-func (l *TestLogger) Print(v ...interface{}) {
-	_, err := l.Write([]byte(fmt.Sprint(v...)))
-	if err != nil {
-		panic("Error writing to logger: " + err.Error())
-	}
-}
-
-// Println prints the arguments to the buffer, using fmt.Sprint,appending a new line
-func (l *TestLogger) Println(v ...interface{}) {
-	_, err := l.Write([]byte(fmt.Sprint(v...) + "\n"))
-	if err != nil {
-		panic("Error writing to logger: " + err.Error())
-	}
-}
-
 // Printf prints the arguments to the buffer, using fmt.Sprintf
 func (l *TestLogger) Printf(format string, v ...interface{}) {
 	_, err := l.Write([]byte(fmt.Sprintf(format, v...)))
 	if err != nil {
-		panic("Error writing to logger: " + err.Error())
+		panic("Error writing to test logger: " + err.Error())
 	}
 }

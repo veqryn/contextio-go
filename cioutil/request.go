@@ -11,6 +11,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
+	"github.com/pkg/errors"
 )
 
 // ClientRequest defines information that can be used to make a request
@@ -51,7 +52,7 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
-		return httpReq, fmt.Errorf("Could not create request: %s", err)
+		return httpReq, RequestError{errors.Wrap(err, "CIO: Failed to form request"), ErrorMetaData{Method: request.Method, URL: cioURL}}
 	}
 
 	// oAuth signature
@@ -79,7 +80,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Make the request
 	res, err := httpClient.Do(httpReq)
 	if err != nil {
-		return fmt.Errorf("Failed to make request: %s", err)
+		return RequestError{errors.Wrap(err, "CIO: Failed to make request"), ErrorMetaData{Method: httpReq.Method, URL: cioURL}}
 	}
 
 	// Parse the response
@@ -90,10 +91,10 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	}()
 
 	resBody, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("Could not read response: %s", err)
-	}
 	resBodyString := string(resBody)
+	if err != nil {
+		return RequestError{errors.Wrap(err, "CIO: Could not read response"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
+	}
 
 	// Unmarshal result
 	err = json.Unmarshal(resBody, &result)
@@ -101,13 +102,16 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Log the response
 	logResponse(cio.Log, httpReq.Method, cioURL, res.StatusCode, resBodyString, err)
 
-	// Return special error if Status Code >= 400
+	// Return own error if Status Code >= 400
 	if res.StatusCode >= 400 {
-		return fmt.Errorf("%d Status Code with Payload %s", res.StatusCode, resBodyString)
+		return RequestError{errors.New("CIO: Status Code >= 400"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
 	}
 
 	// Return Unmarshal error (if any) if Status Code is < 400
-	return err
+	if err != nil {
+		return RequestError{errors.Wrap(err, "CIO: Could not unmarshal payload"), ErrorMetaData{Method: httpReq.Method, URL: cioURL, StatusCode: res.StatusCode, Payload: resBodyString}}
+	}
+	return nil
 }
 
 // logRequest logs the request about to be made to CIO, redacting sensitive information in the body
@@ -140,7 +144,7 @@ func logRequest(log Logger, method string, cioURL string, bodyValues url.Values)
 			logrusLogger.WithFields(logrus.Fields{"httpMethod": method, "url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
 		} else {
 			// Else just log with Println
-			log.Println("Creating new " + method + " request to: " + cioURL + " with payload: " + redactedValues.Encode())
+			log.Printf("Creating new %s request to: %s with payload: %s\n", method, cioURL, redactedValues.Encode())
 		}
 	}
 }
@@ -153,7 +157,7 @@ func logBodyCloseError(log Logger, closeError error) {
 			logrusLogger.WithError(closeError).Warn("Unable to close response body from CIO")
 		} else {
 			// Else just log with Println
-			log.Println("Unable to close response body from CIO, with error: " + closeError.Error())
+			log.Printf("Unable to close response body from CIO, with error: %s\n", closeError.Error())
 		}
 	}
 }
@@ -164,13 +168,18 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 
 		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
 
+		// Take only the first 2000 characters from the responseBody, which should be more than enough to debug anything
+		if bodyLen := len(responseBody); bodyLen > 2000 {
+			responseBody = responseBody[:2000]
+		}
+
 		if logrusLogger, ok := log.(*logrus.Logger); ok {
 			// If logrus, use structured fields
 			logEntry := logrusLogger.WithFields(logrus.Fields{
-				"httpMethod": method,
-				"url":        cioURL,
-				"statusCode": fmt.Sprintf("%d", statusCode),
-				"payload":    responseBody})
+				"httpMethod":     method,
+				"url":            cioURL,
+				"statusCode":     fmt.Sprintf("%d", statusCode),
+				"payloadSnippet": responseBody})
 			if unmarshalError != nil || statusCode >= 400 {
 				logEntry.Warn("Received response from CIO")
 			} else {
@@ -179,9 +188,7 @@ func logResponse(log Logger, method string, cioURL string, statusCode int, respo
 
 		} else {
 			// Else just log with Println
-			log.Println("Received response from " + method + " to: " + cioURL +
-				" with status code: " + fmt.Sprintf("%d", statusCode) +
-				" and payload: " + responseBody)
+			log.Printf("Received response from %s to: %s with status code: %d and payload snippet: %s\n", method, cioURL, statusCode, responseBody)
 		}
 	}
 }
