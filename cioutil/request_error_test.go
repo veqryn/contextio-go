@@ -1,7 +1,9 @@
 package cioutil
 
 import (
+	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -63,6 +65,29 @@ func TestRequestErrorWrapped(t *testing.T) {
 	if !ok {
 		t.Error("Expected error to be of type: ", "RequestError", "; Got: ", err)
 	}
+
+	jsonBytes, jsonErr := json.Marshal(err)
+	if jsonErr != nil {
+		t.Error(jsonErr)
+	}
+
+	if string(jsonBytes) != `{"Error":"outer error: cause error","StatusCode":500,"Payload":"wrapped","Method":"PUT","URL":"https://cio"}` {
+		t.Error("Expected json to be: ",
+			`{"Error":"outer error: cause error","StatusCode":500,"Payload":"wrapped","Method":"PUT","URL":"https://cio"}`,
+			"; Got: ",
+			string(jsonBytes),
+		)
+	}
+
+	if unmarshalled, libErr := UnmarshalJSON(jsonBytes); libErr != nil {
+		t.Error(libErr)
+
+	} else if !reflect.DeepEqual(unmarshalled.(RequestError).ErrorMetaData, err.(RequestError).ErrorMetaData) {
+		t.Error("Expected unmarshalled json error meta data to be: ", err.(RequestError).ErrorMetaData, "; Got: ", unmarshalled.(RequestError).ErrorMetaData)
+
+	} else if unmarshalled.(RequestError).error.Error() != err.(RequestError).error.Error() {
+		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).error, "; Got: ", unmarshalled.(RequestError).error)
+	}
 }
 
 // TestRequestErrorNew tests the behavior of a newly created RequestError type
@@ -108,6 +133,29 @@ func TestRequestErrorNew(t *testing.T) {
 	if !ok {
 		t.Error("Expected error to be of type: ", "RequestError", "; Got: ", err)
 	}
+
+	jsonBytes, jsonErr := json.Marshal(err)
+	if jsonErr != nil {
+		t.Error(jsonErr)
+	}
+
+	if string(jsonBytes) != `{"Error":"fmt error","StatusCode":400,"Payload":"new","Method":"POST","URL":"http://cio"}` {
+		t.Error("Expected json to be: ",
+			`{"Error":"fmt error","StatusCode":400,"Payload":"new","Method":"POST","URL":"http://cio"}`,
+			"; Got: ",
+			string(jsonBytes),
+		)
+	}
+
+	if unmarshalled, libErr := UnmarshalJSON(jsonBytes); libErr != nil {
+		t.Error(libErr)
+
+	} else if !reflect.DeepEqual(unmarshalled.(RequestError).ErrorMetaData, err.(RequestError).ErrorMetaData) {
+		t.Error("Expected unmarshalled json error meta data to be: ", err.(RequestError).ErrorMetaData, "; Got: ", unmarshalled.(RequestError).ErrorMetaData)
+
+	} else if unmarshalled.(RequestError).error.Error() != err.(RequestError).error.Error() {
+		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).error, "; Got: ", unmarshalled.(RequestError).error)
+	}
 }
 
 // TestRequestErrorNil tests the nil behavior of the error helpers
@@ -134,5 +182,21 @@ func TestRequestErrorNil(t *testing.T) {
 
 	if val := ErrorURL(err); val != "" {
 		t.Error("Expected error url of: ", "", "; Got: ", val)
+	}
+
+	jsonBytes, jsonErr := json.Marshal(err)
+	if jsonErr != nil {
+		t.Error(jsonErr)
+	}
+
+	if string(jsonBytes) != `null` {
+		t.Error("Expected json to be: ", `null`, "; Got: ", string(jsonBytes))
+	}
+
+	if unmarshalled, libErr := UnmarshalJSON(jsonBytes); libErr != nil {
+		t.Error(libErr)
+
+	} else if unmarshalled != nil {
+		t.Error("Expected unmarshalled json error to be: nil; Got: ", unmarshalled)
 	}
 }

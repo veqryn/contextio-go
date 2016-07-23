@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/contextio/contextio-go/cioutil"
+	"github.com/pkg/errors"
 )
 
 // GetConnectTokenResponse data struct
@@ -172,23 +173,23 @@ func (cioLite CioLite) CheckConnectToken(connectToken GetConnectTokenResponse, e
 
 	// Confirm email matches
 	if strings.ToLower(connectToken.Email) != strings.ToLower(email) {
-		return fmt.Errorf("Email does not match Context.io token")
+		return errors.New("Email does not match Context.io token")
 	}
 
 	// Confirm token was used (accepted/authorized)
 	if connectToken.Used == 0 || connectToken.Expires.Unused() {
-		return fmt.Errorf("Context.io token not used yet")
+		return errors.New("Context.io token not used yet")
 	}
 
 	// Confirm user exists
 	if len(connectToken.User.ID) == 0 {
-		return fmt.Errorf("Context.io user not created yet")
+		return errors.New("Context.io user not created yet")
 	}
 
 	// Confirm we have access
 	account, err := connectToken.User.EmailAccountMatching(email)
 	if err != nil || account.Status != "OK" {
-		return fmt.Errorf("Unable to access account using Context.io")
+		return errors.New("Unable to access account using Context.io")
 	}
 
 	return nil

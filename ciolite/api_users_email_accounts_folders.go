@@ -3,11 +3,11 @@ package ciolite
 // Api functions that support: https://context.io/docs/lite/users/email_accounts/folders
 
 import (
-	"errors"
 	"fmt"
 	"net/url"
 
 	"github.com/contextio/contextio-go/cioutil"
+	"github.com/pkg/errors"
 )
 
 // GetUserEmailAccountsFoldersParams query values data struct.

@@ -1,6 +1,7 @@
 package cioutil
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -102,4 +103,43 @@ func (e RequestError) Error() string {
 // String returns the same as Error()
 func (e RequestError) String() string {
 	return e.Error()
+}
+
+// MarshalJSON allows RequestError to implement json.Marshaler (for use with logging in json)
+func (e RequestError) MarshalJSON() ([]byte, error) {
+	type Temp struct {
+		Error string
+		ErrorMetaData
+	}
+	return json.Marshal(Temp{e.error.Error(), e.ErrorMetaData})
+}
+
+// UnmarshalJSON allows RequestError to implement json.Unmarshaler (for completeness since RequestError implements Marshaler)
+// 	Use of this loses the ability to unwrap errors with errors.Cause() or get the original stacktrace
+func (e *RequestError) UnmarshalJSON(data []byte) error {
+	type Temp struct {
+		Error string
+		ErrorMetaData
+	}
+	var re Temp
+	err := json.Unmarshal(data, &re)
+	e.error = errors.New(re.Error)
+	e.ErrorMetaData = re.ErrorMetaData
+	return err
+}
+
+// UnmarshalJSON is a helper method to unmarshal the json representation of a RequestError,
+// getting back a valid nil error if it should be nil, and a valid RequestError error otherwise.
+// 	Pay attention to return value order: First argument is the unmarshalled RequestError as an error interface,
+// 	Second argument is any actual error encountered while unmarshalling (from json.Unmarshal).
+func UnmarshalJSON(data []byte) (error, error) {
+	var unmarshalled *RequestError
+	jsonErr := json.Unmarshal(data, &unmarshalled)
+	if jsonErr != nil {
+		return nil, jsonErr
+	}
+	if unmarshalled == nil {
+		return nil, nil
+	}
+	return *unmarshalled, nil
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/contextio/contextio-go/cioutil"
+	"github.com/pkg/errors"
 )
 
 // GetUserEmailAccountsParams query values data struct.
@@ -221,7 +222,7 @@ func FindEmailAccountMatching(emailAccounts []GetUsersEmailAccountsResponse, ema
 			}
 		}
 	}
-	return GetUsersEmailAccountsResponse{}, fmt.Errorf("No email accounts match %s in %v", email, emailAccounts)
+	return GetUsersEmailAccountsResponse{}, errors.Errorf("No email accounts match %s in %v", email, emailAccounts)
 }
 
 // upToSeparator returns a string up to the separator, or the whole string
