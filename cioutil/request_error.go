@@ -10,7 +10,7 @@ import (
 
 // RequestError is the error type returned by DoFormRequest and all cio api calls
 type RequestError struct {
-	error
+	Err error
 	ErrorMetaData
 }
 
@@ -32,7 +32,7 @@ const (
 // Cause returns the cause of any wrapped errors, or just the base error if no wrapped error.
 // Can use with github.com/pkg/errors
 func (e RequestError) Cause() error {
-	return errors.Cause(e.error)
+	return errors.Cause(e.Err)
 }
 
 // ErrorStatusCode returns the StatusCode of the error, or 0
@@ -84,7 +84,7 @@ func (e RequestError) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 'v':
 		if s.Flag('+') {
-			_, _ = fmt.Fprintf(s, "%+v\n%+v", e.error, e.ErrorMetaData)
+			_, _ = fmt.Fprintf(s, "%+v\n%+v", e.Err, e.ErrorMetaData)
 			return
 		}
 		fallthrough
@@ -97,7 +97,7 @@ func (e RequestError) Format(s fmt.State, verb rune) {
 
 // Error returns the Error string, any Wrapped Causes, and any StatusCode, Payload, Method, and URL that were set
 func (e RequestError) Error() string {
-	return fmt.Sprintf("%s; %+v", e.error, e.ErrorMetaData)
+	return fmt.Sprintf("%s; %+v", e.Err, e.ErrorMetaData)
 }
 
 // String returns the same as Error()
@@ -108,22 +108,22 @@ func (e RequestError) String() string {
 // MarshalJSON allows RequestError to implement json.Marshaler (for use with logging in json)
 func (e RequestError) MarshalJSON() ([]byte, error) {
 	type Temp struct {
-		Error string
+		Err string
 		ErrorMetaData
 	}
-	return json.Marshal(Temp{e.error.Error(), e.ErrorMetaData})
+	return json.Marshal(Temp{e.Err.Error(), e.ErrorMetaData})
 }
 
 // UnmarshalJSON allows RequestError to implement json.Unmarshaler (for completeness since RequestError implements Marshaler)
 // 	Use of this loses the ability to unwrap errors with errors.Cause() or get the original stacktrace
 func (e *RequestError) UnmarshalJSON(data []byte) error {
 	type Temp struct {
-		Error string
+		Err string
 		ErrorMetaData
 	}
 	var re Temp
 	err := json.Unmarshal(data, &re)
-	e.error = errors.New(re.Error)
+	e.Err = errors.New(re.Err)
 	e.ErrorMetaData = re.ErrorMetaData
 	return err
 }

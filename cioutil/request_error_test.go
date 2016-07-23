@@ -71,7 +71,7 @@ func TestRequestErrorWrapped(t *testing.T) {
 		t.Error(jsonErr)
 	}
 
-	if string(jsonBytes) != `{"Error":"outer error: cause error","StatusCode":500,"Payload":"wrapped","Method":"PUT","URL":"https://cio"}` {
+	if string(jsonBytes) != `{"Err":"outer error: cause error","StatusCode":500,"Payload":"wrapped","Method":"PUT","URL":"https://cio"}` {
 		t.Error("Expected json to be: ",
 			`{"Error":"outer error: cause error","StatusCode":500,"Payload":"wrapped","Method":"PUT","URL":"https://cio"}`,
 			"; Got: ",
@@ -85,8 +85,8 @@ func TestRequestErrorWrapped(t *testing.T) {
 	} else if !reflect.DeepEqual(unmarshalled.(RequestError).ErrorMetaData, err.(RequestError).ErrorMetaData) {
 		t.Error("Expected unmarshalled json error meta data to be: ", err.(RequestError).ErrorMetaData, "; Got: ", unmarshalled.(RequestError).ErrorMetaData)
 
-	} else if unmarshalled.(RequestError).error.Error() != err.(RequestError).error.Error() {
-		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).error, "; Got: ", unmarshalled.(RequestError).error)
+	} else if unmarshalled.(RequestError).Err.Error() != err.(RequestError).Err.Error() {
+		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).Err, "; Got: ", unmarshalled.(RequestError).Err)
 	}
 }
 
@@ -139,7 +139,7 @@ func TestRequestErrorNew(t *testing.T) {
 		t.Error(jsonErr)
 	}
 
-	if string(jsonBytes) != `{"Error":"fmt error","StatusCode":400,"Payload":"new","Method":"POST","URL":"http://cio"}` {
+	if string(jsonBytes) != `{"Err":"fmt error","StatusCode":400,"Payload":"new","Method":"POST","URL":"http://cio"}` {
 		t.Error("Expected json to be: ",
 			`{"Error":"fmt error","StatusCode":400,"Payload":"new","Method":"POST","URL":"http://cio"}`,
 			"; Got: ",
@@ -153,8 +153,8 @@ func TestRequestErrorNew(t *testing.T) {
 	} else if !reflect.DeepEqual(unmarshalled.(RequestError).ErrorMetaData, err.(RequestError).ErrorMetaData) {
 		t.Error("Expected unmarshalled json error meta data to be: ", err.(RequestError).ErrorMetaData, "; Got: ", unmarshalled.(RequestError).ErrorMetaData)
 
-	} else if unmarshalled.(RequestError).error.Error() != err.(RequestError).error.Error() {
-		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).error, "; Got: ", unmarshalled.(RequestError).error)
+	} else if unmarshalled.(RequestError).Err.Error() != err.(RequestError).Err.Error() {
+		t.Error("Expected unmarshalled json error string to be: ", err.(RequestError).Err, "; Got: ", unmarshalled.(RequestError).Err)
 	}
 }
 
