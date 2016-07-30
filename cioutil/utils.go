@@ -7,9 +7,9 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hash"
+	"net/url"
 	"strconv"
 	"time"
-	"net/url"
 )
 
 // Cio struct contains the api key and secret, and other configuration settings,
@@ -21,9 +21,25 @@ type Cio struct {
 	Log            Logger
 	Host           string
 	RequestTimeout time.Duration
-	RetryServerErr bool
+
+	// PreRequestHook is a function that will be executed before the request is made,
+	// its arguments are the User ID, Account Label, the Method (GET/POST/etc),
+	// the URL, and the redacted body values
 	PreRequestHook func(string, string, string, string, url.Values)
-	PostRequestHook func(string, string, string, string, int, string, error) bool
+
+	// PostRequestShouldRetryHook is a function that will be executed after each request is made,
+	// and will be called at least once.
+	// Its arguments are the request Attempt # (starts at 1), User ID, Account Label,
+	// the Method (GET/POST/etc), the URL, response Status Code, response Payload,
+	// and any error received while attempting this request.
+	// The returned boolean is whether this request should be
+	// retried or not, which if false then this is the last call of this function,
+	// but if true means this function will be called again.
+	PostRequestShouldRetryHook func(int, string, string, string, string, int, string, error) bool
+
+	// ResponseBodyCloseErrorHook is a function that will execute if there is an
+	// error closing the response body
+	ResponseBodyCloseErrorHook func(error)
 }
 
 // NewCio returns a CIO struct for embedding in a concrete type.
