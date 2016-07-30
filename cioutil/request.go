@@ -33,7 +33,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
 
-	// Before-Request Hook Function
+	// Before-Request Hook Function (logging)
 	if cio.PreRequestHook != nil {
 		cio.PreRequestHook(request.UserID, request.AccountLabel, request.Method, cioURL, redactBodyValues(bodyValues))
 	}
@@ -46,7 +46,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 	for i := 1; ; i++ {
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
-		// TODO: redact access_token and access_token_secret inside resBody before logging (only occurs with 3-legged oauth (not presently used))
+		// After-Request Hook Function (logging)
 		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
 			break
 		}
@@ -114,7 +114,7 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	// Parse the response
 	defer func() {
 		if closeErr := res.Body.Close(); closeErr != nil && cio.ResponseBodyCloseErrorHook != nil {
-			cio.ResponseBodyCloseErrorHook(closeErr)
+			cio.ResponseBodyCloseErrorHook(closeErr) // Logging
 		}
 	}()
 
