@@ -23,6 +23,7 @@ type Cio struct {
 	RequestTimeout time.Duration
 	RetryServerErr bool
 	PreRequestHook func(string, string, string, string, url.Values)
+	PostRequestHook func(string, string, string, string, int, string, error) bool
 }
 
 // NewCio returns a CIO struct for embedding in a concrete type.

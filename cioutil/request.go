@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pkg/errors"
@@ -25,7 +26,6 @@ type ClientRequest struct {
 	AccountLabel string
 }
 
-
 // DoFormRequest makes the actual request
 func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
@@ -35,11 +35,26 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	// Construct the body
 	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
+
+	var (
+		statusCode int
+		resBody    string
+		err        error
+	)
+
+	// Defer After-Request Hook Function
+	if cio.PostRequestHook != nil {
+		// Closure on purpose, to send the final values
+		defer func() {
+			cio.PostRequestHook(request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err)
+		}()
+	}
+	// Before-Request Hook Function
 	if cio.PreRequestHook != nil {
 		cio.PreRequestHook(request.UserID, request.AccountLabel, request.Method, cioURL, redactBodyValues(bodyValues))
 	}
 
-	statusCode, resBody, err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+	statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 
 	// Retry if Status Code >= 500 and RetryServerErr is set to true
 	if cio.RetryServerErr && shouldRetryOnce(statusCode, err) {
@@ -47,9 +62,6 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 		logResponse(cio.Log, true, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 	}
-
-	// Log the response
-	logResponse(cio.Log, false, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
 
 	return err
 }
@@ -170,7 +182,6 @@ func redactBodyValues(bodyValues url.Values) url.Values {
 
 	return redactedValues
 }
-
 
 // logBodyCloseError logs any error that happens when trying to close the *http.Response.Body
 func logBodyCloseError(log Logger, closeError error) {
