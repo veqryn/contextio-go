@@ -18,10 +18,12 @@ import (
 
 // ClientRequest defines information that can be used to make a request
 type ClientRequest struct {
-	Method      string
-	Path        string
-	FormValues  interface{}
-	QueryValues interface{}
+	Method       string
+	Path         string
+	FormValues   interface{}
+	QueryValues  interface{}
+	UserID       string
+	AccountLabel string
 }
 
 // DoFormRequest makes the actual request

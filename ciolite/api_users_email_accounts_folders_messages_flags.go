@@ -29,9 +29,11 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, lab
 
 	// Make request
 	request := cioutil.ClientRequest{
-		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
-		QueryValues: queryValues,
+		Method:       "GET",
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		QueryValues:  queryValues,
+		UserID:       userID,
+		AccountLabel: label,
 	}
 
 	// Make response

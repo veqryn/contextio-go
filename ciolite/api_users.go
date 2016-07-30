@@ -141,6 +141,7 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 	request := cioutil.ClientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s", userID),
+		UserID: userID,
 	}
 
 	// Make response
@@ -188,6 +189,7 @@ func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (M
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s", userID),
 		FormValues: formValues,
+		UserID:     userID,
 	}
 
 	// Make response
@@ -207,6 +209,7 @@ func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 	request := cioutil.ClientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s", userID),
+		UserID: userID,
 	}
 
 	// Make response
