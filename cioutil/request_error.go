@@ -22,61 +22,30 @@ type ErrorMetaData struct {
 	URL        string
 }
 
-const (
-	UnknownStatusCode = -1
-	UnknownPayload    = "UNKNOWN"
-	UnknownMethod     = "UNKNOWN"
-	UnknownURL        = "UNKNOWN"
-)
+// ErrorStatusCode returns the RequestError's StatusCode (ex: 200 for OK, 0 if no status code)
+func (e RequestError) ErrorStatusCode() int {
+	return e.StatusCode
+}
+
+// ErrorPayload returns the RequestError's payload, if present
+func (e RequestError) ErrorPayload() string {
+	return e.Payload
+}
+
+// ErrorMethod returns the RequestError's Method (ex: GET, POST, etc)
+func (e RequestError) ErrorMethod() string {
+	return e.Method
+}
+
+// ErrorURL returns the RequestError's URL
+func (e RequestError) ErrorURL() string {
+	return e.URL
+}
 
 // Cause returns the cause of any wrapped errors, or just the base error if no wrapped error.
 // Can use with github.com/pkg/errors
 func (e RequestError) Cause() error {
 	return errors.Cause(e.Err)
-}
-
-// ErrorStatusCode returns the StatusCode of the error, or 0
-func ErrorStatusCode(err error) int {
-	if err == nil {
-		return 0
-	}
-	if e, ok := err.(RequestError); ok {
-		return e.StatusCode
-	}
-	return UnknownStatusCode
-}
-
-// ErrorPayload returns the payload of the error, or an empty string
-func ErrorPayload(err error) string {
-	if err == nil {
-		return ""
-	}
-	if e, ok := err.(RequestError); ok {
-		return e.Payload
-	}
-	return UnknownPayload
-}
-
-// ErrorMethod returns the method of the error, or an empty string
-func ErrorMethod(err error) string {
-	if err == nil {
-		return ""
-	}
-	if e, ok := err.(RequestError); ok {
-		return e.Method
-	}
-	return UnknownMethod
-}
-
-// ErrorURL returns the URL of the error, or an empty string
-func ErrorURL(err error) string {
-	if err == nil {
-		return ""
-	}
-	if e, ok := err.(RequestError); ok {
-		return e.URL
-	}
-	return UnknownURL
 }
 
 // Format prints out the error, any causes, a stacktrace, and the other fields in the struct
@@ -114,7 +83,8 @@ func (e RequestError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(Temp{e.Err.Error(), e.ErrorMetaData})
 }
 
-// UnmarshalJSON allows RequestError to implement json.Unmarshaler (for completeness since RequestError implements Marshaler)
+// UnmarshalJSON allows RequestError to implement json.Unmarshaler (for completeness since RequestError implements Marshaler).
+// 	Note that if the json property is possibly null, you must unmarshal to *RequestError, as the cioutil.UnmarshalJSON helper does.
 // 	Use of this loses the ability to unwrap errors with errors.Cause() or get the original stacktrace
 func (e *RequestError) UnmarshalJSON(data []byte) error {
 	type Temp struct {
