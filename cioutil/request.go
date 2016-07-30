@@ -46,7 +46,8 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 	for i := 1; ; i++ {
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
-		if cio.PreRequestHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
+		// TODO: redact access_token and access_token_secret inside resBody before logging (only occurs with 3-legged oauth (not presently used))
+		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
 			break
 		}
 		time.Sleep(time.Duration(i*i*i) * time.Second) // Exponential backoff
