@@ -195,6 +195,11 @@ type WebhookMessageDataAddresses struct {
 		Email string `json:"email,omitempty"`
 		Name  string `json:"name,omitempty"`
 	} `json:"reply_to,omitempty"`
+
+	ReturnPath []struct {
+		Email string `json:"email,omitempty"`
+		Name  string `json:"name,omitempty"`
+	} `json:"return_path,omitempty"`
 }
 
 // UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
