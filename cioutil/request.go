@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
 	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pkg/errors"
@@ -26,6 +25,7 @@ type ClientRequest struct {
 	AccountLabel string
 }
 
+
 // DoFormRequest makes the actual request
 func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
@@ -35,7 +35,9 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	// Construct the body
 	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
-	logRequest(cio.Log, request.Method, cioURL, bodyValues)
+	if cio.PreRequestHook != nil {
+		cio.PreRequestHook(request.UserID, request.AccountLabel, request.Method, cioURL, redactBodyValues(bodyValues))
+	}
 
 	statusCode, resBody, err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 
@@ -143,40 +145,32 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	return res.StatusCode, resBodyString, nil
 }
 
-// logRequest logs the request about to be made to CIO, redacting sensitive information in the body
-func logRequest(log Logger, method string, cioURL string, bodyValues url.Values) {
-	if log != nil {
+// redactBodyValues returns a copy of the body values redacted
+func redactBodyValues(bodyValues url.Values) url.Values {
 
-		// Copy url.Values
-		redactedValues := url.Values{}
-		for k, v := range bodyValues {
-			redactedValues[k] = v
-		}
-
-		// Redact sensitive information
-		if val := redactedValues.Get("password"); len(val) > 0 {
-			redactedValues.Set("password", "redacted")
-		}
-		if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
-			redactedValues.Set("provider_refresh_token", "redacted")
-		}
-		if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_key", "redacted")
-		}
-		if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_secret", "redacted")
-		}
-
-		// Actually log
-		if logrusLogger, ok := log.(*logrus.Logger); ok {
-			// If logrus, use structured fields
-			logrusLogger.WithFields(logrus.Fields{"httpMethod": method, "url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
-		} else {
-			// Else just log with Println
-			log.Printf("Creating new %s request to: %s with payload: %s\n", method, cioURL, redactedValues.Encode())
-		}
+	// Copy url.Values
+	redactedValues := url.Values{}
+	for k, v := range bodyValues {
+		redactedValues[k] = v
 	}
+
+	// Redact sensitive information
+	if val := redactedValues.Get("password"); len(val) > 0 {
+		redactedValues.Set("password", "redacted")
+	}
+	if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
+		redactedValues.Set("provider_refresh_token", "redacted")
+	}
+	if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
+		redactedValues.Set("provider_consumer_key", "redacted")
+	}
+	if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
+		redactedValues.Set("provider_consumer_secret", "redacted")
+	}
+
+	return redactedValues
 }
+
 
 // logBodyCloseError logs any error that happens when trying to close the *http.Response.Body
 func logBodyCloseError(log Logger, closeError error) {

@@ -9,6 +9,7 @@ import (
 	"hash"
 	"strconv"
 	"time"
+	"net/url"
 )
 
 // Cio struct contains the api key and secret, and other configuration settings,
@@ -21,6 +22,7 @@ type Cio struct {
 	Host           string
 	RequestTimeout time.Duration
 	RetryServerErr bool
+	PreRequestHook func(string, string, string, string, url.Values)
 }
 
 // NewCio returns a CIO struct for embedding in a concrete type.
