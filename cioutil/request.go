@@ -44,7 +44,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 		err        error
 	)
 
-	for i := 1; ; i++ {
+	for i := 1; i <= 10; i++ {
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 		// After-Request Hook Function (logging)
 		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
