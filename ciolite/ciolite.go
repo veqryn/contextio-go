@@ -25,19 +25,14 @@ type CioLite struct {
 
 // NewCioLite returns a CIO Lite struct (without a logger) for accessing the CIO Lite API.
 func NewCioLite(key string, secret string) CioLite {
-	return NewCioLiteWithLogger(key, secret, nil)
-}
-
-// NewCioLiteWithLogger returns a CIO Lite struct (with a logger) for accessing the CIO Lite API.
-func NewCioLiteWithLogger(key string, secret string, logger cioutil.Logger) CioLite {
-	return CioLite{Cio: cioutil.NewCio(key, secret, logger, DefaultHost, DefaultRequestTimeout)}
+	return CioLite{Cio: cioutil.NewCio(key, secret, DefaultHost, DefaultRequestTimeout)}
 }
 
 // NewTestCioLiteServer is a convenience function that returns a CioLite object
 // and a *httptest.Server (which must be closed when done being used).
 // The CioLite instance will hit the test server for all requests.
-func NewTestCioLiteServer(key string, secret string, logger cioutil.Logger, handler http.Handler) (CioLite, *httptest.Server) {
+func NewTestCioLiteServer(key string, secret string, handler http.Handler) (CioLite, *httptest.Server) {
 	testServer := httptest.NewServer(handler)
-	testCioLite := CioLite{Cio: cioutil.NewCio(key, secret, logger, testServer.URL, 5*time.Second)}
+	testCioLite := CioLite{Cio: cioutil.NewCio(key, secret, testServer.URL, 5*time.Second)}
 	return testCioLite, testServer
 }

@@ -16,6 +16,7 @@ func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenRes
 	request := cioutil.ClientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens", userID),
+		UserID: userID,
 	}
 
 	// Make response
@@ -35,6 +36,7 @@ func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConn
 	request := cioutil.ClientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
+		UserID: userID,
 	}
 
 	// Make response
@@ -57,6 +59,7 @@ func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateCo
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/connect_tokens", userID),
 		FormValues: formValues,
+		UserID:     userID,
 	}
 
 	// Make response
@@ -76,6 +79,7 @@ func (cioLite CioLite) DeleteUserConnectToken(userID string, token string) (Dele
 	request := cioutil.ClientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
+		UserID: userID,
 	}
 
 	// Make response

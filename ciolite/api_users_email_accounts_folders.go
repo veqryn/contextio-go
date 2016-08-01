@@ -58,9 +58,11 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 
 	// Make request
 	request := cioutil.ClientRequest{
-		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
-		QueryValues: queryValues,
+		Method:       "GET",
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
+		QueryValues:  queryValues,
+		UserID:       userID,
+		AccountLabel: label,
 	}
 
 	// Make response
@@ -79,9 +81,11 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 
 	// Make request
 	request := cioutil.ClientRequest{
-		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
-		QueryValues: queryValues,
+		Method:       "GET",
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
+		QueryValues:  queryValues,
+		UserID:       userID,
+		AccountLabel: label,
 	}
 
 	// Make response
@@ -101,9 +105,11 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 
 	// Make request
 	request := cioutil.ClientRequest{
-		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
-		FormValues: formValues,
+		Method:       "POST",
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
+		FormValues:   formValues,
+		UserID:       userID,
+		AccountLabel: label,
 	}
 
 	// Make response

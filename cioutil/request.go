@@ -3,25 +3,24 @@ package cioutil
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pkg/errors"
 )
 
 // ClientRequest defines information that can be used to make a request
 type ClientRequest struct {
-	Method      string
-	Path        string
-	FormValues  interface{}
-	QueryValues interface{}
+	Method       string
+	Path         string
+	FormValues   interface{}
+	QueryValues  interface{}
+	UserID       string
+	AccountLabel string
 }
 
 // DoFormRequest makes the actual request
@@ -33,29 +32,28 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 	// Construct the body
 	bodyValues := FormValues(request.FormValues)
 	bodyString := bodyValues.Encode()
-	logRequest(cio.Log, request.Method, cioURL, bodyValues)
 
-	statusCode, resBody, err := cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
-
-	// Retry if Status Code >= 500 and RetryServerErr is set to true
-	if cio.RetryServerErr && shouldRetryOnce(statusCode, err) {
-		time.Sleep(1 * time.Second)
-		logResponse(cio.Log, true, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
-		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+	// Before-Request Hook Function (logging)
+	if cio.PreRequestHook != nil {
+		cio.PreRequestHook(request.UserID, request.AccountLabel, request.Method, cioURL, redactBodyValues(bodyValues))
 	}
 
-	// Log the response
-	logResponse(cio.Log, false, request.Method, cioURL, statusCode, resBody, errors.Cause(err))
+	var (
+		statusCode int
+		resBody    string
+		err        error
+	)
+
+	for i := 1; i <= 10; i++ {
+		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
+		// After-Request Hook Function (logging)
+		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
+			break
+		}
+		time.Sleep(time.Duration(i*i*i) * time.Second) // Exponential backoff
+	}
 
 	return err
-}
-
-// shouldRetryOnce returns true if the request should be retried
-func shouldRetryOnce(statusCode int, err error) bool {
-	// Retry if a connection can not be made (network blip), and also on CIO Server errors,
-	// and also if the nonce has been used (CIO seems to have issues with nonce collisions).
-	return statusCode >= 500 || statusCode == 0 ||
-		(statusCode == 401 && strings.Contains(strings.ToLower(ErrorPayload(err)), "nonce"))
 }
 
 // createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response.
@@ -115,8 +113,8 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 
 	// Parse the response
 	defer func() {
-		if closeErr := res.Body.Close(); closeErr != nil {
-			logBodyCloseError(cio.Log, closeErr)
+		if closeErr := res.Body.Close(); closeErr != nil && cio.ResponseBodyCloseErrorHook != nil {
+			cio.ResponseBodyCloseErrorHook(closeErr) // Logging
 		}
 	}()
 
@@ -141,88 +139,28 @@ func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL str
 	return res.StatusCode, resBodyString, nil
 }
 
-// logRequest logs the request about to be made to CIO, redacting sensitive information in the body
-func logRequest(log Logger, method string, cioURL string, bodyValues url.Values) {
-	if log != nil {
+// redactBodyValues returns a copy of the body values redacted
+func redactBodyValues(bodyValues url.Values) url.Values {
 
-		// Copy url.Values
-		redactedValues := url.Values{}
-		for k, v := range bodyValues {
-			redactedValues[k] = v
-		}
-
-		// Redact sensitive information
-		if val := redactedValues.Get("password"); len(val) > 0 {
-			redactedValues.Set("password", "redacted")
-		}
-		if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
-			redactedValues.Set("provider_refresh_token", "redacted")
-		}
-		if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_key", "redacted")
-		}
-		if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
-			redactedValues.Set("provider_consumer_secret", "redacted")
-		}
-
-		// Actually log
-		if logrusLogger, ok := log.(*logrus.Logger); ok {
-			// If logrus, use structured fields
-			logrusLogger.WithFields(logrus.Fields{"httpMethod": method, "url": cioURL, "payload": redactedValues.Encode()}).Debug("Creating new request to CIO")
-		} else {
-			// Else just log with Println
-			log.Printf("Creating new %s request to: %s with payload: %s\n", method, cioURL, redactedValues.Encode())
-		}
+	// Copy url.Values
+	redactedValues := url.Values{}
+	for k, v := range bodyValues {
+		redactedValues[k] = v
 	}
-}
 
-// logBodyCloseError logs any error that happens when trying to close the *http.Response.Body
-func logBodyCloseError(log Logger, closeError error) {
-	if log != nil {
-		if logrusLogger, ok := log.(*logrus.Logger); ok {
-			// If logrus, use structured fields
-			logrusLogger.WithError(closeError).Warn("Unable to close response body from CIO")
-		} else {
-			// Else just log with Println
-			log.Printf("Unable to close response body from CIO, with error: %s\n", closeError.Error())
-		}
+	// Redact sensitive information
+	if val := redactedValues.Get("password"); len(val) > 0 {
+		redactedValues.Set("password", "redacted")
 	}
-}
-
-// logResponse logs the response from CIO, if any logger is set
-func logResponse(log Logger, retry bool, method string, cioURL string, statusCode int, responseBody string, err error) {
-	if log != nil {
-
-		// TODO: redact access_token and access_token_secret before logging (only occurs with 3-legged oauth [rare])
-
-		// Take only the first 2000 characters from the responseBody, which should be more than enough to debug anything
-		if bodyLen := len(responseBody); bodyLen > 2000 {
-			responseBody = responseBody[:2000]
-		}
-
-		if logrusLogger, ok := log.(*logrus.Logger); ok {
-			// If logrus, use structured fields
-			logEntry := logrusLogger.WithFields(logrus.Fields{
-				"httpMethod":     method,
-				"url":            cioURL,
-				"statusCode":     fmt.Sprintf("%d", statusCode),
-				"payloadSnippet": responseBody})
-			if !retry && (err != nil || statusCode >= 400) {
-				if err != nil {
-					logEntry = logEntry.WithError(err)
-				}
-				logEntry.Warn("Received response from CIO")
-			} else {
-				logEntry.Debug("Received response from CIO")
-			}
-
-		} else {
-			// Else just log with Println
-			if err != nil {
-				log.Printf("Received response from %s to: %s with status code: %d and error: %s and payload snippet: %s\n", method, cioURL, statusCode, err, responseBody)
-			} else {
-				log.Printf("Received response from %s to: %s with status code: %d and payload snippet: %s\n", method, cioURL, statusCode, responseBody)
-			}
-		}
+	if val := redactedValues.Get("provider_refresh_token"); len(val) > 0 {
+		redactedValues.Set("provider_refresh_token", "redacted")
 	}
+	if val := redactedValues.Get("provider_consumer_key"); len(val) > 0 {
+		redactedValues.Set("provider_consumer_key", "redacted")
+	}
+	if val := redactedValues.Get("provider_consumer_secret"); len(val) > 0 {
+		redactedValues.Set("provider_consumer_secret", "redacted")
+	}
+
+	return redactedValues
 }

@@ -1,12 +1,11 @@
 package cioutil
 
 import (
-	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
 	"hash"
+	"net/url"
 	"strconv"
 	"time"
 )
@@ -17,18 +16,34 @@ import (
 type Cio struct {
 	apiKey         string
 	apiSecret      string
-	Log            Logger
 	Host           string
 	RequestTimeout time.Duration
-	RetryServerErr bool
+
+	// PreRequestHook is a function (mostly for logging) that will be executed
+	// before the request is made, its arguments are the User ID, Account Label,
+	// the Method (GET/POST/etc), the URL, and the redacted body values.
+	PreRequestHook func(string, string, string, string, url.Values)
+
+	// PostRequestShouldRetryHook is a function (mostly for logging) that will be
+	// executed after each request is made, and will be called at least once.
+	// Its arguments are the request Attempt # (starts at 1), User ID, Account Label,
+	// the Method (GET/POST/etc), the URL, response Status Code, response Payload,
+	// and any error received while attempting this request.
+	// The returned boolean is whether this request should be retried or not, which
+	// if false then this is the last call of this function, but if true means this
+	// function will be called again.
+	PostRequestShouldRetryHook func(int, string, string, string, string, int, string, error) bool
+
+	// ResponseBodyCloseErrorHook is a function (purely for logging) that will
+	// execute if there is an error closing the response body.
+	ResponseBodyCloseErrorHook func(error)
 }
 
 // NewCio returns a CIO struct for embedding in a concrete type.
-func NewCio(key string, secret string, logger Logger, host string, requestTimeout time.Duration) Cio {
+func NewCio(key string, secret string, host string, requestTimeout time.Duration) Cio {
 	return Cio{
 		apiKey:         key,
 		apiSecret:      secret,
-		Log:            logger,
 		Host:           host,
 		RequestTimeout: requestTimeout,
 	}
@@ -49,23 +64,4 @@ func hashHmac(hashAlgorithm func() hash.Hash, message string, secret string) str
 		panic("hash.Hash unable to write message bytes, with error: " + err.Error())
 	}
 	return hex.EncodeToString(h.Sum(nil))
-}
-
-// Logger interface which *log.Logger uses.
-// Allows injection of user specified loggers, such as log.Logger or logrus.
-type Logger interface {
-	Printf(format string, v ...interface{})
-}
-
-// TestLogger is a *bytes.Buffer that implements the logging interface
-type TestLogger struct {
-	*bytes.Buffer
-}
-
-// Printf prints the arguments to the buffer, using fmt.Sprintf
-func (l *TestLogger) Printf(format string, v ...interface{}) {
-	_, err := l.Write([]byte(fmt.Sprintf(format, v...)))
-	if err != nil {
-		panic("Error writing to test logger: " + err.Error())
-	}
 }
