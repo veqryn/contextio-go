@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pkg/errors"
@@ -44,13 +43,12 @@ func (cio CioLite) doFormRequest(request clientRequest, result interface{}) erro
 		err        error
 	)
 
-	for i := 1; i <= 10; i++ {
+	for i := 1; ; i++ {
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 		// After-Request Hook Function (logging)
 		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
 			break
 		}
-		time.Sleep(time.Duration(i*i*i) * time.Second) // Exponential backoff
 	}
 
 	return err
