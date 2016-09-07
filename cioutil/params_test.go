@@ -24,12 +24,12 @@ func TestFormValuesAndQueryString(t *testing.T) {
 		StringEmpty string `json:"string_empty,omitempty"`
 	}{
 		// Test values:
-		StringFull:  "hello world",
-		StringEmpty: "",
 		BoolTrue:    true,
 		BoolFalse:   false,
 		IntLarge:    8194723,
 		IntZero:     0,
+		StringFull:  "hello world",
+		StringEmpty: "",
 	}
 
 	expectedFormValues := url.Values{
