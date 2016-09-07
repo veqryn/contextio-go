@@ -96,7 +96,7 @@ type StatusCallback struct {
 func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEmailAccountsParams) ([]GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:      "GET",
 		Path:        fmt.Sprintf("/users/%s/email_accounts", userID),
 		QueryValues: queryValues,
@@ -107,7 +107,7 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEm
 	var response []GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -118,7 +118,7 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEm
 func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,
@@ -129,7 +129,7 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 	var response GetUsersEmailAccountsResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -143,7 +143,7 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUserParams) (CreateEmailAccountResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/email_accounts", userID),
 		FormValues: formValues,
@@ -154,7 +154,7 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUs
 	var response CreateEmailAccountResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -166,7 +166,7 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUs
 func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formValues ModifyUserEmailAccountParams) (ModifyEmailAccountResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "POST",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		FormValues:   formValues,
@@ -178,7 +178,7 @@ func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formV
 	var response ModifyEmailAccountResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -188,7 +188,7 @@ func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formV
 func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (DeleteEmailAccountResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "DELETE",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,
@@ -199,7 +199,7 @@ func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (Dele
 	var response DeleteEmailAccountResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

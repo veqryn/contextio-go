@@ -223,7 +223,7 @@ func (m *WebhookMessageDataAddresses) UnmarshalJSON(b []byte) error {
 func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/webhooks", userID),
 		UserID: userID,
@@ -233,7 +233,7 @@ func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksRespons
 	var response []GetUsersWebhooksResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -243,7 +243,7 @@ func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksRespons
 func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsersWebhooksResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 		UserID: userID,
@@ -253,7 +253,7 @@ func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsers
 	var response GetUsersWebhooksResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -267,7 +267,7 @@ func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsers
 func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWebhookParams) (CreateUserWebhookResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/webhooks", userID),
 		FormValues: formValues,
@@ -278,7 +278,7 @@ func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWeb
 	var response CreateUserWebhookResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -289,7 +289,7 @@ func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWeb
 func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formValues ModifyUserWebhookParams) (ModifyWebhookResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 		FormValues: formValues,
@@ -300,7 +300,7 @@ func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formVa
 	var response ModifyWebhookResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -310,7 +310,7 @@ func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formVa
 func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string) (DeleteWebhookResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
 		UserID: userID,
@@ -320,7 +320,7 @@ func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string)
 	var response DeleteWebhookResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

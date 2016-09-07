@@ -26,7 +26,7 @@ type GetUserEmailAccountsFolderMessageFlagsResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageFlagsResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
@@ -38,7 +38,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, lab
 	var response GetUserEmailAccountsFolderMessageFlagsResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

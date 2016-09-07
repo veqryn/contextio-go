@@ -56,7 +56,7 @@ type CreateEmailAccountFolderResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, queryValues GetUserEmailAccountsFoldersParams) ([]GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
 		QueryValues:  queryValues,
@@ -68,7 +68,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 	var response []GetUsersEmailAccountFoldersResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -79,7 +79,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, folder string, queryValues EmailAccountFolderDelimiterParam) (GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		QueryValues:  queryValues,
@@ -91,7 +91,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 	var response GetUsersEmailAccountFoldersResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -103,7 +103,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderDelimiterParam) (CreateEmailAccountFolderResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "POST",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		FormValues:   formValues,
@@ -115,7 +115,7 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 	var response CreateEmailAccountFolderResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

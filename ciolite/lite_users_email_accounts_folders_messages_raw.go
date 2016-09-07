@@ -17,7 +17,7 @@ type GetUserEmailAccountsFolderMessageRawResponse string
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageRaw(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageRawResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/raw", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
@@ -29,7 +29,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageRaw(userID string, label
 	var response GetUserEmailAccountsFolderMessageRawResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

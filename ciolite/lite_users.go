@@ -116,7 +116,7 @@ type DeleteUserResponse struct {
 func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:      "GET",
 		Path:        "/users",
 		QueryValues: queryValues,
@@ -126,7 +126,7 @@ func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse,
 	var response []GetUsersResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -136,7 +136,7 @@ func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse,
 func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s", userID),
 		UserID: userID,
@@ -146,7 +146,7 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 	var response GetUsersResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -162,7 +162,7 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       "/users",
 		FormValues: formValues,
@@ -172,7 +172,7 @@ func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserRespon
 	var response CreateUserResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -183,7 +183,7 @@ func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserRespon
 func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (ModifyUserResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s", userID),
 		FormValues: formValues,
@@ -194,7 +194,7 @@ func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (M
 	var response ModifyUserResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -204,7 +204,7 @@ func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (M
 func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s", userID),
 		UserID: userID,
@@ -214,7 +214,7 @@ func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 	var response DeleteUserResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

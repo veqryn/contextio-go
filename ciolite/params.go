@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// FormValues returns valid FormValues for CIO
-func FormValues(cioFormValueParams interface{}) url.Values {
+// formValues returns valid FormValues for CIO
+func formValues(cioFormValueParams interface{}) url.Values {
 
 	// Values
 	values := url.Values{}
@@ -60,11 +60,11 @@ func FormValues(cioFormValueParams interface{}) url.Values {
 	return values
 }
 
-// QueryString returns a query string
-func QueryString(cioQueryValueParams interface{}) string {
+// queryString returns a query string
+func queryString(cioQueryValueParams interface{}) string {
 
 	// Encode parameters
-	encoded := FormValues(cioQueryValueParams).Encode()
+	encoded := formValues(cioQueryValueParams).Encode()
 	if encoded == "" {
 		return encoded
 	}

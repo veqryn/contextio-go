@@ -151,7 +151,7 @@ type MoveUserEmailAccountFolderMessageResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label string, folder string, queryValues GetUserEmailAccountsFolderMessageParams) ([]GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages", userID, label, url.QueryEscape(folder)),
 		QueryValues:  queryValues,
@@ -163,7 +163,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label s
 	var response []GetUsersEmailAccountFolderMessagesResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -174,7 +174,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label s
 func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues GetUserEmailAccountsFolderMessageParams) (GetUsersEmailAccountFolderMessagesResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
@@ -186,7 +186,7 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 	var response GetUsersEmailAccountFolderMessagesResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -197,7 +197,7 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label string, folder string, messageID string, queryValues MoveUserEmailAccountFolderMessageParams) (MoveUserEmailAccountFolderMessageResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:       "PUT",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
@@ -209,7 +209,7 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label st
 	var response MoveUserEmailAccountFolderMessageResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

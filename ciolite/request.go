@@ -13,8 +13,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// ClientRequest defines information that can be used to make a request
-type ClientRequest struct {
+// clientRequest defines information that can be used to make a request
+type clientRequest struct {
 	Method       string
 	Path         string
 	FormValues   interface{}
@@ -23,14 +23,14 @@ type ClientRequest struct {
 	AccountLabel string
 }
 
-// DoFormRequest makes the actual request
-func (cio CioLite) DoFormRequest(request ClientRequest, result interface{}) error {
+// doFormRequest makes the actual request
+func (cio CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
-	cioURL := cio.Host + request.Path + QueryString(request.QueryValues)
+	cioURL := cio.Host + request.Path + queryString(request.QueryValues)
 
 	// Construct the body
-	bodyValues := FormValues(request.FormValues)
+	bodyValues := formValues(request.FormValues)
 	bodyString := bodyValues.Encode()
 
 	// Before-Request Hook Function (logging)
@@ -58,7 +58,7 @@ func (cio CioLite) DoFormRequest(request ClientRequest, result interface{}) erro
 
 // createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response.
 // Returns the status code, the response body, and any error
-func (cio CioLite) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
+func (cio CioLite) createAndSendRequest(request clientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
 
 	var bodyReader io.Reader
 	if len(bodyString) > 0 {
@@ -76,7 +76,7 @@ func (cio CioLite) createAndSendRequest(request ClientRequest, cioURL string, bo
 }
 
 // createRequest creates the *http.Request object
-func (cio CioLite) createRequest(request ClientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
+func (cio CioLite) createRequest(request clientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {

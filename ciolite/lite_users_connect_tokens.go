@@ -11,7 +11,7 @@ import (
 func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens", userID),
 		UserID: userID,
@@ -21,7 +21,7 @@ func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenRes
 	var response []GetConnectTokenResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -31,7 +31,7 @@ func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenRes
 func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConnectTokenResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
 		UserID: userID,
@@ -41,7 +41,7 @@ func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConn
 	var response GetConnectTokenResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -53,7 +53,7 @@ func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConn
 func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateConnectTokenParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/connect_tokens", userID),
 		FormValues: formValues,
@@ -64,7 +64,7 @@ func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateCo
 	var response CreateConnectTokenResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -74,7 +74,7 @@ func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateCo
 func (cioLite CioLite) DeleteUserConnectToken(userID string, token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
 		UserID: userID,
@@ -84,7 +84,7 @@ func (cioLite CioLite) DeleteUserConnectToken(userID string, token string) (Dele
 	var response DeleteConnectTokenResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

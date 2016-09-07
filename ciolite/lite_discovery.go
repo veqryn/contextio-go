@@ -45,7 +45,7 @@ type GetDiscoveryIMAPResponse struct {
 func (cioLite CioLite) GetDiscovery(queryValues GetDiscoveryParams) (GetDiscoveryResponse, error) {
 
 	// Make request
-	request := ClientRequest{
+	request := clientRequest{
 		Method:      "GET",
 		Path:        "/discovery",
 		QueryValues: queryValues,
@@ -55,7 +55,7 @@ func (cioLite CioLite) GetDiscovery(queryValues GetDiscoveryParams) (GetDiscover
 	var response GetDiscoveryResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
