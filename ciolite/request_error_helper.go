@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 const (
 	UnknownStatusCode = -1

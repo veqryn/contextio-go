@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 import (
 	"net/url"
@@ -42,7 +42,7 @@ func TestFormValuesAndQueryString(t *testing.T) {
 		"string_full":           []string{"hello world"},
 	}
 
-	formValues := FormValues(params)
+	formValues := formValues(params)
 
 	if !reflect.DeepEqual(formValues, expectedFormValues) {
 		t.Error("Expected form values: ", expectedFormValues, "; Got: ", formValues)
@@ -50,7 +50,7 @@ func TestFormValuesAndQueryString(t *testing.T) {
 
 	expectedQueryString := "?bool_always_include=0&bool_true=1&int_always_include=0&int_large=8194723&string_always_include=&string_full=hello+world"
 
-	queryString := QueryString(params)
+	queryString := queryString(params)
 
 	if queryString != expectedQueryString {
 		t.Error("Expected query string: ", expectedQueryString, "; Got: ", queryString)

@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 import (
 	"encoding/json"
@@ -40,7 +40,7 @@ func TestRequestErrorWrapped(t *testing.T) {
 		t.Error("Expected error cause string of: ", "cause error", "; Got: ", err.Error())
 	}
 
-	expectedPrefix := "cause error\nouter error\ngithub.com/contextio/contextio-go/cioutil.wrappedError\n"
+	expectedPrefix := "cause error\nouter error\ngithub.com/contextio/contextio-go/ciolite.wrappedError\n"
 	if plusV := fmt.Sprintf("%+v", err); !strings.HasPrefix(plusV, expectedPrefix) || !strings.HasSuffix(plusV, expectedSuffix) {
 		t.Error("Expected +v formatting of: ", expectedPrefix, expectedSuffix, "; Got: ", plusV)
 	}

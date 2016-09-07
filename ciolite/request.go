@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 import (
 	"bytes"
@@ -7,14 +7,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pkg/errors"
 )
 
-// ClientRequest defines information that can be used to make a request
-type ClientRequest struct {
+// clientRequest defines information that can be used to make a request
+type clientRequest struct {
 	Method       string
 	Path         string
 	FormValues   interface{}
@@ -23,14 +22,14 @@ type ClientRequest struct {
 	AccountLabel string
 }
 
-// DoFormRequest makes the actual request
-func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
+// doFormRequest makes the actual request
+func (cio CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
 	// Construct the url
-	cioURL := cio.Host + request.Path + QueryString(request.QueryValues)
+	cioURL := cio.Host + request.Path + queryString(request.QueryValues)
 
 	// Construct the body
-	bodyValues := FormValues(request.FormValues)
+	bodyValues := formValues(request.FormValues)
 	bodyString := bodyValues.Encode()
 
 	// Before-Request Hook Function (logging)
@@ -44,13 +43,12 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 		err        error
 	)
 
-	for i := 1; i <= 10; i++ {
+	for i := 1; ; i++ {
 		statusCode, resBody, err = cio.createAndSendRequest(request, cioURL, bodyString, bodyValues, result)
 		// After-Request Hook Function (logging)
 		if cio.PostRequestShouldRetryHook == nil || !cio.PostRequestShouldRetryHook(i, request.UserID, request.AccountLabel, request.Method, cioURL, statusCode, resBody, err) {
 			break
 		}
-		time.Sleep(time.Duration(i*i*i) * time.Second) // Exponential backoff
 	}
 
 	return err
@@ -58,7 +56,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 // createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response.
 // Returns the status code, the response body, and any error
-func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
+func (cio CioLite) createAndSendRequest(request clientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
 
 	var bodyReader io.Reader
 	if len(bodyString) > 0 {
@@ -76,7 +74,7 @@ func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodySt
 }
 
 // createRequest creates the *http.Request object
-func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
+func (cio CioLite) createRequest(request clientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
@@ -98,7 +96,7 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 }
 
 // sendRequest sends the *http.Request, and returns the status code, the response body, and any error
-func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
+func (cio CioLite) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,

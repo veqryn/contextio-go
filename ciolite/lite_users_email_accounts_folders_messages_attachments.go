@@ -5,8 +5,6 @@ package ciolite
 import (
 	"fmt"
 	"net/url"
-
-	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUserEmailAccountsFolderMessageAttachmentsResponse data struct
@@ -30,7 +28,7 @@ type GetUserEmailAccountsFolderMessageAttachmentsResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID string, label string, folder string, messageID string, queryValues EmailAccountFolderDelimiterParam) ([]GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
@@ -42,7 +40,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID strin
 	var response []GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -53,7 +51,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID strin
 func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string, label string, folder string, messageID string, attachmentID string, queryValues EmailAccountFolderDelimiterParam) (GetUserEmailAccountsFolderMessageAttachmentsResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := clientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID), attachmentID),
 		QueryValues:  queryValues,
@@ -65,7 +63,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string
 	var response GetUserEmailAccountsFolderMessageAttachmentsResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }

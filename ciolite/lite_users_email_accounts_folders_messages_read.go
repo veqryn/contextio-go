@@ -5,8 +5,6 @@ package ciolite
 import (
 	"fmt"
 	"net/url"
-
-	"github.com/contextio/contextio-go/cioutil"
 )
 
 // UserEmailAccountsFolderMessageReadResponse data struct
@@ -22,7 +20,7 @@ type UserEmailAccountsFolderMessageReadResponse struct {
 func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, label string, folder string, messageID string, formValues EmailAccountFolderDelimiterParam) (UserEmailAccountsFolderMessageReadResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := clientRequest{
 		Method:       "POST",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		FormValues:   formValues,
@@ -34,7 +32,7 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, lab
 	var response UserEmailAccountsFolderMessageReadResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
@@ -45,7 +43,7 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, lab
 func (cioLite CioLite) MarkUserEmailAccountsFolderMessageUnRead(userID string, label string, folder string, messageID string, formValues EmailAccountFolderDelimiterParam) (UserEmailAccountsFolderMessageReadResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := clientRequest{
 		Method:       "DELETE",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		FormValues:   formValues,
@@ -57,7 +55,7 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageUnRead(userID string, l
 	var response UserEmailAccountsFolderMessageReadResponse
 
 	// Request
-	err := cioLite.DoFormRequest(request, &response)
+	err := cioLite.doFormRequest(request, &response)
 
 	return response, err
 }
