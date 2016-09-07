@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 import (
 	"bytes"
@@ -24,7 +24,7 @@ type ClientRequest struct {
 }
 
 // DoFormRequest makes the actual request
-func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
+func (cio CioLite) DoFormRequest(request ClientRequest, result interface{}) error {
 
 	// Construct the url
 	cioURL := cio.Host + request.Path + QueryString(request.QueryValues)
@@ -58,7 +58,7 @@ func (cio Cio) DoFormRequest(request ClientRequest, result interface{}) error {
 
 // createAndSendRequest creates the body io.Reader, the *http.Request, and sends the request, logging the response.
 // Returns the status code, the response body, and any error
-func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
+func (cio CioLite) createAndSendRequest(request ClientRequest, cioURL string, bodyString string, bodyValues url.Values, result interface{}) (int, string, error) {
 
 	var bodyReader io.Reader
 	if len(bodyString) > 0 {
@@ -76,7 +76,7 @@ func (cio Cio) createAndSendRequest(request ClientRequest, cioURL string, bodySt
 }
 
 // createRequest creates the *http.Request object
-func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
+func (cio CioLite) createRequest(request ClientRequest, cioURL string, bodyReader io.Reader, bodyValues url.Values) (*http.Request, error) {
 	// Construct the request
 	httpReq, err := http.NewRequest(request.Method, cioURL, bodyReader)
 	if err != nil {
@@ -98,7 +98,7 @@ func (cio Cio) createRequest(request ClientRequest, cioURL string, bodyReader io
 }
 
 // sendRequest sends the *http.Request, and returns the status code, the response body, and any error
-func (cio Cio) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
+func (cio CioLite) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
 	// Create the HTTP client
 	httpClient := &http.Client{
 		Transport: http.DefaultTransport,

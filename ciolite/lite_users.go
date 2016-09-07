@@ -4,8 +4,6 @@ package ciolite
 
 import (
 	"fmt"
-
-	"github.com/contextio/contextio-go/cioutil"
 )
 
 // GetUsersParams query values data struct.
@@ -118,7 +116,7 @@ type DeleteUserResponse struct {
 func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:      "GET",
 		Path:        "/users",
 		QueryValues: queryValues,
@@ -138,7 +136,7 @@ func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse,
 func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/users/%s", userID),
 		UserID: userID,
@@ -164,7 +162,7 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:     "POST",
 		Path:       "/users",
 		FormValues: formValues,
@@ -185,7 +183,7 @@ func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserRespon
 func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (ModifyUserResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s", userID),
 		FormValues: formValues,
@@ -206,7 +204,7 @@ func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (M
 func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/users/%s", userID),
 		UserID: userID,

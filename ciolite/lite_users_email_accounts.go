@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/contextio/contextio-go/cioutil"
 	"github.com/pkg/errors"
 )
 
@@ -97,7 +96,7 @@ type StatusCallback struct {
 func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEmailAccountsParams) ([]GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:      "GET",
 		Path:        fmt.Sprintf("/users/%s/email_accounts", userID),
 		QueryValues: queryValues,
@@ -119,7 +118,7 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEm
 func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUsersEmailAccountsResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,
@@ -144,7 +143,7 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUserParams) (CreateEmailAccountResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:     "POST",
 		Path:       fmt.Sprintf("/users/%s/email_accounts", userID),
 		FormValues: formValues,
@@ -167,7 +166,7 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUs
 func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formValues ModifyUserEmailAccountParams) (ModifyEmailAccountResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "POST",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		FormValues:   formValues,
@@ -189,7 +188,7 @@ func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formV
 func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (DeleteEmailAccountResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "DELETE",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,

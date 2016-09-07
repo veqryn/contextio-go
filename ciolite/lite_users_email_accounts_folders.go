@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/contextio/contextio-go/cioutil"
 	"github.com/pkg/errors"
 )
 
@@ -57,7 +56,7 @@ type CreateEmailAccountFolderResponse struct {
 func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, queryValues GetUserEmailAccountsFoldersParams) ([]GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
 		QueryValues:  queryValues,
@@ -80,7 +79,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, folder string, queryValues EmailAccountFolderDelimiterParam) (GetUsersEmailAccountFoldersResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "GET",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		QueryValues:  queryValues,
@@ -104,7 +103,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string, folder string, formValues EmailAccountFolderDelimiterParam) (CreateEmailAccountFolderResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:       "POST",
 		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		FormValues:   formValues,

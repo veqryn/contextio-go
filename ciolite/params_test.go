@@ -1,4 +1,4 @@
-package cioutil
+package ciolite
 
 import (
 	"net/url"

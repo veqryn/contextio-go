@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/contextio/contextio-go/cioutil"
 	"github.com/pkg/errors"
 )
 
@@ -87,7 +86,7 @@ type DeleteConnectTokenResponse struct {
 func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method: "GET",
 		Path:   "/connect_tokens",
 	}
@@ -106,7 +105,7 @@ func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method: "GET",
 		Path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}
@@ -127,7 +126,7 @@ func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, e
 func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (CreateConnectTokenResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:     "POST",
 		Path:       "/connect_tokens",
 		FormValues: formValues,
@@ -147,7 +146,7 @@ func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (
 func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method: "DELETE",
 		Path:   fmt.Sprintf("/connect_tokens/%s", token),
 	}

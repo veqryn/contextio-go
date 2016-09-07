@@ -1,7 +1,5 @@
 package ciolite
 
-import "github.com/contextio/contextio-go/cioutil"
-
 // Api functions that support: https://context.io/docs/lite/discovery
 
 // GetDiscoveryParams query values data struct.
@@ -47,7 +45,7 @@ type GetDiscoveryIMAPResponse struct {
 func (cioLite CioLite) GetDiscovery(queryValues GetDiscoveryParams) (GetDiscoveryResponse, error) {
 
 	// Make request
-	request := cioutil.ClientRequest{
+	request := ClientRequest{
 		Method:      "GET",
 		Path:        "/discovery",
 		QueryValues: queryValues,

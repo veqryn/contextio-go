@@ -161,7 +161,7 @@ func TestSimulatedGetConnectToken(t *testing.T) {
 			FirstName:      "test@gmail.com",
 			LastName:       "",
 			Created:        1462217251,
-			EmailAccounts: []GetUsersEmailAccountsResponse{GetUsersEmailAccountsResponse{
+			EmailAccounts: []GetUsersEmailAccountsResponse{{
 				Status:             "OK",
 				ResourceURL:        "https://api.context.io/lite/users/5727aa2a0be9af5d658b4568/email_accounts/test%3A%3Agmail",
 				Type:               "imap",
