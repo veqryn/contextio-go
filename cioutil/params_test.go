@@ -11,25 +11,35 @@ func TestFormValuesAndQueryString(t *testing.T) {
 	t.Parallel()
 
 	params := struct {
-		StringFull  string `json:"string_full"`
-		StringEmpty string `json:"string_empty"`
-		BoolTrue    bool   `json:"bool_true"`
-		BoolFalse   bool   `json:"bool_false"`
-		IntLarge    int    `json:"int_large"`
-		IntZero     int    `json:"int_zero"`
+		// Fields without omitempty should always be included
+		BoolAlwaysInclude   bool   `json:"bool_always_include"`
+		IntAlwaysInclude    int    `json:"int_always_include"`
+		StringAlwaysInclude string `json:"string_always_include"`
+		// Fields with omitempty that are zero values should not be included
+		BoolTrue    bool   `json:"bool_true,omitempty"`
+		BoolFalse   bool   `json:"bool_false,omitempty"`
+		IntLarge    int    `json:"int_large,omitempty"`
+		IntZero     int    `json:"int_zero,omitempty"`
+		StringFull  string `json:"string_full,omitempty"`
+		StringEmpty string `json:"string_empty,omitempty"`
 	}{
-		StringFull:  "hello world",
-		StringEmpty: "",
+		// Test values:
 		BoolTrue:    true,
 		BoolFalse:   false,
 		IntLarge:    8194723,
 		IntZero:     0,
+		StringFull:  "hello world",
+		StringEmpty: "",
 	}
 
 	expectedFormValues := url.Values{
-		"string_full": []string{"hello world"},
-		"bool_true":   []string{"1"},
-		"int_large":   []string{"8194723"},
+		// Booleans get converted to 0 or 1
+		"bool_always_include":   []string{"0"},
+		"int_always_include":    []string{"0"},
+		"string_always_include": []string{""},
+		"bool_true":             []string{"1"},
+		"int_large":             []string{"8194723"},
+		"string_full":           []string{"hello world"},
 	}
 
 	formValues := FormValues(params)
@@ -38,7 +48,7 @@ func TestFormValuesAndQueryString(t *testing.T) {
 		t.Error("Expected form values: ", expectedFormValues, "; Got: ", formValues)
 	}
 
-	expectedQueryString := "?bool_true=1&int_large=8194723&string_full=hello+world"
+	expectedQueryString := "?bool_always_include=0&bool_true=1&int_always_include=0&int_large=8194723&string_always_include=&string_full=hello+world"
 
 	queryString := QueryString(params)
 

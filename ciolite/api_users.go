@@ -50,12 +50,12 @@ type GetUsersResponse struct {
 // 	https://context.io/docs/lite/users/email_accounts#post
 type CreateUserParams struct {
 	// Optional, but Required for creating an Email Account
-	Email    string `json:"email,omitempty"`
-	Server   string `json:"server,omitempty"`
-	Username string `json:"username,omitempty"`
-	Type     string `json:"type,omitempty"`
-	UseSSL   bool   `json:"use_ssl,omitempty"`
-	Port     int    `json:"port,omitempty"`
+	Email    string `json:"email"`
+	Server   string `json:"server"`
+	Username string `json:"username"`
+	Type     string `json:"type"`
+	UseSSL   bool   `json:"use_ssl"`
+	Port     int    `json:"port"`
 
 	// Optional, but Required for OAUTH:
 	ProviderRefreshToken string `json:"provider_refresh_token,omitempty"`
