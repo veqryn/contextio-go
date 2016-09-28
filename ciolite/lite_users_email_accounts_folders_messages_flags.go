@@ -12,12 +12,16 @@ import (
 type GetUserEmailAccountsFolderMessageFlagsResponse struct {
 	ResourceURL string `json:"resource_url,omitempty"`
 
-	Flags struct {
-		Read     bool `json:"read,omitempty"`
-		Answered bool `json:"answered,omitempty"`
-		Flagged  bool `json:"flagged,omitempty"`
-		Draft    bool `json:"draft,omitempty"`
-	} `json:"flags,omitempty"`
+	Flags UserEmailAccountsFolderMessageFlags `json:"flags,omitempty"`
+}
+
+// UserEmailAccountsFolderMessageFlags embedded data struct within GetUserEmailAccountsFolderMessageFlagsResponse
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages/flags#get
+type UserEmailAccountsFolderMessageFlags struct {
+	Read     bool `json:"read,omitempty"`
+	Answered bool `json:"answered,omitempty"`
+	Flagged  bool `json:"flagged,omitempty"`
+	Draft    bool `json:"draft,omitempty"`
 }
 
 // GetUserEmailAccountsFolderMessageFlags returns the message flags.

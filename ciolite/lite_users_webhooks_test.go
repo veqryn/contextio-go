@@ -105,13 +105,8 @@ func TestSimulatedReceivingWebhookFullAddresses(t *testing.T) {
 		t.Error("Expected MessageData.Folders: ", "[Inbox]", "; Got: ", fullAddresses.MessageData.Folders)
 	}
 
-	type address struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	}
-
 	addressesExpected := WebhookMessageDataAddresses{
-		From: address{
+		From: Address{
 			Email: "from@test.com",
 			Name:  "John",
 		},

@@ -123,81 +123,62 @@ type WebhookMessageData struct {
 
 	PersonInfo PersonInfo `json:"person_info,omitempty"`
 
-	Flags struct {
-		Flagged  bool `json:"flagged,omitempty"`
-		Answered bool `json:"answered,omitempty"`
-		Draft    bool `json:"draft,omitempty"`
-		Seen     bool `json:"seen,omitempty"`
-	} `json:"flags,omitempty"`
+	Flags WebhookMessageDataFlags `json:"flags,omitempty"`
 
-	Sources []struct {
-		Label  string `json:"label,omitempty"`
-		Folder string `json:"folder,omitempty"`
-		UID    int    `json:"uid,omitempty"`
-	} `json:"sources,omitempty"`
+	Sources []WebhookMessageDataAccount `json:"sources,omitempty"`
 
-	EmailAccounts []struct {
-		Label  string `json:"label,omitempty"`
-		Folder string `json:"folder,omitempty"`
-		UID    int    `json:"uid,omitempty"`
-	} `json:"email_accounts,omitempty"`
+	EmailAccounts []WebhookMessageDataAccount `json:"email_accounts,omitempty"`
 
-	Files []struct {
-		ContentID          string `json:"content_id,omitempty"`
-		Type               string `json:"type,omitempty"`
-		FileName           string `json:"file_name,omitempty"`
-		BodySection        string `json:"body_section,omitempty"`
-		ContentDisposition string `json:"content_disposition,omitempty"`
-		MainFileName       string `json:"main_file_name,omitempty"`
+	Files []WebhookMessageDataFile `json:"files,omitempty"`
+}
 
-		XAttachmentID interface{} `json:"x_attachment_id,omitempty"` // appears to be a single string and also an array of strings
+// WebhookMessageDataFlags embedded data struct within WebhookMessageData
+// 	https://context.io/docs/lite/users/webhooks#callbacks
+type WebhookMessageDataFlags struct {
+	Flagged  bool `json:"flagged,omitempty"`
+	Answered bool `json:"answered,omitempty"`
+	Draft    bool `json:"draft,omitempty"`
+	Seen     bool `json:"seen,omitempty"`
+}
 
-		FileNameStructure [][]string `json:"file_name_structure,omitempty"`
+// WebhookMessageDataAccount embedded data struct within WebhookMessageData
+// 	https://context.io/docs/lite/users/webhooks#callbacks
+type WebhookMessageDataAccount struct {
+	Label  string `json:"label,omitempty"`
+	Folder string `json:"folder,omitempty"`
+	UID    int    `json:"uid,omitempty"`
+}
 
-		AttachmentID int `json:"attachment_id,omitempty"`
-		Size         int `json:"size,omitempty"`
+// WebhookMessageDataFile embedded data struct within WebhookMessageData
+// 	https://context.io/docs/lite/users/webhooks#callbacks
+type WebhookMessageDataFile struct {
+	ContentID          string `json:"content_id,omitempty"`
+	Type               string `json:"type,omitempty"`
+	FileName           string `json:"file_name,omitempty"`
+	BodySection        string `json:"body_section,omitempty"`
+	ContentDisposition string `json:"content_disposition,omitempty"`
+	MainFileName       string `json:"main_file_name,omitempty"`
 
-		IsEmbedded bool `json:"is_embedded,omitempty"`
-	} `json:"files,omitempty"`
+	XAttachmentID interface{} `json:"x_attachment_id,omitempty"` // appears to be a single string and also an array of strings
+
+	FileNameStructure [][]string `json:"file_name_structure,omitempty"`
+
+	AttachmentID int `json:"attachment_id,omitempty"`
+	Size         int `json:"size,omitempty"`
+
+	IsEmbedded bool `json:"is_embedded,omitempty"`
 }
 
 // WebhookMessageDataAddresses struct within WebhookMessageData
 // 	https://context.io/docs/lite/users/webhooks#callbacks
 type WebhookMessageDataAddresses struct {
-	From struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"from,omitempty"`
-
-	To []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"to,omitempty"`
-
-	Cc []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"cc,omitempty"`
-
-	Bcc []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"bcc,omitempty"`
-
-	Sender []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"sender,omitempty"`
-
-	ReplyTo []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"reply_to,omitempty"`
-
-	ReturnPath []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"return_path,omitempty"`
+	From       Address   `json:"from,omitempty"`
+	To         []Address `json:"to,omitempty"`
+	Cc         []Address `json:"cc,omitempty"`
+	Bcc        []Address `json:"bcc,omitempty"`
+	Sender     []Address `json:"sender,omitempty"`
+	ReplyTo    []Address `json:"reply_to,omitempty"`
+	ReturnPath []Address `json:"return_path,omitempty"`
 }
 
 // UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
