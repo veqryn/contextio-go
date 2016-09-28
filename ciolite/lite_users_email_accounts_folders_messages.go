@@ -40,9 +40,10 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 	ResourceURL    string `json:"resource_url,omitempty"`
 
 	Folders         []string `json:"folders,omitempty"`
-	ListHeaders     []string `json:"list_headers,omitempty"`
 	References      []string `json:"references,omitempty"`
 	ReceivedHeaders []string `json:"received_headers,omitempty"`
+
+	ListHeaders ListHeaders `json:"list_headers,omitempty"`
 
 	Addresses GetUsersEmailAccountFolderMessageAddresses `json:"addresses,omitempty"`
 
@@ -80,6 +81,27 @@ type UsersEmailAccountFolderMessageBody struct {
 	Encoding    string `json:"encoding,omitempty"`
 
 	Size int `json:"size,omitempty"`
+}
+
+// ListHeaders embedded data struct within GetUsersEmailAccountFolderMessagesResponse
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
+type ListHeaders map[string]string
+
+// UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
+func (m *ListHeaders) UnmarshalJSON(b []byte) error {
+	if bytes.Equal([]byte(`[]`), b) {
+		// its the empty array, set an empty map
+		*m = make(map[string]string)
+		return nil
+	}
+	mp := make(map[string]string)
+	err := json.Unmarshal(b, &mp)
+	if err != nil {
+		return err
+	}
+	*m = mp
+	return nil
 }
 
 // PersonInfo embedded data struct within GetUsersEmailAccountFolderMessagesResponse and WebhookMessageData
