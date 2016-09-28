@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"testing"
+	"time"
 )
 
 // TestNewCioLiteWithLogger tests the construction of CioLite
@@ -57,7 +58,7 @@ func addLogging(cioLite *CioLite) *TestLogger {
 		logger.Printf("Creating new %s request to: %s with payload: %s\n", method, url, redactedBodyValues.Encode())
 	}
 
-	cioLite.PostRequestShouldRetryHook = func(attemptNum int, userID string, label string, method string, url string, statusCode int, responseBody string, err error) bool {
+	cioLite.PostRequestShouldRetryHook = func(attemptNum int, userID string, label string, method string, url string, statusCode int, responseBody string, beforeAttempt time.Time, beforeAll time.Time, err error) bool {
 		// TODO: redact access_token and access_token_secret inside resBody before logging (only occurs with 3-legged oauth (not presently used))
 		// Take only the first 2000 characters from the responseBody, which should be more than enough to debug anything, without killing the logger
 		if bodyLen := len(responseBody); bodyLen > 2000 {

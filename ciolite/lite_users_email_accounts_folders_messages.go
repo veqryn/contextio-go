@@ -48,31 +48,41 @@ type GetUsersEmailAccountFolderMessagesResponse struct {
 
 	PersonInfo PersonInfo `json:"person_info,omitempty"`
 
-	Attachments []struct {
-		Type               string `json:"type,omitempty"`
-		FileName           string `json:"file_name,omitempty"`
-		BodySection        string `json:"body_section,omitempty"`
-		ContentDisposition string `json:"content_disposition,omitempty"`
-		EmailMessageID     string `json:"email_message_id,omitempty"`
-		XAttachmentID      string `json:"x_attachment_id,omitempty"`
+	Attachments []UsersEmailAccountFolderMessageAttachment `json:"attachments,omitempty"`
 
-		Size         int `json:"size,omitempty"`
-		AttachmentID int `json:"attachment_id,omitempty"`
-	} `json:"attachments,omitempty"`
-
-	Bodies []struct {
-		BodySection string `json:"body_section,omitempty"`
-		Type        string `json:"type,omitempty"`
-		Encoding    string `json:"encoding,omitempty"`
-
-		Size int `json:"size,omitempty"`
-	} `json:"bodies,omitempty"`
+	Bodies []UsersEmailAccountFolderMessageBody `json:"bodies,omitempty"`
 
 	SentAt     int `json:"sent_at,omitempty"`
 	ReceivedAt int `json:"received_at,omitempty"`
 }
 
-// PersonInfo data struct within GetUsersEmailAccountFolderMessagesResponse and WebhookMessageData
+// UsersEmailAccountFolderMessageAttachment embedded data struct within GetUsersEmailAccountFolderMessagesResponse
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
+type UsersEmailAccountFolderMessageAttachment struct {
+	Type               string `json:"type,omitempty"`
+	FileName           string `json:"file_name,omitempty"`
+	BodySection        string `json:"body_section,omitempty"`
+	ContentDisposition string `json:"content_disposition,omitempty"`
+	EmailMessageID     string `json:"email_message_id,omitempty"`
+	XAttachmentID      string `json:"x_attachment_id,omitempty"`
+
+	Size         int `json:"size,omitempty"`
+	AttachmentID int `json:"attachment_id,omitempty"`
+}
+
+// UsersEmailAccountFolderMessageBody embedded data struct within GetUsersEmailAccountFolderMessagesResponse
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
+type UsersEmailAccountFolderMessageBody struct {
+	BodySection string `json:"body_section,omitempty"`
+	Type        string `json:"type,omitempty"`
+	Encoding    string `json:"encoding,omitempty"`
+
+	Size int `json:"size,omitempty"`
+}
+
+// PersonInfo embedded data struct within GetUsersEmailAccountFolderMessagesResponse and WebhookMessageData
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type PersonInfo map[string]map[string]string
@@ -93,39 +103,25 @@ func (m *PersonInfo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Address embedded data struct within GetUsersEmailAccountFolderMessageAddresses and WebhookMessageDataAddresses
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
+// 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
+// 	https://context.io/docs/lite/users/webhooks#callbacks
+type Address struct {
+	Email string `json:"email,omitempty"`
+	Name  string `json:"name,omitempty"`
+}
+
 // GetUsersEmailAccountFolderMessageAddresses data struct within GetUsersEmailAccountFolderMessagesResponse
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
 type GetUsersEmailAccountFolderMessageAddresses struct {
-	From []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"from,omitempty"`
-
-	To []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"to,omitempty"`
-
-	Cc []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"cc,omitempty"`
-
-	Bcc []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"bcc,omitempty"`
-
-	Sender []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"sender,omitempty"`
-
-	ReplyTo []struct {
-		Email string `json:"email,omitempty"`
-		Name  string `json:"name,omitempty"`
-	} `json:"reply_to,omitempty"`
+	From    []Address `json:"from,omitempty"`
+	To      []Address `json:"to,omitempty"`
+	Cc      []Address `json:"cc,omitempty"`
+	Bcc     []Address `json:"bcc,omitempty"`
+	Sender  []Address `json:"sender,omitempty"`
+	ReplyTo []Address `json:"reply_to,omitempty"`
 }
 
 // MoveUserEmailAccountFolderMessageParams form values data struct.

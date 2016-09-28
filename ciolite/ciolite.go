@@ -30,19 +30,32 @@ type CioLite struct {
 	RequestTimeout time.Duration
 
 	// PreRequestHook is a function (mostly for logging) that will be executed
-	// before the request is made, its arguments are the User ID, Account Label,
-	// the Method (GET/POST/etc), the URL, and the redacted body values.
+	// before the request is made.
+	// 	Its arguments are:
+	// 	User ID (if present),
+	// 	Account Label (if present),
+	// 	Method (GET/POST/etc),
+	// 	URL,
+	// 	redacted body values.
 	PreRequestHook func(string, string, string, string, url.Values)
 
 	// PostRequestShouldRetryHook is a function (mostly for logging) that will be
 	// executed after each request is made, and will be called at least once.
-	// Its arguments are the request Attempt # (starts at 1), User ID, Account Label,
-	// the Method (GET/POST/etc), the URL, response Status Code, response Payload,
-	// and any error received while attempting this request.
+	// 	Its arguments are:
+	// 	request Attempt # (starts at 1),
+	// 	User ID (if present),
+	// 	Account Label (if present),
+	// 	Method (GET/POST/etc),
+	// 	URL,
+	// 	response Status Code,
+	// 	response Payload,
+	// 	time at start of most recent attempt,
+	// 	time at start of all attempts,
+	// 	any error received while attempting this request.
 	// The returned boolean is whether this request should be retried or not, which
-	// if false then this is the last call of this function, but if true means this
+	// if False then this is the last call of this function, but if True means this
 	// function will be called again.
-	PostRequestShouldRetryHook func(int, string, string, string, string, int, string, error) bool
+	PostRequestShouldRetryHook func(int, string, string, string, string, int, string, time.Time, time.Time, error) bool
 
 	// ResponseBodyCloseErrorHook is a function (purely for logging) that will
 	// execute if there is an error closing the response body.
