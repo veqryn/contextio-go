@@ -134,6 +134,24 @@ type Address struct {
 	Name  string `json:"name,omitempty"`
 }
 
+// UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
+func (m *Address) UnmarshalJSON(b []byte) error {
+	if bytes.Equal([]byte(`[]`), b) {
+		// its the empty array, set an empty struct
+		*m = Address{}
+		return nil
+	}
+	// avoid recursion
+	type addressTemp Address
+	var tmp addressTemp
+
+	if err := json.Unmarshal(b, &tmp); err != nil {
+		return err
+	}
+	*m = Address(tmp)
+	return nil
+}
+
 // GetUsersEmailAccountFolderMessageAddresses data struct within GetUsersEmailAccountFolderMessagesResponse
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#get
 // 	https://context.io/docs/lite/users/email_accounts/folders/messages#id-get
@@ -144,6 +162,24 @@ type GetUsersEmailAccountFolderMessageAddresses struct {
 	Bcc     []Address `json:"bcc,omitempty"`
 	Sender  []Address `json:"sender,omitempty"`
 	ReplyTo []Address `json:"reply_to,omitempty"`
+}
+
+// UnmarshalJSON is here because the empty state is an array in the json, and is a object/map when populated
+func (m *GetUsersEmailAccountFolderMessageAddresses) UnmarshalJSON(b []byte) error {
+	if bytes.Equal([]byte(`[]`), b) {
+		// its the empty array, set an empty struct
+		*m = GetUsersEmailAccountFolderMessageAddresses{}
+		return nil
+	}
+	// avoid recursion
+	type getUsersEmailAccountFolderMessageAddressesTemp GetUsersEmailAccountFolderMessageAddresses
+	var tmp getUsersEmailAccountFolderMessageAddressesTemp
+
+	if err := json.Unmarshal(b, &tmp); err != nil {
+		return err
+	}
+	*m = GetUsersEmailAccountFolderMessageAddresses(tmp)
+	return nil
 }
 
 // MoveUserEmailAccountFolderMessageParams form values data struct.
