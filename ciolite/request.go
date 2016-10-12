@@ -26,8 +26,11 @@ type clientRequest struct {
 // doFormRequest makes the actual request
 func (cio CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
+	// Escape the path
+	path := url.URL{Path: request.Path}
+
 	// Construct the url
-	cioURL := cio.Host + request.Path + queryString(request.QueryValues)
+	cioURL := cio.Host + path.String() + queryString(request.QueryValues)
 
 	// Construct the body
 	bodyValues := formValues(request.FormValues)
