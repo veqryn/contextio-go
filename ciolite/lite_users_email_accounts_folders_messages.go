@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/url"
 )
 
 // GetUserEmailAccountsFolderMessageParams query values data struct.
@@ -207,7 +206,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessages(userID string, label s
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages", userID, label, url.QueryEscape(folder)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages", userID, label, folder),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -230,7 +229,7 @@ func (cioLite CioLite) GetUserEmailAccountFolderMessage(userID string, label str
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -253,7 +252,7 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage(userID string, label st
 	// Make request
 	request := clientRequest{
 		Method:       "PUT",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s", userID, label, folder, messageID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -276,7 +275,7 @@ func (cioLite CioLite) MoveUserEmailAccountFolderMessage2(userID string, label s
 	// Make request
 	request := clientRequest{
 		Method:       "PUT",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages2/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages2/%s", userID, label, folder, messageID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,

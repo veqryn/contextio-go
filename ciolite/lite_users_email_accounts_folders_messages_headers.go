@@ -4,7 +4,6 @@ package ciolite
 
 import (
 	"fmt"
-	"net/url"
 )
 
 // GetUserEmailAccountsFolderMessageHeadersParams query values data struct.
@@ -32,7 +31,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageHeaders(userID string, l
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/headers", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/headers", userID, label, folder, messageID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,

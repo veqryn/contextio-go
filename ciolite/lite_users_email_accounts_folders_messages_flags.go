@@ -4,7 +4,6 @@ package ciolite
 
 import (
 	"fmt"
-	"net/url"
 )
 
 // GetUserEmailAccountsFolderMessageFlagsResponse data struct
@@ -32,7 +31,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageFlags(userID string, lab
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/flags", userID, label, folder, messageID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
