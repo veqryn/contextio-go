@@ -4,6 +4,7 @@ package ciolite
 
 import (
 	"fmt"
+	"net/url"
 )
 
 // UserEmailAccountsFolderMessageReadResponse data struct
@@ -21,7 +22,7 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageRead(userID string, lab
 	// Make request
 	request := clientRequest{
 		Method:       "POST",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, folder, messageID),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		FormValues:   formValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -44,7 +45,7 @@ func (cioLite CioLite) MarkUserEmailAccountsFolderMessageUnRead(userID string, l
 	// Make request
 	request := clientRequest{
 		Method:       "DELETE",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, folder, messageID),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/read", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		FormValues:   formValues,
 		UserID:       userID,
 		AccountLabel: label,

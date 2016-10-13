@@ -4,6 +4,7 @@ package ciolite
 
 import (
 	"fmt"
+	"net/url"
 )
 
 // GetUserEmailAccountsFolderMessageAttachmentsResponse data struct
@@ -29,7 +30,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachments(userID strin
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, folder, messageID),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID)),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -52,7 +53,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolderMessageAttachment(userID string
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, folder, messageID, attachmentID),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s/messages/%s/attachments/%s", userID, label, url.QueryEscape(folder), url.QueryEscape(messageID), attachmentID),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,

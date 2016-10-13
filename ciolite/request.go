@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/garyburd/go-oauth/oauth"
@@ -26,11 +27,12 @@ type clientRequest struct {
 // doFormRequest makes the actual request
 func (cio CioLite) doFormRequest(request clientRequest, result interface{}) error {
 
-	// Escape the path
-	path := url.URL{Path: request.Path}
+	// url.QueryEscape turns spaces into +, and we need to turn them into %20
+	// but we can't get rid of url.QueryEscape because it turns / into %2F for delimited folder names
+	escapedPath := strings.Replace(request.Path, "+", "%20", -1)
 
 	// Construct the url
-	cioURL := cio.Host + path.String() + queryString(request.QueryValues)
+	cioURL := cio.Host + escapedPath + queryString(request.QueryValues)
 
 	// Construct the body
 	bodyValues := formValues(request.FormValues)

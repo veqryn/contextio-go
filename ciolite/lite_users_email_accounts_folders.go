@@ -4,6 +4,7 @@ package ciolite
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/pkg/errors"
 )
@@ -80,7 +81,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -104,7 +105,7 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 	// Make request
 	request := clientRequest{
 		Method:       "POST",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, folder),
+		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		FormValues:   formValues,
 		UserID:       userID,
 		AccountLabel: label,
