@@ -78,11 +78,12 @@ type DeleteEmailAccountResponse struct {
 // 	https://context.io/docs/lite/users/email_accounts#post
 // 	https://context.io/docs/lite/users/email_accounts#id-post
 type StatusCallback struct {
-	AccountID    string `json:"account_id,omitempty"`
-	UserID       string `json:"user_id,omitempty"`
-	ServerLabel  string `json:"server_label,omitempty"`
-	EmailAccount string `json:"email_account,omitempty"`
-	Failure      string `json:"failure,omitempty"`
+	AccountID      string `json:"account_id,omitempty"`
+	UserID         string `json:"user_id,omitempty"`
+	ServerLabel    string `json:"server_label,omitempty"`
+	EmailAccount   string `json:"email_account,omitempty"`
+	Failure        string `json:"failure,omitempty"`
+	FailureMessage string `json:"failure_message,omitempty"`
 
 	Token     string `json:"token,omitempty" valid:"required"`
 	Signature string `json:"signature,omitempty" valid:"required"`
