@@ -24,10 +24,12 @@ const (
 // CioLite struct contains the api key and secret, along with an optional logger,
 // and provides convenience functions for accessing all CIO Lite endpoints.
 type CioLite struct {
-	apiKey         string
-	apiSecret      string
-	Host           string
-	RequestTimeout time.Duration
+	apiKey    string
+	apiSecret string
+	Host      string
+
+	// Allow setting your own *http.Client, otherwise default is client with DefaultRequestTimeout
+	HTTPClient *http.Client
 
 	// PreRequestHook is a function (mostly for logging) that will be executed
 	// before the request is made.
@@ -64,11 +66,12 @@ type CioLite struct {
 
 // NewCioLite returns a CIO Lite struct (without a logger) for accessing the CIO Lite API.
 func NewCioLite(key string, secret string) CioLite {
+
 	return CioLite{
-		apiKey:         key,
-		apiSecret:      secret,
-		Host:           DefaultHost,
-		RequestTimeout: DefaultRequestTimeout,
+		apiKey:     key,
+		apiSecret:  secret,
+		Host:       DefaultHost,
+		HTTPClient: &http.Client{Timeout: DefaultRequestTimeout},
 	}
 }
 
@@ -78,10 +81,10 @@ func NewCioLite(key string, secret string) CioLite {
 func NewTestCioLiteServer(key string, secret string, handler http.Handler) (CioLite, *httptest.Server) {
 	testServer := httptest.NewServer(handler)
 	testCioLite := CioLite{
-		apiKey:         key,
-		apiSecret:      secret,
-		Host:           testServer.URL,
-		RequestTimeout: 5 * time.Second,
+		apiKey:     key,
+		apiSecret:  secret,
+		Host:       testServer.URL,
+		HTTPClient: &http.Client{Timeout: 5 * time.Second},
 	}
 	return testCioLite, testServer
 }

@@ -105,14 +105,9 @@ func (cio CioLite) createRequest(request clientRequest, cioURL string, bodyReade
 
 // sendRequest sends the *http.Request, and returns the status code, the response body, and any error
 func (cio CioLite) sendRequest(httpReq *http.Request, result interface{}, cioURL string) (int, string, error) {
-	// Create the HTTP client
-	httpClient := &http.Client{
-		Transport: http.DefaultTransport,
-		Timeout:   cio.RequestTimeout,
-	}
 
 	// Make the request
-	res, err := httpClient.Do(httpReq)
+	res, err := cio.HTTPClient.Do(httpReq)
 	if err != nil {
 		return 0, "", RequestError{errors.Wrap(err, "CIO: Failed to make request"), ErrorMetaData{Method: httpReq.Method, URL: cioURL}}
 	}
