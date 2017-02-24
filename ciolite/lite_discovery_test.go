@@ -118,6 +118,15 @@ func TestActualDiscoveryRequestToCioForYahoo(t *testing.T) {
 	response, err := cioLite.GetDiscovery(GetDiscoveryParams{Email: "test@yahoo.com", SourceType: "IMAP"})
 	expected.Documentation = response.Documentation
 
+	// yahoo can somtimes be oauth, depending on the cio account settings
+	if response.Type == "yahoo" && response.IMAP.OAuth {
+		expected.Type = response.Type
+		expected.IMAP.OAuth = response.IMAP.OAuth
+	} else if response.Type == "generic" && !response.IMAP.OAuth {
+		expected.Type = response.Type
+		expected.IMAP.OAuth = response.IMAP.OAuth
+	}
+
 	if err != nil || !reflect.DeepEqual(expected, response) {
 		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err)
 	}
@@ -128,6 +137,15 @@ func TestActualDiscoveryRequestToCioForYahoo(t *testing.T) {
 
 	response, err = cioLite.GetDiscovery(GetDiscoveryParams{Email: "test@yahoo.com.cn", SourceType: "IMAP"})
 	expected.Documentation = response.Documentation
+
+	// yahoo can somtimes be oauth, depending on the cio account settings
+	if response.Type == "yahoo" && response.IMAP.OAuth {
+		expected.Type = response.Type
+		expected.IMAP.OAuth = response.IMAP.OAuth
+	} else if response.Type == "generic" && !response.IMAP.OAuth {
+		expected.Type = response.Type
+		expected.IMAP.OAuth = response.IMAP.OAuth
+	}
 
 	if err != nil || !reflect.DeepEqual(expected, response) {
 		t.Error("Expected GetDiscovery Response: ", expected, "; Got: ", response, "; With Error: ", err)

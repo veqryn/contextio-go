@@ -135,7 +135,7 @@ func TestSimulatedGetConnectToken(t *testing.T) {
 	cioLite, logger, testServer, mux := NewTestCioLiteWithLoggerAndTestServer(t)
 	defer testServer.Close()
 
-	mux.HandleFunc("/connect_tokens/axjogv7yipqnhj9c", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/lite/connect_tokens/axjogv7yipqnhj9c", func(w http.ResponseWriter, r *http.Request) {
 		_, err := io.WriteString(w, responseString)
 		Must(err)
 	})
