@@ -58,7 +58,7 @@ func (cioLite CioLite) GetUserEmailAccountsFolders(userID string, label string, 
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders", userID, label),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s/folders", userID, label),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -81,7 +81,7 @@ func (cioLite CioLite) GetUserEmailAccountFolder(userID string, label string, fo
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		QueryValues:  queryValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -105,7 +105,7 @@ func (cioLite CioLite) CreateUserEmailAccountFolder(userID string, label string,
 	// Make request
 	request := clientRequest{
 		Method:       "POST",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s/folders/%s", userID, label, url.QueryEscape(folder)),
 		FormValues:   formValues,
 		UserID:       userID,
 		AccountLabel: label,

@@ -13,7 +13,7 @@ func (cioLite CioLite) GetWebhooks() ([]GetUsersWebhooksResponse, error) {
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   "/webhooks",
+		Path:   "/lite/webhooks",
 	}
 
 	// Make response
@@ -32,7 +32,7 @@ func (cioLite CioLite) GetWebhook(webhookID string) (GetUsersWebhooksResponse, e
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/webhooks/%s", webhookID),
+		Path:   fmt.Sprintf("/lite/webhooks/%s", webhookID),
 	}
 
 	// Make response
@@ -55,7 +55,7 @@ func (cioLite CioLite) CreateWebhook(formValues CreateUserWebhookParams) (Create
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       "/webhooks",
+		Path:       "/lite/webhooks",
 		FormValues: formValues,
 	}
 
@@ -76,7 +76,7 @@ func (cioLite CioLite) ModifyWebhook(webhookID string, formValues ModifyUserWebh
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/webhooks/%s", webhookID),
+		Path:       fmt.Sprintf("/lite/webhooks/%s", webhookID),
 		FormValues: formValues,
 	}
 
@@ -96,7 +96,7 @@ func (cioLite CioLite) DeleteWebhookAccount(webhookID string) (DeleteWebhookResp
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/webhooks/%s", webhookID),
+		Path:   fmt.Sprintf("/lite/webhooks/%s", webhookID),
 	}
 
 	// Make response

@@ -47,7 +47,7 @@ func (cioLite CioLite) GetDiscovery(queryValues GetDiscoveryParams) (GetDiscover
 	// Make request
 	request := clientRequest{
 		Method:      "GET",
-		Path:        "/discovery",
+		Path:        "/lite/discovery",
 		QueryValues: queryValues,
 	}
 

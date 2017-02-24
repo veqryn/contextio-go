@@ -206,7 +206,7 @@ func (cioLite CioLite) GetUserWebhooks(userID string) ([]GetUsersWebhooksRespons
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/webhooks", userID),
+		Path:   fmt.Sprintf("/lite/users/%s/webhooks", userID),
 		UserID: userID,
 	}
 
@@ -226,7 +226,7 @@ func (cioLite CioLite) GetUserWebhook(userID string, webhookID string) (GetUsers
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+		Path:   fmt.Sprintf("/lite/users/%s/webhooks/%s", userID, webhookID),
 		UserID: userID,
 	}
 
@@ -250,7 +250,7 @@ func (cioLite CioLite) CreateUserWebhook(userID string, formValues CreateUserWeb
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/webhooks", userID),
+		Path:       fmt.Sprintf("/lite/users/%s/webhooks", userID),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -272,7 +272,7 @@ func (cioLite CioLite) ModifyUserWebhook(userID string, webhookID string, formVa
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+		Path:       fmt.Sprintf("/lite/users/%s/webhooks/%s", userID, webhookID),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -293,7 +293,7 @@ func (cioLite CioLite) DeleteUserWebhookAccount(userID string, webhookID string)
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/users/%s/webhooks/%s", userID, webhookID),
+		Path:   fmt.Sprintf("/lite/users/%s/webhooks/%s", userID, webhookID),
 		UserID: userID,
 	}
 
