@@ -14,7 +14,7 @@ func TestSimulatedGetOauthProviders(t *testing.T) {
 	cioLite, logger, testServer, mux := NewTestCioLiteWithLoggerAndTestServer(t)
 	defer testServer.Close()
 
-	mux.HandleFunc("/oauth_providers", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/lite/oauth_providers", func(w http.ResponseWriter, r *http.Request) {
 		_, err := io.WriteString(w, `[ { "type": "GMAIL_OAUTH2",
       "provider_consumer_key": "123-abc.xzy.com",
       "provider_consumer_secret": "A2i[...]M9k",
@@ -47,7 +47,7 @@ func TestSimulatedGetOauthProvider(t *testing.T) {
 	cioLite, logger, testServer, mux := NewTestCioLiteWithLoggerAndTestServer(t)
 	defer testServer.Close()
 
-	mux.HandleFunc("/oauth_providers/123-abc.xzy.com", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/lite/oauth_providers/123-abc.xzy.com", func(w http.ResponseWriter, r *http.Request) {
 		_, err := io.WriteString(w, `{ "type": "GMAIL_OAUTH2",
       "provider_consumer_key": "123-abc.xzy.com",
       "provider_consumer_secret": "A2i[...]M9k",

@@ -13,7 +13,7 @@ func (cioLite CioLite) GetUserConnectTokens(userID string) ([]GetConnectTokenRes
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/connect_tokens", userID),
+		Path:   fmt.Sprintf("/lite/users/%s/connect_tokens", userID),
 		UserID: userID,
 	}
 
@@ -33,7 +33,7 @@ func (cioLite CioLite) GetUserConnectToken(userID string, token string) (GetConn
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
+		Path:   fmt.Sprintf("/lite/users/%s/connect_tokens/%s", userID, token),
 		UserID: userID,
 	}
 
@@ -55,7 +55,7 @@ func (cioLite CioLite) CreateUserConnectToken(userID string, formValues CreateCo
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/connect_tokens", userID),
+		Path:       fmt.Sprintf("/lite/users/%s/connect_tokens", userID),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -76,7 +76,7 @@ func (cioLite CioLite) DeleteUserConnectToken(userID string, token string) (Dele
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/users/%s/connect_tokens/%s", userID, token),
+		Path:   fmt.Sprintf("/lite/users/%s/connect_tokens/%s", userID, token),
 		UserID: userID,
 	}
 

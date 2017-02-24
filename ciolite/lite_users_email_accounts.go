@@ -99,7 +99,7 @@ func (cioLite CioLite) GetUserEmailAccounts(userID string, queryValues GetUserEm
 	// Make request
 	request := clientRequest{
 		Method:      "GET",
-		Path:        fmt.Sprintf("/users/%s/email_accounts", userID),
+		Path:        fmt.Sprintf("/lite/users/%s/email_accounts", userID),
 		QueryValues: queryValues,
 		UserID:      userID,
 	}
@@ -121,7 +121,7 @@ func (cioLite CioLite) GetUserEmailAccount(userID string, label string) (GetUser
 	// Make request
 	request := clientRequest{
 		Method:       "GET",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,
 		AccountLabel: label,
 	}
@@ -146,7 +146,7 @@ func (cioLite CioLite) CreateUserEmailAccount(userID string, formValues CreateUs
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/email_accounts", userID),
+		Path:       fmt.Sprintf("/lite/users/%s/email_accounts", userID),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -169,7 +169,7 @@ func (cioLite CioLite) ModifyUserEmailAccount(userID string, label string, formV
 	// Make request
 	request := clientRequest{
 		Method:       "POST",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s", userID, label),
 		FormValues:   formValues,
 		UserID:       userID,
 		AccountLabel: label,
@@ -191,7 +191,7 @@ func (cioLite CioLite) DeleteUserEmailAccount(userID string, label string) (Dele
 	// Make request
 	request := clientRequest{
 		Method:       "DELETE",
-		Path:         fmt.Sprintf("/users/%s/email_accounts/%s", userID, label),
+		Path:         fmt.Sprintf("/lite/users/%s/email_accounts/%s", userID, label),
 		UserID:       userID,
 		AccountLabel: label,
 	}

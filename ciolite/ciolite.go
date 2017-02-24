@@ -15,7 +15,7 @@ import (
 
 const (
 	// DefaultHost is the default host of CIO Lite API
-	DefaultHost = "https://api.context.io/lite"
+	DefaultHost = "https://api.context.io"
 
 	// DefaultRequestTimeout is the default timeout duration used on HTTP requests
 	DefaultRequestTimeout = 120 * time.Second

@@ -118,7 +118,7 @@ func (cioLite CioLite) GetUsers(queryValues GetUsersParams) ([]GetUsersResponse,
 	// Make request
 	request := clientRequest{
 		Method:      "GET",
-		Path:        "/users",
+		Path:        "/lite/users",
 		QueryValues: queryValues,
 	}
 
@@ -138,7 +138,7 @@ func (cioLite CioLite) GetUser(userID string) (GetUsersResponse, error) {
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s", userID),
+		Path:   fmt.Sprintf("/lite/users/%s", userID),
 		UserID: userID,
 	}
 
@@ -164,7 +164,7 @@ func (cioLite CioLite) CreateUser(formValues CreateUserParams) (CreateUserRespon
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       "/users",
+		Path:       "/lite/users",
 		FormValues: formValues,
 	}
 
@@ -185,7 +185,7 @@ func (cioLite CioLite) ModifyUser(userID string, formValues ModifyUserParams) (M
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s", userID),
+		Path:       fmt.Sprintf("/lite/users/%s", userID),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -206,7 +206,7 @@ func (cioLite CioLite) DeleteUser(userID string) (DeleteUserResponse, error) {
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/users/%s", userID),
+		Path:   fmt.Sprintf("/lite/users/%s", userID),
 		UserID: userID,
 	}
 

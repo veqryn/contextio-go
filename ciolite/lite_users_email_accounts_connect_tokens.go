@@ -13,7 +13,7 @@ func (cioLite CioLite) GetUserEmailAccountConnectTokens(userID string, label str
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/email_accounts/%s/connect_tokens", userID, label),
+		Path:   fmt.Sprintf("/lite/users/%s/email_accounts/%s/connect_tokens", userID, label),
 		UserID: userID,
 	}
 
@@ -33,7 +33,7 @@ func (cioLite CioLite) GetUserEmailAccountConnectToken(userID string, label stri
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/users/%s/email_accounts/%s/connect_tokens/%s", userID, label, token),
+		Path:   fmt.Sprintf("/lite/users/%s/email_accounts/%s/connect_tokens/%s", userID, label, token),
 		UserID: userID,
 	}
 
@@ -54,7 +54,7 @@ func (cioLite CioLite) CreateUserEmailAccountConnectToken(userID string, label s
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       fmt.Sprintf("/users/%s/email_accounts/%s/connect_tokens", userID, label),
+		Path:       fmt.Sprintf("/lite/users/%s/email_accounts/%s/connect_tokens", userID, label),
 		FormValues: formValues,
 		UserID:     userID,
 	}
@@ -75,7 +75,7 @@ func (cioLite CioLite) DeleteUserEmailAccountConnectToken(userID string, label s
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/users/%s/email_accounts/%s/connect_tokens/%s", userID, label, token),
+		Path:   fmt.Sprintf("/lite/users/%s/email_accounts/%s/connect_tokens/%s", userID, label, token),
 		UserID: userID,
 	}
 

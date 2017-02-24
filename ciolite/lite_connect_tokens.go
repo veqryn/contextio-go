@@ -88,7 +88,7 @@ func (cioLite CioLite) GetConnectTokens() ([]GetConnectTokenResponse, error) {
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   "/connect_tokens",
+		Path:   "/lite/connect_tokens",
 	}
 
 	// Make response
@@ -107,7 +107,7 @@ func (cioLite CioLite) GetConnectToken(token string) (GetConnectTokenResponse, e
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/connect_tokens/%s", token),
+		Path:   fmt.Sprintf("/lite/connect_tokens/%s", token),
 	}
 
 	// Make response
@@ -128,7 +128,7 @@ func (cioLite CioLite) CreateConnectToken(formValues CreateConnectTokenParams) (
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       "/connect_tokens",
+		Path:       "/lite/connect_tokens",
 		FormValues: formValues,
 	}
 
@@ -148,7 +148,7 @@ func (cioLite CioLite) DeleteConnectToken(token string) (DeleteConnectTokenRespo
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/connect_tokens/%s", token),
+		Path:   fmt.Sprintf("/lite/connect_tokens/%s", token),
 	}
 
 	// Make response

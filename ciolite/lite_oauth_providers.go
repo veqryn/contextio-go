@@ -47,7 +47,7 @@ func (cioLite CioLite) GetOAuthProviders() ([]GetOAuthProvidersResponse, error) 
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   "/oauth_providers",
+		Path:   "/lite/oauth_providers",
 	}
 
 	// Make response
@@ -66,7 +66,7 @@ func (cioLite CioLite) GetOAuthProvider(key string) (GetOAuthProvidersResponse, 
 	// Make request
 	request := clientRequest{
 		Method: "GET",
-		Path:   fmt.Sprintf("/oauth_providers/%s", key),
+		Path:   fmt.Sprintf("/lite/oauth_providers/%s", key),
 	}
 
 	// Make response
@@ -86,7 +86,7 @@ func (cioLite CioLite) CreateOAuthProvider(formValues CreateOAuthProviderParams)
 	// Make request
 	request := clientRequest{
 		Method:     "POST",
-		Path:       "/oauth_providers",
+		Path:       "/lite/oauth_providers",
 		FormValues: formValues,
 	}
 
@@ -106,7 +106,7 @@ func (cioLite CioLite) DeleteOAuthProvider(key string) (DeleteOAuthProviderRespo
 	// Make request
 	request := clientRequest{
 		Method: "DELETE",
-		Path:   fmt.Sprintf("/oauth_providers/%s", key),
+		Path:   fmt.Sprintf("/lite/oauth_providers/%s", key),
 	}
 
 	// Make response

@@ -26,7 +26,7 @@ func TestSimulatedGetUserEmailAccountFolder(t *testing.T) {
 		}
 	}
 
-	mux.HandleFunc("/users/123abc/email_accounts/0/folders/"+folderName, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/lite/users/123abc/email_accounts/0/folders/"+folderName, func(w http.ResponseWriter, r *http.Request) {
 		_, err := io.WriteString(w, `{
 		 "name": "`+folderName+`",
 		 "nb_messages": 5,
