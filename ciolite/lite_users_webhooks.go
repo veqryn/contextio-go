@@ -119,6 +119,8 @@ type WebhookMessageData struct {
 	Date         int `json:"date,omitempty"`
 	DateReceived int `json:"date_received,omitempty"`
 
+	ID uint64 `json:"id,omitempty"`
+
 	Addresses WebhookMessageDataAddresses `json:"addresses,omitempty"`
 
 	PersonInfo PersonInfo `json:"person_info,omitempty"`
