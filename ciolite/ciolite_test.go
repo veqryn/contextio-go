@@ -37,11 +37,8 @@ func NewTestCioLiteWithLogger(t *testing.T) (CioLite, *TestLogger) {
 
 // NewTestCioLiteWithLoggerAndTestServer returns a new CioLite, *TestLogger, and *httptest.Server objects
 func NewTestCioLiteWithLoggerAndTestServer(t *testing.T) (CioLite, *TestLogger, *httptest.Server, *http.ServeMux) {
-
 	mux := http.NewServeMux()
-
-	cioLite, server := NewTestCioLiteServer(getEnv(t, "CIO_API_KEY"), getEnv(t, "CIO_API_SECRET"), mux)
-
+	cioLite, server := NewTestCioLiteServer(mux)
 	return cioLite, addLogging(&cioLite), server, mux
 }
 

@@ -78,11 +78,9 @@ func NewCioLite(key string, secret string) CioLite {
 // NewTestCioLiteServer is a convenience function that returns a CioLite object
 // and a *httptest.Server (which must be closed when done being used).
 // The CioLite instance will hit the test server for all requests.
-func NewTestCioLiteServer(key string, secret string, handler http.Handler) (CioLite, *httptest.Server) {
+func NewTestCioLiteServer(handler http.Handler) (CioLite, *httptest.Server) {
 	testServer := httptest.NewServer(handler)
 	testCioLite := CioLite{
-		apiKey:     key,
-		apiSecret:  secret,
 		Host:       testServer.URL,
 		HTTPClient: &http.Client{Timeout: 5 * time.Second},
 	}
