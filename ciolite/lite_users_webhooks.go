@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/mail"
 )
 
 // GetUsersWebhooksResponse data struct
@@ -28,9 +29,13 @@ type GetUsersWebhooksResponse struct {
 	BodyType           string `json:"body_type,omitempty"`
 	ResourceURL        string `json:"resource_url,omitempty"`
 
-	Active      bool `json:"active,omitempty"`
-	Failure     bool `json:"failure,omitempty"`
-	IncludeBody bool `json:"include_body,omitempty"`
+	Active            bool `json:"active,omitempty"`
+	Failure           bool `json:"failure,omitempty"`
+	IncludeBody       bool `json:"include_body,omitempty"`
+	IncludeHeader     bool `json:"include_header,omitempty"`
+	ReceiveDrafts     bool `json:"receive_drafts,omitempty"`
+	ReceiveAllChanges bool `json:"receive_all_changes,omitempty"`
+	ReceiveHistorical bool `json:"receive_historical,omitempty"`
 }
 
 // CreateUserWebhookParams form values data struct.
@@ -57,6 +62,10 @@ type CreateUserWebhookParams struct {
 	FilterFromDomain   string `json:"filter_from_domain,omitempty"`
 	BodyType           string `json:"body_type,omitempty"`
 	IncludeBody        bool   `json:"include_body,omitempty"`
+	IncludeHeader      bool   `json:"include_header,omitempty"`
+	ReceiveDrafts      bool   `json:"receive_drafts,omitempty"`
+	ReceiveAllChanges  bool   `json:"receive_all_changes,omitempty"`
+	ReceiveHistorical  bool   `json:"receive_historical,omitempty"`
 }
 
 // CreateUserWebhookResponse data struct
@@ -119,7 +128,7 @@ type WebhookMessageData struct {
 	Date         int `json:"date,omitempty"`
 	DateReceived int `json:"date_received,omitempty"`
 
-	ID uint64 `json:"id,omitempty"`
+	ID uint64 `json:"id,omitempty"` // Unique message identifier or body hash
 
 	Addresses WebhookMessageDataAddresses `json:"addresses,omitempty"`
 
@@ -132,6 +141,19 @@ type WebhookMessageData struct {
 	EmailAccounts []WebhookMessageDataAccount `json:"email_accounts,omitempty"`
 
 	Files []WebhookMessageDataFile `json:"files,omitempty"`
+
+	Bodies []WebhookBody `json:"bodies,omitempty"`
+
+	Headers mail.Header `json:"headers,omitempty"`
+}
+
+// WebhookBody embedded data struct within WebhookMessageData
+// 	https://context.io/docs/lite/users/webhooks#callbacks
+type WebhookBody struct {
+	Type        string `json:"type,omitempty"`
+	Charset     string `json:"charset,omitempty"`
+	BodySection string `json:"body_section,omitempty"`
+	Content     string `json:"content,omitempty"`
 }
 
 // WebhookMessageDataFlags embedded data struct within WebhookMessageData
@@ -146,9 +168,10 @@ type WebhookMessageDataFlags struct {
 // WebhookMessageDataAccount embedded data struct within WebhookMessageData
 // 	https://context.io/docs/lite/users/webhooks#callbacks
 type WebhookMessageDataAccount struct {
-	Label  string `json:"label,omitempty"`
-	Folder string `json:"folder,omitempty"`
-	UID    int    `json:"uid,omitempty"`
+	Label       string `json:"label,omitempty"`
+	Folder      string `json:"folder,omitempty"`
+	UID         int    `json:"uid,omitempty"`
+	ResourceURL string `json:"resource_url,omitempty"`
 }
 
 // WebhookMessageDataFile embedded data struct within WebhookMessageData
